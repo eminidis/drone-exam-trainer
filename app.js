@@ -7,17 +7,17 @@ const response = await fetch("questions.json");
 questions = await response.json();
 }
 
-function startStudy(){
+function startStudy() {
 
-// κρύβει την αρχική οθόνη
 document.getElementById("home").style.display = "none";
 
 currentQuestion = 0;
 
 showQuestion();
+
 }
 
-function showQuestion(){
+function showQuestion() {
 
 answered = false;
 
@@ -28,7 +28,7 @@ let html = `
 <p style="font-size:22px">${q.question}</p>
 `;
 
-q.answers.forEach((a,i)=>{
+q.answers.forEach((a, i) => {
 html += `<button onclick="checkAnswer(${i})" id="a${i}" style="display:block;margin:10px auto;padding:15px;width:300px;font-size:18px">${a}</button>`;
 });
 
@@ -39,36 +39,36 @@ document.getElementById("quiz").innerHTML = html;
 
 }
 
-function checkAnswer(i){
+function checkAnswer(i) {
 
-if(answered) return;
+if (answered) return;
 
 answered = true;
 
 const correct = questions[currentQuestion].correct;
 
-if(i === correct){
+if (i === correct) {
 
-document.getElementById("a"+i).style.background="green";
-document.getElementById("result").innerHTML="✔ Σωστό";
+document.getElementById("a" + i).style.background = "green";
+document.getElementById("result").innerHTML = "✔ Σωστό";
 
-}else{
+} else {
 
-document.getElementById("a"+i).style.background="red";
-document.getElementById("a"+correct).style.background="green";
-document.getElementById("result").innerHTML="❌ Λάθος";
-
-}
+document.getElementById("a" + i).style.background = "red";
+document.getElementById("a" + correct).style.background = "green";
+document.getElementById("result").innerHTML = "❌ Λάθος";
 
 }
 
-function nextQuestion(){
+}
+
+function nextQuestion() {
 
 currentQuestion++;
 
-if(currentQuestion >= questions.length){
+if (currentQuestion >= questions.length) {
 
-document.getElementById("quiz").innerHTML="<h2>Τέλος Study Mode</h2>";
+document.getElementById("quiz").innerHTML = "<h2>Τέλος Study Mode</h2>";
 return;
 
 }
