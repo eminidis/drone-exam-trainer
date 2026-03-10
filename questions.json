@@ -1,0 +1,19 @@
+{
+  "categories": [
+    {
+      "name": "Test",
+      "questions": [
+        {
+          "question": "Test ερώτηση Drone Exam Trainer",
+          "answers": [
+            "Απάντηση Α",
+            "Απάντηση Β",
+            "Απάντηση Γ",
+            "Απάντηση Δ"
+          ],
+          "correct": 2
+        }
+      ]
+    }
+  ]
+}
