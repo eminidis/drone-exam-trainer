@@ -9,14 +9,27 @@
 body{
 margin:0;
 font-family:Arial;
+transition:0.3s;
+}
+
+.dark{
 background:url("background.jpg") center/cover no-repeat fixed;
 color:white;
+}
+
+.light{
+background:#f5f5f5;
+color:#222;
 }
 
 .overlay{
 background:rgba(0,0,0,0.65);
 min-height:100vh;
 padding:40px;
+}
+
+.light .overlay{
+background:rgba(255,255,255,0.85);
 }
 
 h1{
@@ -41,6 +54,13 @@ cursor:pointer;
 .studyBtn{background:#2ecc71;color:white;}
 .examBtn{background:#3498db;color:white;}
 
+.modeBtn{background:#555;color:white}
+
+.light .modeBtn{
+background:#ddd;
+color:#000;
+}
+
 .toolbar{
 display:flex;
 justify-content:space-between;
@@ -53,6 +73,10 @@ background:#444;
 border-radius:5px;
 overflow:hidden;
 margin-bottom:20px;
+}
+
+.light .progress{
+background:#ccc;
 }
 
 .progressBar{
@@ -73,6 +97,11 @@ text-align:left;
 background:#333;
 color:white;
 margin-bottom:10px;
+}
+
+.light .answers button{
+background:#eaeaea;
+color:#000;
 }
 
 .correct{background:#2ecc71!important;}
@@ -96,10 +125,15 @@ align-items:center;
 justify-content:center;
 border-radius:5px;
 font-size:14px;
+cursor:pointer;
 }
 
-.green{background:#2ecc71;}
-.red{background:#e74c3c;}
+.light .grid div{
+background:#ddd;
+}
+
+.green{background:#2ecc71!important;}
+.red{background:#e74c3c!important;}
 
 .marked::after{
 content:"!";
@@ -129,7 +163,11 @@ font-size:22px;
 <div class="menu" id="menu">
 
 <button class="studyBtn" onclick="startStudy()">Έναρξη Μελέτης</button>
-<button class="examBtn">Εξέταση</button>
+
+<br><br>
+
+<button class="modeBtn" onclick="setMode('dark')">Dark Mode</button>
+<button class="modeBtn" onclick="setMode('light')">Light Mode</button>
 
 </div>
 
@@ -137,27 +175,36 @@ font-size:22px;
 
 <script>
 
+let savedMode=localStorage.getItem("mode") || "dark"
+document.body.classList.add(savedMode)
+
+function setMode(mode){
+
+document.body.classList.remove("dark","light")
+document.body.classList.add(mode)
+
+localStorage.setItem("mode",mode)
+
+}
+
 let questions=[
 
 {
 q:"Ποια είναι η μέγιστη απόσταση πτήσης στην Open Category;",
 a:["Απεριόριστη","Εντός VLOS","50km","100m"],
-correct:1,
-cat:"Airlaw"
+correct:1
 },
 
 {
 q:"Τι σημαίνει VLOS;",
 a:["Visual Line of Sight","Very Long Operating System","Vision Link","Visual Level"],
-correct:0,
-cat:"Airlaw"
+correct:0
 },
 
 {
 q:"Ο άνεμος επηρεάζει το drone;",
 a:["Τη σταθερότητα","Την μπαταρία","Και τα δύο","Τίποτα"],
-correct:2,
-cat:"Meteorology"
+correct:2
 }
 
 ]
@@ -248,28 +295,35 @@ renderGrid()
 }
 
 function next(){
+
 if(current<questions.length-1){
 current++
 render()
 }else{
 finishPrompt()
 }
+
 }
 
 function prev(){
+
 if(current>0){
 current--
 render()
 }
+
 }
 
 function mark(){
+
 if(!marked.includes(current)){
 marked.push(current)
 }else{
 marked=marked.filter(x=>x!=current)
 }
+
 renderGrid()
+
 }
 
 function renderGrid(){
@@ -359,13 +413,13 @@ document.getElementById("app").innerHTML=`
 
 <div class="result">
 
-Σωστές απαντήσεις: ${correct} <br><br>
+Σωστές απαντήσεις: ${correct}<br><br>
 
-Λάθος απαντήσεις: ${wrong} <br><br>
+Λάθος απαντήσεις: ${wrong}<br><br>
 
-Σημειωμένες: ${marked.length} <br><br>
+Σημειωμένες: ${marked.length}<br><br>
 
-Χρόνος: ${time} <br><br>
+Χρόνος: ${time}<br><br>
 
 <button onclick="practiceWrong()">Εξάσκηση Λάθος Ερωτήσεων</button>
 
