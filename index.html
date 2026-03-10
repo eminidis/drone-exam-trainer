@@ -4,29 +4,42 @@
 <head>
 <meta charset="UTF-8">
 <title>Drone Exam Trainer</title>
+<script src="app.js" defer></script>
 </head>
 
-<body style="font-family:Arial;text-align:center;margin-top:80px">
+<body style="
+font-family:Arial;
+text-align:center;
+margin-top:80px;
+background-image:url('drone-bg.jpg');
+background-size:cover;
+background-position:center;
+">
+
+<div id="timer" style="
+position:absolute;
+top:20px;
+left:20px;
+font-size:24px;
+font-weight:bold;
+background:white;
+padding:10px;
+border-radius:8px;
+">
+⏱ 0:00
+</div>
 
 <div id="home">
 
 <h1>Drone Exam Trainer</h1>
 
-<button onclick="startStudy()" style="font-size:20px;padding:15px;margin:10px">
+<button onclick="startStudy()" style="padding:15px;margin:10px;font-size:18px">
 Study Mode
-</button>
-
-<br><br>
-
-<button onclick="startExam()" style="font-size:20px;padding:15px;margin:10px">
-Exam Mode
 </button>
 
 </div>
 
 <div id="quiz"></div>
-
-<script src="app.js"></script>
 
 </body>
 </html>
