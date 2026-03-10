@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drone Pilot Pro - Study & Exam</title>
+    <title>Drone Pilot Pro - Master Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
@@ -71,19 +71,17 @@
         .dot.correct { background: #10b981 !important; color: white; }
         .dot.wrong { background: #ef4444 !important; color: white; }
         .dot.flagged::after {
-            content: '🚩';
+            content: '🟡';
             position: absolute;
-            top: -5px;
-            right: -5px;
-            font-size: 10px;
+            top: -8px;
+            right: -8px;
+            font-size: 12px;
         }
 
         #timer-display.warning { color: #ef4444; animation: pulse 1s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        input[type="range"] {
-            accent-color: #38bdf8;
-        }
+        input[type="range"] { accent-color: #38bdf8; }
 
         .category-item {
             padding: 1.25rem;
@@ -102,7 +100,7 @@
                 <div class="w-10 h-10 bg-sky-500 rounded-xl flex items-center justify-center shadow-lg shadow-sky-500/20">
                     <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.97 4.43c-.16.09-.33.14-.5.14s-.34-.05-.5-.14l-7.97-4.43c-.32-.17-.53-.5-.53-.88V7.5c0-.38.21-.71.53-.88l7.97-4.43c.16-.09.33-.14.5-.14s.34.05.5.14l7.97 4.43c.32.17.53.5.53.88v9z"/></svg>
                 </div>
-                <span class="font-black text-xl tracking-tight uppercase">Drone<span class="text-sky-400">Pilot</span></span>
+                <span class="font-black text-xl tracking-tight uppercase italic">Drone<span class="text-sky-400">Pilot</span> <span class="text-xs align-top opacity-50">PRO</span></span>
             </div>
             <div id="active-timer" class="hidden font-mono font-bold text-xl px-4 py-1 rounded-full bg-slate-900 border border-white/10">
                 <span id="timer-label" class="text-[10px] uppercase text-slate-500 mr-2">Χρονομετρο:</span>
@@ -113,11 +111,11 @@
 
     <main class="max-w-7xl mx-auto p-4 lg:p-8">
         
-        <!-- Main Menu -->
+        <!-- Menu Screen -->
         <div id="menu-screen" class="py-12">
             <div class="text-center mb-16">
-                <h1 class="text-5xl font-black mb-4">Επιλέξτε Λειτουργία</h1>
-                <p class="text-slate-400 text-lg">Προετοιμαστείτε για το δίπλωμα Drone</p>
+                <h1 class="text-5xl font-black mb-4 uppercase italic">Επιλέξτε <span class="text-sky-400">Λειτουργία</span></h1>
+                <p class="text-slate-400 text-lg">Προετοιμαστείτε για τις εξετάσεις ΣμηΕΑ (A1-A2-A3)</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -125,32 +123,32 @@
                     <div class="w-16 h-16 bg-sky-500/10 text-sky-400 rounded-2xl flex items-center justify-center mb-6">
                         <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     </div>
-                    <h2 class="text-2xl font-black mb-2">Study Mode</h2>
-                    <p class="text-slate-400 mb-6">Μελέτη ανά ενότητα ή τυχαία με άμεσες απαντήσεις και επεξηγήσεις.</p>
+                    <h2 class="text-2xl font-black mb-2 uppercase">Study Mode</h2>
+                    <p class="text-slate-400 mb-6">Μελέτη ανά ενότητα με άμεση επεξήγηση. Οι σωστές απαντήσεις προχωρούν αυτόματα.</p>
                 </div>
 
                 <div onclick="startExamMode()" class="mode-card glass-card p-8 rounded-3xl border-purple-500/20">
                     <div class="w-16 h-16 bg-purple-500/10 text-purple-400 rounded-2xl flex items-center justify-center mb-6">
                         <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <h2 class="text-2xl font-black mb-2">Exam Mode</h2>
-                    <p class="text-slate-400 mb-6">Προσομοίωση εξετάσεων ΥΠΑ με αντίστροφη μέτρηση (40 ερωτήσεις).</p>
+                    <h2 class="text-2xl font-black mb-2 uppercase">Exam Mode</h2>
+                    <p class="text-slate-400 mb-6">Προσομοίωση εξετάσεων ΥΠΑ. 40 ερωτήσεις σε 45 λεπτά.</p>
                 </div>
             </div>
         </div>
 
         <!-- Category Picker -->
         <div id="study-options" class="hidden py-12 max-w-2xl mx-auto">
-            <button onclick="goHome()" class="text-sky-400 font-bold mb-8 flex items-center gap-2 group">
-                <svg class="group-hover:-translate-x-1 transition-transform" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg> Πίσω
+            <button onclick="goHome()" class="text-sky-400 font-bold mb-8 flex items-center gap-2 group uppercase text-sm">
+                <svg class="group-hover:-translate-x-1 transition-transform" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg> Πίσω στην Αρχική
             </button>
-            <h2 class="text-3xl font-black mb-6">Επιλογή Ενότητας</h2>
+            <h2 class="text-3xl font-black mb-6 uppercase italic">Επιλογή Ενότητας</h2>
             <div id="category-list" class="glass-card rounded-2xl overflow-hidden border-sky-500/20">
                 <div onclick="selectCategory('RANDOM')" class="category-item flex justify-between items-center bg-sky-500/10 border-b-2 border-sky-500/20">
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center text-white font-bold">ALL</div>
                         <div>
-                            <span class="font-black block text-sky-400">Τυχαίες Ερωτήσεις</span>
+                            <span class="font-black block text-sky-400 uppercase">Τυχαίες Ερωτήσεις</span>
                             <span class="text-xs text-slate-400 italic">Όλες οι ενότητες σε τυχαία σειρά</span>
                         </div>
                     </div>
@@ -159,24 +157,24 @@
             </div>
         </div>
 
-        <!-- Study Settings -->
+        <!-- Settings Screen -->
         <div id="study-settings" class="hidden py-12 max-w-xl mx-auto">
-            <button onclick="showStudyOptions()" class="text-sky-400 font-bold mb-8 flex items-center gap-2 group">
+            <button onclick="showStudyOptions()" class="text-sky-400 font-bold mb-8 flex items-center gap-2 group uppercase text-sm">
                 <svg class="group-hover:-translate-x-1 transition-transform" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg> Αλλαγή Κατηγορίας
             </button>
             <div class="glass-card p-8 rounded-3xl border-sky-500/30">
-                <h3 class="text-2xl font-black mb-2 text-white">Ρυθμίσεις Μελέτης</h3>
-                <p id="settings-subtitle" class="text-slate-400 mb-8 text-sm">Κατηγορία: ...</p>
+                <h3 class="text-2xl font-black mb-2 text-white uppercase italic">Ρυθμίσεις Μελέτης</h3>
+                <p id="settings-subtitle" class="text-slate-400 mb-8 text-sm italic">Κατηγορία: ...</p>
                 
                 <div class="mb-10">
                     <div class="flex justify-between items-end mb-4">
                         <label class="text-sm font-bold text-slate-300 uppercase">Αριθμός Ερωτήσεων</label>
-                        <span id="count-display" class="text-3xl font-black text-sky-400">10</span>
+                        <span id="count-display" class="text-4xl font-black text-sky-400">10</span>
                     </div>
                     <input type="range" id="q-count-range" min="1" max="50" value="10" 
                            class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer"
                            oninput="updateCountDisplay(this.value)">
-                    <div class="flex justify-between text-[10px] text-slate-500 mt-2 font-bold">
+                    <div class="flex justify-between text-[10px] text-slate-500 mt-2 font-bold uppercase">
                         <span>1 ΕΡΩΤΗΣΗ</span>
                         <span id="max-label">MAX: ...</span>
                     </div>
@@ -193,7 +191,7 @@
             <div class="flex-1">
                 <div class="flex justify-between items-center mb-6">
                     <div id="mode-pill" class="px-3 py-1 rounded text-[10px] font-black uppercase tracking-tighter">STUDY MODE</div>
-                    <div id="q-progress" class="text-slate-500 font-bold text-sm">Ερώτηση 1 / 0</div>
+                    <div id="q-progress" class="text-slate-500 font-bold text-sm uppercase">Ερώτηση 1 / 0</div>
                 </div>
 
                 <div class="glass-card p-8 lg:p-12 rounded-3xl shadow-2xl relative">
@@ -204,22 +202,22 @@
 
                     <div id="explanation-box" class="hidden mt-8 p-6 bg-slate-900/50 border-l-4 border-sky-500 rounded-xl">
                         <span class="text-[10px] font-black text-sky-500 uppercase block mb-2">ΕΠΕΞΗΓΗΣΗ</span>
-                        <p id="explanation-text" class="text-slate-400 leading-relaxed"></p>
+                        <p id="explanation-text" class="text-slate-400 leading-relaxed italic text-sm"></p>
                     </div>
                 </div>
 
                 <div class="flex gap-4 mt-8">
-                    <button onclick="prevQ()" class="flex-1 py-4 bg-slate-800 rounded-2xl font-bold hover:bg-slate-700 transition">ΠΡΟΗΓΟΥΜΕΝΗ</button>
-                    <button id="next-btn-main" onclick="nextQ()" class="flex-[2] py-4 bg-sky-600 rounded-2xl font-bold hover:bg-sky-500 transition shadow-lg shadow-sky-600/20">ΕΠΟΜΕΝΗ</button>
-                    <button id="submit-btn" onclick="submitExam()" class="hidden flex-[2] py-4 bg-emerald-600 rounded-2xl font-bold hover:bg-emerald-500 transition shadow-lg shadow-emerald-600/20">ΥΠΟΒΟΛΗ</button>
+                    <button onclick="prevQ()" class="flex-1 py-4 bg-slate-800 rounded-2xl font-bold hover:bg-slate-700 transition uppercase text-sm">Προηγουμενη</button>
+                    <button id="next-btn-main" onclick="nextQ()" class="flex-[2] py-4 bg-sky-600 rounded-2xl font-bold hover:bg-sky-500 transition shadow-lg shadow-sky-600/20 uppercase">Επομενη</button>
+                    <button id="submit-btn" onclick="submitExam()" class="hidden flex-[2] py-4 bg-emerald-600 rounded-2xl font-bold hover:bg-emerald-500 transition shadow-lg shadow-emerald-600/20 uppercase">Υποβολη</button>
                 </div>
             </div>
 
             <aside class="w-full lg:w-80">
                 <div class="glass-card p-6 rounded-2xl sticky top-24">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xs font-black text-slate-500 uppercase font-mono tracking-widest">Navigation</h3>
-                        <button onclick="toggleFlag()" class="text-xs font-bold text-amber-500 flex items-center gap-1">🚩 Σημείωση</button>
+                        <h3 class="text-xs font-black text-slate-500 uppercase font-mono tracking-widest">Πλοηγηση</h3>
+                        <button onclick="toggleFlag()" class="text-xs font-bold text-amber-500 flex items-center gap-1 uppercase">🟡 Σημειωση</button>
                     </div>
                     <div id="dot-grid" class="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto pr-1"></div>
                 </div>
@@ -229,28 +227,60 @@
         <!-- Results Screen -->
         <div id="results-screen" class="hidden text-center py-20 max-w-2xl mx-auto">
             <div id="result-icon" class="text-9xl mb-8">🚁</div>
-            <h2 id="result-title" class="text-5xl font-black mb-4 uppercase text-white">Τελος</h2>
-            <div class="glass-card p-12 rounded-3xl my-10">
+            <h2 id="result-title" class="text-5xl font-black mb-4 uppercase text-white italic">Αποτελεσμα</h2>
+            <div class="glass-card p-12 rounded-3xl my-10 border-sky-500/20">
                 <div class="text-slate-400 uppercase font-black tracking-widest text-xs mb-2">ΣΥΝΟΛΙΚΟ ΣΚΟΡ</div>
                 <div id="result-score" class="text-8xl font-black text-sky-400">0%</div>
                 <p id="result-stats" class="text-slate-400 text-xl mt-6 font-medium font-mono"></p>
             </div>
-            <button onclick="goHome()" class="w-full py-5 bg-white text-black text-xl font-black rounded-2xl hover:bg-slate-200 transition">ΑΡΧΙΚΗ ΣΕΛΙΔΑ</button>
+            <button onclick="goHome()" class="w-full py-5 bg-white text-black text-xl font-black rounded-2xl hover:bg-slate-200 transition uppercase italic">Αρχικη Σελιδα</button>
         </div>
 
     </main>
 
     <script>
-        // Database of Questions
+        // Full Question Database (40 Questions)
         const db = [
-            { id: 1, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Ποια είναι η ελάχιστη απόσταση από μη εμπλεκόμενα πρόσωπα για ΣμηΕΑ κατηγορίας C2 (A2);", a: ["50 μέτρα", "30 μέτρα (ή 5 με λειτουργία χαμηλής ταχύτητας)", "120 μέτρα", "10 μέτρα"], c: 1, exp: "Στην υποκατηγορία A2, η ελάχιστη απόσταση είναι 30μ, αλλά μπορεί να μειωθεί στα 5μ αν το Drone διαθέτει ενεργή λειτουργία χαμηλής ταχύτητας." },
+            { id: 1, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Ποια είναι η ελάχιστη απόσταση από μη εμπλεκόμενα πρόσωπα για ΣμηΕΑ κατηγορίας C2 (A2);", a: ["50 μέτρα", "30 μέτρα (ή 5 με λειτουργία χαμηλής ταχύτητας)", "120 μέτρα", "10 μέτρα"], c: 1, exp: "Στην υποκατηγορία A2, η ελάχιστη απόσταση είναι 30μ, αλλά μπορεί να μειωθεί στα 5μ αν το Drone διαθέτει λειτουργία χαμηλής ταχύτητας." },
             { id: 2, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Ποιο είναι το μέγιστο επιτρεπόμενο ύψος πτήσης στην Ανοιχτή Κατηγορία;", a: ["50μ", "100μ", "120μ", "150μ"], c: 2, exp: "Ο κανονισμός ορίζει τα 120 μέτρα (400 πόδια) από το πλησιέστερο σημείο της επιφάνειας της γης." },
-            { id: 3, cat: "Γ", topic: "Κανονισμοί", q: "Πού πρέπει να αναγράφεται ο αριθμός εγγραφής εκμεταλλευόμενου;", a: ["Στο τηλεχειριστήριο", "Στο σώμα του ΣμηΕΑ", "Μόνο στην εφαρμογή πτήσης", "Στο κουτί μεταφοράς"], c: 1, exp: "Ο αριθμός εγγραφής εκμεταλλευόμενου πρέπει να επικολλάται με ευκρινή τρόπο στο σώμα του Drone." },
-            { id: 4, cat: "Ι", topic: "Μετεωρολογία", q: "Τι προκαλεί ο παγετός στις έλικες ενός Drone;", a: ["Αύξηση της άντωσης", "Μείωση της αεροδυναμικής απόδοσης και αύξηση βάρους", "Καλύτερη ψύξη μοτέρ", "Καμία επίδραση"], c: 1, exp: "Ο πάγος αλλοιώνει το σχήμα της έλικας, καταστρέφοντας την αεροδυναμική και επιβαρύνοντας το Drone με επιπλέον βάρος." },
-            { id: 5, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Τι είναι η 'οπτική σήραγγα' (tunnel vision);", a: ["Βελτιωμένη περιφερειακή όραση", "Εστίαση σε ένα μόνο σημείο λόγω άγχους", "Ειδική λειτουργία κάμερας", "Νυχτερινή όραση"], c: 1, exp: "Σε κατάσταση υψηλού στρες, ο χειριστής εστιάζει μόνο στο Drone και χάνει την εικόνα του περιβάλλοντος." },
-            { id: 6, cat: "Ε", topic: "Διαδικασίες", q: "Πριν από την πτήση, ο χειριστής πρέπει να ελέγξει:", a: ["Μόνο την μπαταρία", "Τις καιρικές συνθήκες και την κατάσταση του ΣμηΕΑ", "Τον αριθμό των followers", "Την ταχύτητα του κινητού"], c: 1, exp: "Ο προ-πτητικός έλεγχος περιλαμβάνει την αξιολόγηση του καιρού, των εμποδίων και της τεχνικής ακεραιότητας." },
-            { id: 7, cat: "Α", topic: "Ασφάλεια", q: "Επιτρέπεται η πτήση πάνω από συγκεντρώσεις ανθρώπων στην ανοιχτή κατηγορία;", a: ["Ναι, πάντα", "Όχι, ποτέ", "Μόνο με άδεια της αστυνομίας", "Μόνο αν το Drone είναι κάτω από 250γρ"], c: 1, exp: "Σε καμία υποκατηγορία (A1, A2, A3) της Ανοιχτής Κατηγορίας δεν επιτρέπεται η πτήση πάνω από συγκεντρώσεις ανθρώπων." },
-            { id: 8, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Ποιος έχει προτεραιότητα στον εναέριο χώρο;", a: ["Τα Drone έναντι των επανδρωμένων", "Τα επανδρωμένα αεροσκάφη έναντι των Drone", "Όποιος πετάει πιο ψηλά", "Όποιος πετάει πιο γρήγορα"], c: 1, exp: "Τα ΣμηΕΑ πρέπει πάντα να παραχωρούν προτεραιότητα σε όλα τα επανδρωμένα αεροσκάφη." }
+            { id: 3, cat: "Γ", topic: "Κανονισμοί", q: "Πού πρέπει να αναγράφεται ο αριθμός εγγραφής εκμεταλλευόμενου;", a: ["Στο τηλεχειριστήριο", "Στο σώμα του ΣμηΕΑ", "Μόνο στην εφαρμογή πτήσης", "Στο κουτί μεταφοράς"], c: 1, exp: "Ο αριθμός εγγραφής εκμεταλλευόμενου πρέπει να επικολλάται στο σώμα του Drone." },
+            { id: 4, cat: "Ι", topic: "Μετεωρολογία", q: "Τι προκαλεί ο παγετός στις έλικες ενός Drone;", a: ["Αύξηση της άντωσης", "Μείωση της αεροδυναμικής απόδοσης και αύξηση βάρους", "Καλύτερη ψύξη μοτέρ", "Καμία επίδραση"], c: 1, exp: "Ο πάγος αλλοιώνει το σχήμα της έλικας, καταστρέφοντας την αεροδυναμική." },
+            { id: 5, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Τι είναι η 'οπτική σήραγγα' (tunnel vision);", a: ["Βελτιωμένη περιφερειακή όραση", "Εστίαση σε ένα μόνο σημείο λόγω άγχους", "Ειδική λειτουργία κάμερας", "Νυχτερινή όραση"], c: 1, exp: "Σε κατάσταση άγχους, ο χειριστής χάνει την εικόνα του περιβάλλοντος." },
+            { id: 6, cat: "Α", topic: "Ασφάλεια", q: "Ποια είναι η ενέργεια του τηλεχειριστή σε περίπτωση απώλειας σύνδεσης (C2 Link loss);", a: ["Το Drone παραμένει ακίνητο", "Το Drone εκτελεί RTH", "Το Drone απενεργοποιεί κινητήρες", "Τυχαία κατεύθυνση"], c: 1, exp: "Τα σύγχρονα ΣμηΕΑ εκτελούν Return to Home." },
+            { id: 7, cat: "Α", topic: "Ασφάλεια", q: "Πότε επιτρέπεται η πτήση πάνω από συγκεντρώσεις προσώπων στην Ανοιχτή Κατηγορία;", a: ["Ποτέ", "Μόνο αν το Drone είναι < 250γρ", "Με ειδική άδεια", "Σε μεγάλη ταχύτητα"], c: 0, exp: "Απαγορεύεται αυστηρά η πτήση πάνω από συγκεντρώσεις." },
+            { id: 8, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Τι σημαίνει ο όρος 'VLOS';", a: ["Vertical Lift Off", "Visual Line of Sight", "Velocity Level", "Virtual Location"], c: 1, exp: "VLOS σημαίνει οπτική επαφή με το ΣμηΕΑ." },
+            { id: 9, cat: "Ε", topic: "Διαδικασίες", q: "Ποιο είναι το πρώτο βήμα πριν από κάθε πτήση;", a: ["Φόρτιση κινητού", "Έλεγχος περιβάλλοντος και περιορισμών", "Αλλαγή ελίκων", "Καθαρισμός κάμερας"], c: 1, exp: "Η αξιολόγηση του χώρου είναι απαραίτητη." },
+            { id: 10, cat: "Γ", topic: "Κανονισμοί", q: "Ποια είναι η ελάχιστη ηλικία για τηλεχειριστή ΣμηΕΑ στην Ελλάδα;", a: ["12 έτη", "14 έτη", "16 έτη", "18 έτη"], c: 2, exp: "Η ελάχιστη ηλικία είναι τα 16 έτη." },
+            { id: 11, cat: "Α", topic: "Ασφάλεια", q: "Τι είναι το Geo-fencing;", a: ["Σύστημα αυτόματης προσγείωσης", "Σύστημα αποφυγής εμποδίων", "Ψηφιακός περιορισμός εναέριου χώρου", "Λειτουργία πτήσης σε ευθεία"], c: 2, exp: "Το Geo-fencing εμποδίζει το drone να εισέλθει σε απαγορευμένες περιοχές." },
+            { id: 12, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Ποιο Drone επιτρέπεται να πετάει πάνω από μη εμπλεκόμενα πρόσωπα στην Α1;", a: ["C0 (<250g)", "C2", "C3", "Κανένα"], c: 0, exp: "Drones κατηγορίας C0 ή <250g επιτρέπεται να πετούν πάνω από πρόσωπα αλλά όχι πάνω από συγκεντρώσεις." },
+            { id: 13, cat: "Γ", topic: "Κανονισμοί", q: "Πόση είναι η διάρκεια ισχύος του πιστοποιητικού τηλεχειριστή A1/A3;", a: ["2 έτη", "5 έτη", "10 έτη", "Ισόβιο"], c: 1, exp: "Το πιστοποιητικό ισχύει για 5 έτη." },
+            { id: 14, cat: "Ι", topic: "Μετεωρολογία", q: "Τι είναι η 'ριπή ανέμου';", a: ["Σταθερός άνεμος", "Ξαφνική και προσωρινή αύξηση της ταχύτητας του ανέμου", "Άνεμος που φυσάει προς τα πάνω", "Κυκλικός άνεμος"], c: 1, exp: "Οι ριπές είναι επικίνδυνες για τη σταθερότητα του drone." },
+            { id: 15, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Πώς επηρεάζει το αλκοόλ τον τηλεχειριστή;", a: ["Βελτιώνει τα αντανακλαστικά", "Μειώνει το χρόνο αντίδρασης και την κρίση", "Δεν έχει καμία επίδραση", "Βελτιώνει την όραση"], c: 1, exp: "Το αλκοόλ απαγορεύεται κατά τη χρήση ΣμηΕΑ." },
+            { id: 16, cat: "Ε", topic: "Διαδικασίες", q: "Τι πρέπει να κάνετε αν ένα επανδρωμένο αεροσκάφος πλησιάσει την περιοχή σας;", a: ["Πετάτε ψηλότερα", "Προσγειώνεστε αμέσως ή μένετε σε χαμηλό ύψος μακριά του", "Συνεχίζετε κανονικά", "Προσπαθείτε να το τραβήξετε βίντεο"], c: 1, exp: "Τα επανδρωμένα έχουν πάντα προτεραιότητα." },
+            { id: 17, cat: "Α", topic: "Ασφάλεια", q: "Τι ελέγχουμε στις μπαταρίες LiPo πριν την πτήση;", a: ["Αν είναι ζεστές", "Αν έχουν φουσκώματα ή ζημιές", "Το χρώμα τους", "Την ημερομηνία αγοράς"], c: 1, exp: "Φουσκωμένες μπαταρίες είναι επικίνδυνες για φωτιά." },
+            { id: 18, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Σε ποια ζώνη απαγορεύεται η πτήση χωρίς άδεια;", a: ["Πάνω από το σπίτι μας", "Κοντά σε αεροδρόμια", "Πάνω από δάση", "Πάνω από τη θάλασσα"], c: 1, exp: "Οι ζώνες αεροδρομίων είναι ελεγχόμενες." },
+            { id: 19, cat: "Γ", topic: "Κανονισμοί", q: "Ποιος είναι υπεύθυνος για την ασφάλεια της πτήσης;", a: ["Ο κατασκευαστής", "Ο τηλεχειριστής", "Η ΥΠΑ", "Ο ιδιοκτήτης του χωραφιού"], c: 1, exp: "Ο τηλεχειριστής φέρει την πλήρη ευθύνη." },
+            { id: 20, cat: "Α", topic: "Ασφάλεια", q: "Ποια είναι η μέγιστη ταχύτητα στην A2 λειτουργία χαμηλής ταχύτητας;", a: ["1 m/s", "3 m/s", "5 m/s", "10 m/s"], c: 1, exp: "Η λειτουργία low speed περιορίζει το drone στα 3 m/s για ασφάλεια κοντά σε κόσμο." },
+            { id: 21, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Τι είναι η κόπωση κατά την πτήση;", a: ["Εξάντληση των μπαταριών", "Μειωμένη ικανότητα προσοχής του χειριστή", "Φθορά των μοτέρ", "Υπερθέρμανση του controller"], c: 1, exp: "Η κόπωση μειώνει την ασφάλεια της επιχείρησης." },
+            { id: 22, cat: "Ι", topic: "Μετεωρολογία", q: "Πώς επηρεάζει η υψηλή θερμοκρασία την μπαταρία;", a: ["Αυξάνει την απόδοση", "Μπορεί να προκαλέσει υπερθέρμανση και πτώση τάσης", "Δεν την επηρεάζει", "Την φορτίζει"], c: 1, exp: "Η υπερβολική ζέστη είναι εχθρός των LiPo." },
+            { id: 23, cat: "Ε", topic: "Διαδικασίες", q: "Τι είναι το Check-list;", a: ["Λίστα με τα ψώνια", "Λίστα ελέγχων ασφαλείας πριν την απογείωση", "Κατάλογος ανταλλακτικών", "Βιβλίο οδηγιών"], c: 1, exp: "Το check-list διασφαλίζει ότι δεν ξεχάσαμε τίποτα κρίσιμο." },
+            { id: 24, cat: "Γ", topic: "Κανονισμοί", q: "Τι σημαίνει η σήμανση CE στο Drone;", a: ["Camera Enabled", "Συμμόρφωση με τα ευρωπαϊκά πρότυπα", "China Export", "Control Edition"], c: 1, exp: "Το CE δείχνει ότι το προϊόν πληροί τις προδιαγραφές ασφαλείας της ΕΕ." },
+            { id: 25, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Ποιο είναι το μέγιστο βάρος Drone στην Α1 (C0/C1);", a: ["250g / 900g", "500g", "2kg", "25kg"], c: 0, exp: "Η Α1 καλύπτει ελαφριά drones." },
+            { id: 26, cat: "Α", topic: "Ασφάλεια", q: "Τι κάνουμε αν το Drone αρχίσει να συμπεριφέρεται αλλόκοτα;", a: ["Πετάμε πιο γρήγορα", "Προσγειωνόμαστε αμέσως με ασφάλεια", "Κλείνουμε τα μάτια", "Περιμένουμε να φτιάξει"], c: 1, exp: "Η άμεση προσγείωση προλαμβάνει ατυχήματα." },
+            { id: 27, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Γιατί η αυτοπεποίθηση μπορεί να είναι επικίνδυνη;", a: ["Μας κάνει καλύτερους πιλότους", "Μπορεί να οδηγήσει σε παράβλεψη κινδύνων", "Δεν είναι ποτέ επικίνδυνη", "Βοηθάει στην ταχύτητα"], c: 1, exp: "Η υπερβολική σιγουριά οδηγεί σε λάθη." },
+            { id: 28, cat: "Ι", topic: "Μετεωρολογία", q: "Πού βρίσκουμε πληροφορίες για τον άνεμο;", a: ["Στο Facebook", "Σε μετεωρολογικές εφαρμογές (UAV Forecast κλπ)", "Κοιτώντας τα σύννεφα μόνο", "Ρωτώντας περαστικούς"], c: 1, exp: "Εξειδικευμένες εφαρμογές δίνουν ακριβή δεδομένα." },
+            { id: 29, cat: "Ε", topic: "Διαδικασίες", q: "Τι κάνουμε αν χάσουμε την οπτική επαφή;", a: ["Πατάμε τυχαία κουμπιά", "Χρησιμοποιούμε το RTH ή την κάμερα για να το βρούμε", "Φεύγουμε από το σημείο", "Περιμένουμε να πέσει"], c: 1, exp: "Το Return to Home είναι η ασφαλέστερη λύση." },
+            { id: 30, cat: "Γ", topic: "Κανονισμοί", q: "Πρέπει να έχουμε ασφάλεια για το Drone;", a: ["Όχι, ποτέ", "Ναι, αν το Drone είναι πάνω από ένα βάρος ή για επαγγελματική χρήση", "Μόνο αν πετάμε στο εξωτερικό", "Μόνο αν είναι ακριβό"], c: 1, exp: "Η ασφάλιση αστικής ευθύνης είναι υποχρεωτική στην Ελλάδα." },
+            { id: 31, cat: "Α", topic: "Ασφάλεια", q: "Ποιο είναι το 'Home Point';", a: ["Το σπίτι του πιλότου", "Το σημείο από όπου απογειώθηκε το Drone και αποθηκεύτηκε στο GPS", "Το κέντρο του αεροδρομίου", "Οποιοδήποτε πάρκο"], c: 1, exp: "Εκεί θα επιστρέψει το drone σε ανάγκη." },
+            { id: 32, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Τι είναι το NOTAM;", a: ["Ειδοποίηση προς αεροναυτιλλομένους για κινδύνους ή αλλαγές", "Νέος τύπος Drone", "Όνομα εταιρείας", "Κωδικός πρόσβασης"], c: 0, exp: "Τα NOTAM περιέχουν κρίσιμες πληροφορίες για τον εναέριο χώρο." },
+            { id: 33, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Ποια αίσθηση είναι η πιο σημαντική για το VLOS;", a: ["Ακοή", "Όραση", "Αφή", "Όσφρηση"], c: 1, exp: "Η όραση είναι η βάση του Visual Line of Sight." },
+            { id: 34, cat: "Ι", topic: "Μετεωρολογία", q: "Τι είναι η πυκνότητα αέρα;", a: ["Το χρώμα του αέρα", "Η μάζα του αέρα ανά μονάδα όγκου", "Η ταχύτητα του ανέμου", "Η υγρασία"], c: 1, exp: "Η πυκνότητα επηρεάζει την άντωση (λιγότερη άντωση σε μεγάλο υψόμετρο)." },
+            { id: 35, cat: "Ε", topic: "Διαδικασίες", q: "Τι είναι το Logbook;", a: ["Βιβλίο με φωτογραφίες", "Ημερολόγιο καταγραφής πτήσεων", "Οδηγίες χρήσης", "Λίστα επαφών"], c: 1, exp: "Στο Logbook καταγράφουμε ώρες πτήσης και συντήρηση." },
+            { id: 36, cat: "Γ", topic: "Κανονισμοί", q: "Τι είναι η 'Ειδική Κατηγορία' (Specific);", a: ["Για drones παιχνίδια", "Για πτήσεις με αυξημένο κίνδυνο που απαιτούν άδεια", "Για πτήσεις μόνο σε κλειστό χώρο", "Για πτήσεις στη θάλασσα"], c: 1, exp: "Η Specific καλύπτει πτήσεις εκτός ορίων της Open." },
+            { id: 37, cat: "Α", topic: "Ασφάλεια", q: "Ποιος είναι ο κίνδυνος των ελίκων;", a: ["Κανένας", "Μπορεί να προκαλέσουν σοβαρούς τραυματισμούς/κοψίματα", "Μόνο αν σπάσουν", "Μόνο αν είναι μεταλλικές"], c: 1, exp: "Οι έλικες περιστρέφονται με χιλιάδες στροφές." },
+            { id: 38, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Ποιο είναι το μέγιστο ύψος αν πετάμε κοντά σε εμπόδιο (π.χ. κτίριο);", a: ["Πάντα 120μ", "Έως 15μ πάνω από το εμπόδιο (με άδεια ιδιοκτήτη)", "500μ", "Όσο θέλουμε"], c: 1, exp: "Υπάρχει εξαίρεση για επιθεώρηση κτιρίων." },
+            { id: 39, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Τι προκαλεί η ηλιοφάνεια στον πιλότο;", a: ["Χαρά", "Θάμβωση και δυσκολία στον εντοπισμό του drone", "Καλύτερη όραση", "Τίποτα"], c: 1, exp: "Τα γυαλιά ηλίου είναι απαραίτητος εξοπλισμός." },
+            { id: 40, cat: "Ε", topic: "Διαδικασίες", q: "Πότε κάνουμε καλιμπράρισμα πυξίδας (Compass Calibration);", a: ["Κάθε φορά που αλλάζουμε μπαταρία", "Όταν το ζητάει η εφαρμογή ή αλλάζουμε τοποθεσία σημαντικά", "Ποτέ", "Μόνο όταν βρέχει"], c: 1, exp: "Η πυξίδα είναι κρίσιμη για τον προσανατολισμό του drone." }
         ];
 
         const categories = [
@@ -284,6 +314,7 @@
         function showStudyOptions() {
             document.getElementById('menu-screen').classList.add('hidden');
             document.getElementById('study-settings').classList.add('hidden');
+            document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('study-options').classList.remove('hidden');
             
             const list = document.getElementById('category-list');
@@ -301,8 +332,8 @@
                         <div class="flex items-center gap-4">
                             <div class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center font-bold text-sky-400">${cat.id}</div>
                             <div>
-                                <span class="font-bold text-slate-200 block">${cat.name}</span>
-                                <span class="text-[10px] text-slate-500 uppercase">${countInCategory} Ερωτήσεις</span>
+                                <span class="font-bold text-slate-200 block uppercase">${cat.name}</span>
+                                <span class="text-[10px] text-slate-500 uppercase tracking-widest">${countInCategory} ΕΡΩΤΗΣΕΙΣ</span>
                             </div>
                         </div>
                         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
@@ -400,9 +431,10 @@
                 btn.className = `option-btn ${state.answers[state.currentIndex] === idx ? 'selected' : ''}`;
                 
                 if (state.mode === 'study' && answered) {
-                    btn.disabled = true;
+                    // In study mode, we allow re-selection if they got it wrong, 
+                    // but we highlight the result
                     if (idx === q.c) btn.classList.add('correct');
-                    else if (idx === state.answers[state.currentIndex]) btn.classList.add('wrong');
+                    else if (idx === state.answers[state.currentIndex] && idx !== q.c) btn.classList.add('wrong');
                 }
                 
                 btn.onclick = () => selectOption(idx);
@@ -426,16 +458,32 @@
         }
 
         function selectOption(idx) {
+            const correctIdx = state.questions[state.currentIndex].c;
             state.answers[state.currentIndex] = idx;
+            
             const dot = document.getElementById(`dot-${state.currentIndex}`);
             dot.classList.add('answered');
 
             if (state.mode === 'study') {
-                const correct = state.questions[state.currentIndex].c;
-                if (idx === correct) dot.classList.add('correct');
-                else dot.classList.add('wrong');
+                if (idx === correctIdx) {
+                    dot.classList.remove('wrong');
+                    dot.classList.add('correct');
+                    renderQuestion();
+                    // Auto-advance on correct answer
+                    setTimeout(() => {
+                        if (state.currentIndex < state.questions.length - 1) {
+                            nextQ();
+                        }
+                    }, 1000);
+                } else {
+                    dot.classList.remove('correct');
+                    dot.classList.add('wrong');
+                    renderQuestion();
+                    // Stay on question if wrong
+                }
+            } else {
+                renderQuestion();
             }
-            renderQuestion();
         }
 
         function toggleFlag() {
@@ -478,7 +526,8 @@
 
         function submitExam() {
             if (state.mode === 'exam') {
-                const unanswered = state.questions.length - Object.keys(state.answers).length;
+                const answeredCount = Object.keys(state.answers).length;
+                const unanswered = state.questions.length - answeredCount;
                 if (unanswered > 0 && state.timeLeft > 0) {
                     if (!confirm(`Έχετε ${unanswered} αναπάντητες ερωτήσεις. Σίγουρα υποβολή;`)) return;
                 }
@@ -500,7 +549,7 @@
             const passed = percent >= 75;
             document.getElementById('result-title').innerText = passed ? "Πετύχατε!" : "Αποτυχία";
             document.getElementById('result-icon').innerText = passed ? "🏆" : "❌";
-            document.getElementById('result-stats').innerText = `${score} / ${state.questions.length} ΣΩΣΤΕΣ`;
+            document.getElementById('result-stats').innerText = `${score} / ${state.questions.length} ΣΩΣΤΕΣ ΑΠΑΝΤΗΣΕΙΣ`;
         }
     </script>
 </body>
