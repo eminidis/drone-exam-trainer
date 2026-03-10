@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
 <meta charset="UTF-8">
 <title>Drone Exam Trainer</title>
@@ -30,9 +30,9 @@ text-align:center;
 }
 
 button{
-padding:12px 20px;
+padding:14px 22px;
 margin:6px;
-font-size:16px;
+font-size:17px;
 border:none;
 border-radius:8px;
 cursor:pointer;
@@ -100,6 +100,7 @@ font-size:14px;
 
 .green{background:#2ecc71;}
 .red{background:#e74c3c;}
+
 .marked::after{
 content:"!";
 color:yellow;
@@ -127,8 +128,8 @@ font-size:22px;
 
 <div class="menu" id="menu">
 
-<button class="studyBtn" onclick="startStudy()">Study Mode</button>
-<button class="examBtn">Exam Mode</button>
+<button class="studyBtn" onclick="startStudy()">Έναρξη Μελέτης</button>
+<button class="examBtn">Εξέταση</button>
 
 </div>
 
@@ -139,22 +140,22 @@ font-size:22px;
 let questions=[
 
 {
-q:"How far can an open category drone fly?",
-a:["Unlimited","Within VLOS","50km","100m"],
+q:"Ποια είναι η μέγιστη απόσταση πτήσης στην Open Category;",
+a:["Απεριόριστη","Εντός VLOS","50km","100m"],
 correct:1,
 cat:"Airlaw"
 },
 
 {
-q:"What does VLOS mean?",
+q:"Τι σημαίνει VLOS;",
 a:["Visual Line of Sight","Very Long Operating System","Vision Link","Visual Level"],
 correct:0,
 cat:"Airlaw"
 },
 
 {
-q:"Wind affects drone:",
-a:["Stability","Battery","Both","None"],
+q:"Ο άνεμος επηρεάζει το drone;",
+a:["Τη σταθερότητα","Την μπαταρία","Και τα δύο","Τίποτα"],
 correct:2,
 cat:"Meteorology"
 }
@@ -178,11 +179,11 @@ document.getElementById("app").innerHTML=`
 <div class="timer" id="timer">00:00</div>
 
 <div>
-<button onclick="menu()">Menu</button>
-<button onclick="prev()">Previous</button>
-<button onclick="next()">Next</button>
-<button onclick="mark()">Mark</button>
-<button onclick="finish()">Finish</button>
+<button onclick="menu()">Μενού</button>
+<button onclick="prev()">Προηγούμενη</button>
+<button onclick="next()">Επόμενη</button>
+<button onclick="mark()">Σημείωση</button>
+<button onclick="finish()">Τερματισμός</button>
 </div>
 
 </div>
@@ -332,7 +333,7 @@ String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")
 
 function finishPrompt(){
 
-if(confirm("You answered all questions. Finish exam?")){
+if(confirm("Έχεις απαντήσει όλες τις ερωτήσεις. Θέλεις να τερματίσεις το τεστ;")){
 finish()
 }
 
@@ -354,21 +355,21 @@ let time=document.getElementById("timer").innerText
 
 document.getElementById("app").innerHTML=`
 
-<h1>Results</h1>
+<h1>Αποτελέσματα</h1>
 
 <div class="result">
 
-Correct: ${correct} <br><br>
+Σωστές απαντήσεις: ${correct} <br><br>
 
-Wrong: ${wrong} <br><br>
+Λάθος απαντήσεις: ${wrong} <br><br>
 
-Marked: ${marked.length} <br><br>
+Σημειωμένες: ${marked.length} <br><br>
 
-Time: ${time} <br><br>
+Χρόνος: ${time} <br><br>
 
-<button onclick="practiceWrong()">Practice Wrong Questions</button>
+<button onclick="practiceWrong()">Εξάσκηση Λάθος Ερωτήσεων</button>
 
-<button onclick="menu()">Menu</button>
+<button onclick="menu()">Επιστροφή στο Μενού</button>
 
 </div>
 
