@@ -168,6 +168,19 @@ userAnswers[currentQuestion]=i;
 
 render();
 
+if(i===questions[currentQuestion].correct){
+
+setTimeout(()=>{
+
+if(currentQuestion < questions.length-1){
+currentQuestion++;
+render();
+}
+
+},600);
+
+}
+
 }
 
 function next(){
