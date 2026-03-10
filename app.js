@@ -11,7 +11,7 @@ explanation:"Το μέγιστο επιτρεπόμενο ύψος στην open
 question:"Πρέπει να υπάρχει οπτική επαφή με το drone;",
 answers:["Ναι πάντα","Όχι","Μόνο τη νύχτα","Μόνο σε πόλη"],
 correct:0,
-explanation:"Ο χειριστής πρέπει να διατηρεί VLOS (Visual Line of Sight)."
+explanation:"Ο χειριστής πρέπει να διατηρεί VLOS."
 },
 
 {
@@ -25,7 +25,7 @@ explanation:"Η πτήση πάνω από συγκεντρωμένο πλήθο
 question:"Ποιος είναι υπεύθυνος για την πτήση;",
 answers:["Κατασκευαστής","Πιλότος","Αστυνομία","Δήμος"],
 correct:1,
-explanation:"Ο pilot in command είναι πάντα υπεύθυνος."
+explanation:"Ο pilot είναι υπεύθυνος για την πτήση."
 }
 
 ];
@@ -119,13 +119,13 @@ html+=`
 
 <br>
 
-<button onclick="prev()" style="padding:12px 22px;font-size:18px;margin:5px">Previous</button>
+<button onclick="prev()" style="padding:14px 24px;font-size:20px;margin:6px">Previous</button>
 
-<button onclick="next()" style="padding:12px 22px;font-size:18px;margin:5px">Next</button>
+<button onclick="next()" style="padding:14px 24px;font-size:20px;margin:6px">Next</button>
 
-<button onclick="mark()" style="padding:12px 22px;font-size:18px;margin:5px">Mark ❗</button>
+<button onclick="mark()" style="padding:14px 24px;font-size:20px;margin:6px">Mark</button>
 
-<button onclick="finishExam()" style="padding:12px 22px;font-size:18px;margin:5px;background:#444;color:white">Finish</button>
+<button onclick="finishExam()" style="padding:14px 24px;font-size:20px;margin:6px;background:#444;color:white">Finish</button>
 
 </div>
 
@@ -162,9 +162,35 @@ color="#ff8f8f";
 
 }
 
-let markIcon = marked[i] ? "❗" : "";
+let markBadge="";
+
+if(marked[i]){
+
+markBadge=`
+<span style="
+position:absolute;
+top:-6px;
+right:-6px;
+background:yellow;
+color:black;
+font-weight:bold;
+font-size:14px;
+padding:2px 6px;
+border-radius:50%;
+">
+!
+</span>
+`;
+
+}
 
 grid+=`
+
+<div style="
+position:relative;
+display:inline-block;
+">
+
 <button onclick="goto(${i})"
 style="
 width:38px;
@@ -173,8 +199,13 @@ margin:3px;
 background:${color};
 font-weight:bold;
 ">
-${i+1}${markIcon}
+${i+1}
 </button>
+
+${markBadge}
+
+</div>
+
 `;
 
 });
