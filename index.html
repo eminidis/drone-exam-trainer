@@ -24,12 +24,32 @@ font-size:18px;
 margin:10px;
 }
 
+#toolbar{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+background:#222;
+color:white;
+padding:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.2);
+z-index:100;
+}
+
+#toolbar button{
+margin-right:10px;
+padding:8px 14px;
+font-size:16px;
+}
+
 #timer{
-position:absolute;
-top:20px;
-left:20px;
-font-size:20px;
 font-weight:bold;
+margin-left:20px;
+}
+
+#quiz{
+margin-top:80px;
 }
 
 </style>
@@ -38,7 +58,13 @@ font-weight:bold;
 
 <body>
 
-<div id="timer"></div>
+<div id="toolbar">
+
+<button onclick="goHome()">🏠 Menu</button> <button onclick="restartExam()">🔄 Restart</button>
+
+<span id="timer">⏱ 0:00</span>
+
+</div>
 
 <div id="home">
 
@@ -75,10 +101,10 @@ let allQuestions=[
 
 {
 category:"Air Law",
-question:"Πόσο ψηλά επιτρέπεται να πετάει ένα drone ανοιχτής κατηγορίας;",
+question:"Πόσο ψηλά επιτρέπεται να πετάει ένα drone;",
 answers:["50m","120m","300m","500m"],
 correct:1,
-explanation:"Το μέγιστο ύψος είναι 120m."
+explanation:"Το μέγιστο επιτρεπόμενο ύψος είναι 120m."
 },
 
 {
@@ -94,7 +120,7 @@ category:"Human Performance",
 question:"Ποιος είναι υπεύθυνος για την πτήση;",
 answers:["Κατασκευαστής","Πιλότος","Αστυνομία","Δήμος"],
 correct:1,
-explanation:"Ο pilot είναι υπεύθυνος."
+explanation:"Ο pilot είναι υπεύθυνος για την πτήση."
 },
 
 {
@@ -102,7 +128,7 @@ category:"Operational Procedures",
 question:"Πρέπει να υπάρχει οπτική επαφή με το drone;",
 answers:["Ναι πάντα","Όχι","Μόνο τη νύχτα","Μόνο σε πόλη"],
 correct:0,
-explanation:"Πρέπει να διατηρείται VLOS."
+explanation:"Ο χειριστής πρέπει να διατηρεί VLOS."
 }
 
 ];
@@ -118,6 +144,8 @@ let examFinished=false;
 
 function startStudy(){
 
+document.getElementById("toolbar").style.display="block";
+
 let category=document.getElementById("categorySelect").value;
 let amount=document.getElementById("questionAmount").value;
 
@@ -132,6 +160,20 @@ questions=filtered.slice(0,Number(amount));
 }
 
 initExam();
+
+}
+
+function goHome(){
+
+location.reload();
+
+}
+
+function restartExam(){
+
+if(confirm("Restart the study session?")){
+initExam();
+}
 
 }
 
@@ -155,6 +197,7 @@ userAnswers=new Array(questions.length).fill(null);
 marked=new Array(questions.length).fill(false);
 
 startTime=Date.now();
+clearInterval(timerInterval);
 timerInterval=setInterval(updateTimer,1000);
 
 examFinished=false;
@@ -255,7 +298,7 @@ document.getElementById("quiz").innerHTML=html;
 
 function showGrid(){
 
-let grid=`<div style="position:absolute;top:20px;right:20px;background:white;padding:12px;border-radius:10px">`;
+let grid=`<div style="position:absolute;top:100px;right:20px;background:white;padding:12px;border-radius:10px">`;
 
 questions.forEach((q,i)=>{
 
@@ -430,25 +473,8 @@ document.getElementById("quiz").innerHTML=`
 Restart
 </button>
 
-<button onclick="practiceWrong()" style="padding:14px 25px;font-size:18px;margin:8px;background:#ffc107">
-Practice Wrong (${wrongQuestions.length})
-</button>
-
 </div>
 `;
-
-}
-
-function practiceWrong(){
-
-if(wrongQuestions.length===0){
-alert("No wrong questions.");
-return;
-}
-
-questions=wrongQuestions.map(i=>questions[i]);
-
-initExam();
 
 }
 
