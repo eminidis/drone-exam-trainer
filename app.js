@@ -1,79 +1,148 @@
 let questions = [];
 let currentQuestion = 0;
-let answered = false;
 
-async function loadQuestions() {
+let userAnswers = [];
+let markedQuestions = [];
+
+async function loadQuestions(){
 const response = await fetch("questions.json");
 questions = await response.json();
 }
 
-function startStudy() {
+function startStudy(){
 
-document.getElementById("home").style.display = "none";
+document.getElementById("home").style.display="none";
+
+userAnswers = new Array(questions.length).fill(null);
+markedQuestions = new Array(questions.length).fill(false);
 
 currentQuestion = 0;
 
-showQuestion();
+render();
 
 }
 
-function showQuestion() {
+function render(){
 
-answered = false;
+showQuestion();
+showGrid();
+
+}
+
+function showQuestion(){
 
 const q = questions[currentQuestion];
 
 let html = `
-<h2>Ερώτηση ${currentQuestion + 1}</h2>
+<div style="width:65%;float:left;text-align:center">
+
+<h2>Ερώτηση ${currentQuestion+1}</h2>
+
 <p style="font-size:22px">${q.question}</p>
 `;
 
-q.answers.forEach((a, i) => {
-html += `<button onclick="checkAnswer(${i})" id="a${i}" style="display:block;margin:10px auto;padding:15px;width:300px;font-size:18px">${a}</button>`;
+q.answers.forEach((a,i)=>{
+
+let color = "";
+
+if(userAnswers[currentQuestion] !== null){
+
+if(i === questions[currentQuestion].correct){
+color="background:lightgreen";
+}
+
+if(i === userAnswers[currentQuestion] && i !== questions[currentQuestion].correct){
+color="background:#ff9e9e";
+}
+
+}
+
+html += `<button onclick="answer(${i})" style="display:block;margin:10px auto;padding:15px;width:300px;font-size:18px;${color}">${a}</button>`;
+
 });
 
-html += `<div id="result" style="margin-top:20px;font-size:22px"></div>`;
-html += `<button onclick="nextQuestion()" style="margin-top:20px;padding:10px 20px">Επόμενη ερώτηση</button>`;
+html += `
+<br>
+
+<button onclick="previous()">Previous</button>
+
+<button onclick="next()">Next</button>
+
+<button onclick="mark()">❗ Mark</button>
+
+</div>
+`;
 
 document.getElementById("quiz").innerHTML = html;
 
 }
 
-function checkAnswer(i) {
+function showGrid(){
 
-if (answered) return;
+let grid = `<div style="position:absolute;top:80px;right:40px;width:200px">`;
 
-answered = true;
+grid += `<h3>Questions</h3>`;
 
-const correct = questions[currentQuestion].correct;
+questions.forEach((q,i)=>{
 
-if (i === correct) {
+let color="#eee";
 
-document.getElementById("a" + i).style.background = "green";
-document.getElementById("result").innerHTML = "✔ Σωστό";
+if(userAnswers[i] !== null){
+color="#b8ffb8";
+}
 
-} else {
+if(markedQuestions[i]){
+color="#ffe599";
+}
 
-document.getElementById("a" + i).style.background = "red";
-document.getElementById("a" + correct).style.background = "green";
-document.getElementById("result").innerHTML = "❌ Λάθος";
+grid += `<button onclick="goto(${i})" style="width:40px;height:40px;margin:4px;background:${color}">${i+1}</button>`;
+
+});
+
+grid += `</div>`;
+
+document.getElementById("quiz").innerHTML += grid;
 
 }
 
+function answer(i){
+
+userAnswers[currentQuestion] = i;
+
+render();
+
 }
 
-function nextQuestion() {
+function next(){
 
+if(currentQuestion < questions.length-1){
 currentQuestion++;
-
-if (currentQuestion >= questions.length) {
-
-document.getElementById("quiz").innerHTML = "<h2>Τέλος Study Mode</h2>";
-return;
+render();
+}
 
 }
 
-showQuestion();
+function previous(){
+
+if(currentQuestion > 0){
+currentQuestion--;
+render();
+}
+
+}
+
+function goto(i){
+
+currentQuestion = i;
+render();
+
+}
+
+function mark(){
+
+markedQuestions[currentQuestion] = !markedQuestions[currentQuestion];
+
+render();
 
 }
 
