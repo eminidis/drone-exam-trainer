@@ -2,17 +2,20 @@ let questions = [];
 let currentQuestion = 0;
 let answered = false;
 
-async function loadQuestions(){
+async function loadQuestions() {
 const response = await fetch("questions.json");
 questions = await response.json();
 }
 
 function startStudy(){
-document.getElementById("home").style.display="none";
+
+// κρύβει την αρχική οθόνη
+document.getElementById("home").style.display = "none";
 
 currentQuestion = 0;
 
 showQuestion();
+}
 
 function showQuestion(){
 
@@ -21,7 +24,7 @@ answered = false;
 const q = questions[currentQuestion];
 
 let html = `
-<h2>Ερώτηση ${currentQuestion+1}</h2>
+<h2>Ερώτηση ${currentQuestion + 1}</h2>
 <p style="font-size:22px">${q.question}</p>
 `;
 
@@ -53,7 +56,6 @@ document.getElementById("result").innerHTML="✔ Σωστό";
 
 document.getElementById("a"+i).style.background="red";
 document.getElementById("a"+correct).style.background="green";
-
 document.getElementById("result").innerHTML="❌ Λάθος";
 
 }
