@@ -97,7 +97,7 @@ color="background:#ff8f8f";
 
 html+=`
 <button onclick="answer(${i})"
-style="display:block;margin:10px auto;padding:15px;width:300px;font-size:18px;${color}">
+style="display:block;margin:10px auto;padding:15px;width:320px;font-size:18px;${color}">
 ${a}
 </button>
 `;
@@ -119,10 +119,13 @@ html+=`
 
 <br>
 
-<button onclick="prev()">Previous</button>
-<button onclick="next()">Next</button>
-<button onclick="mark()">❗ Mark</button>
-<button onclick="finishExam()">Finish</button>
+<button onclick="prev()" style="padding:12px 22px;font-size:18px;margin:5px">Previous</button>
+
+<button onclick="next()" style="padding:12px 22px;font-size:18px;margin:5px">Next</button>
+
+<button onclick="mark()" style="padding:12px 22px;font-size:18px;margin:5px">Mark ❗</button>
+
+<button onclick="finishExam()" style="padding:12px 22px;font-size:18px;margin:5px;background:#444;color:white">Finish</button>
 
 </div>
 
@@ -140,7 +143,7 @@ position:absolute;
 top:20px;
 right:20px;
 background:white;
-padding:10px;
+padding:12px;
 border-radius:10px;
 ">
 
@@ -159,12 +162,18 @@ color="#ff8f8f";
 
 }
 
-if(marked[i]) color="yellow";
+let markIcon = marked[i] ? "❗" : "";
 
 grid+=`
 <button onclick="goto(${i})"
-style="width:35px;height:35px;margin:3px;background:${color}">
-${i+1}
+style="
+width:38px;
+height:38px;
+margin:3px;
+background:${color};
+font-weight:bold;
+">
+${i+1}${markIcon}
 </button>
 `;
 
@@ -257,7 +266,7 @@ document.getElementById("quiz").innerHTML=`
 
 <h3>${percent>=75 ? "PASS" : "FAIL"}</h3>
 
-<button onclick="location.reload()">Restart</button>
+<button onclick="location.reload()" style="padding:14px 25px;font-size:18px">Restart</button>
 
 </div>
 
