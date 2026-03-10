@@ -1,24 +1,59 @@
-let questions = [];
-let currentQuestion = 0;
+let questions = [
 
-let userAnswers = [];
-let markedQuestions = [];
+{
+question:"Πόσο ψηλά επιτρέπεται να πετάει ένα drone ανοιχτής κατηγορίας;",
+answers:["50m","120m","300m","500m"],
+correct:1
+},
 
-async function loadQuestions(){
-const response = await fetch("questions.json");
-questions = await response.json();
+{
+question:"Πρέπει να υπάρχει οπτική επαφή με το drone;",
+answers:["Ναι πάντα","Όχι","Μόνο τη νύχτα","Μόνο σε πόλη"],
+correct:0
+},
+
+{
+question:"Μπορεί drone να πετάξει πάνω από συγκεντρωμένο πλήθος;",
+answers:["Ναι","Όχι","Μόνο με άδεια","Μόνο χαμηλά"],
+correct:1
+},
+
+{
+question:"Ποιος είναι υπεύθυνος για την πτήση;",
+answers:["Κατασκευαστής","Πιλότος","Αστυνομία","Δήμος"],
+correct:1
 }
+
+];
+
+let currentQuestion=0;
+let userAnswers=[];
+let marked=[];
+let startTime;
+let timerInterval;
 
 function startStudy(){
 
 document.getElementById("home").style.display="none";
 
-userAnswers = new Array(questions.length).fill(null);
-markedQuestions = new Array(questions.length).fill(false);
+userAnswers=new Array(questions.length).fill(null);
+marked=new Array(questions.length).fill(false);
 
-currentQuestion = 0;
+startTime=Date.now();
+timerInterval=setInterval(updateTimer,1000);
 
 render();
+
+}
+
+function updateTimer(){
+
+let seconds=Math.floor((Date.now()-startTime)/1000);
+
+let min=Math.floor(seconds/60);
+let sec=seconds%60;
+
+document.getElementById("timer").innerHTML="⏱ "+min+":"+sec.toString().padStart(2,"0");
 
 }
 
@@ -31,83 +66,103 @@ showGrid();
 
 function showQuestion(){
 
-const q = questions[currentQuestion];
+let q=questions[currentQuestion];
 
-let html = `
-<div style="width:65%;float:left;text-align:center">
+let html=`
+
+<div style="width:60%;margin:auto;background:white;padding:20px;border-radius:10px">
 
 <h2>Ερώτηση ${currentQuestion+1}</h2>
 
 <p style="font-size:22px">${q.question}</p>
+
 `;
 
 q.answers.forEach((a,i)=>{
 
-let color = "";
+let color="";
 
-if(userAnswers[currentQuestion] !== null){
+if(userAnswers[currentQuestion]!==null){
 
-if(i === questions[currentQuestion].correct){
-color="background:lightgreen";
-}
+if(i===q.correct) color="background:#9cff9c";
 
-if(i === userAnswers[currentQuestion] && i !== questions[currentQuestion].correct){
-color="background:#ff9e9e";
-}
+if(i===userAnswers[currentQuestion] && i!==q.correct)
+color="background:#ff8f8f";
 
 }
 
-html += `<button onclick="answer(${i})" style="display:block;margin:10px auto;padding:15px;width:300px;font-size:18px;${color}">${a}</button>`;
+html+=`
+<button onclick="answer(${i})"
+style="display:block;margin:10px auto;padding:15px;width:300px;font-size:18px;${color}">
+${a}
+</button>
+`;
 
 });
 
-html += `
+html+=`
+
 <br>
 
-<button onclick="previous()">Previous</button>
-
+<button onclick="prev()">Previous</button>
 <button onclick="next()">Next</button>
-
 <button onclick="mark()">❗ Mark</button>
 
 </div>
+
 `;
 
-document.getElementById("quiz").innerHTML = html;
+document.getElementById("quiz").innerHTML=html;
 
 }
 
 function showGrid(){
 
-let grid = `<div style="position:absolute;top:80px;right:40px;width:200px">`;
+let grid=`
+<div style="
+position:absolute;
+top:20px;
+right:20px;
+background:white;
+padding:10px;
+border-radius:10px;
+">
 
-grid += `<h3>Questions</h3>`;
+`;
 
 questions.forEach((q,i)=>{
 
-let color="#eee";
+let color="white";
 
-if(userAnswers[i] !== null){
-color="#b8ffb8";
+if(userAnswers[i]!==null){
+
+if(userAnswers[i]===questions[i].correct)
+color="#9cff9c";
+else
+color="#ff8f8f";
+
 }
 
-if(markedQuestions[i]){
-color="#ffe599";
-}
+if(marked[i]) color="yellow";
 
-grid += `<button onclick="goto(${i})" style="width:40px;height:40px;margin:4px;background:${color}">${i+1}</button>`;
+grid+=`
+<button onclick="goto(${i})"
+style="width:35px;height:35px;margin:3px;background:${color}">
+${i+1}
+</button>
+`;
 
 });
 
-grid += `</div>`;
+grid+="</div>";
 
-document.getElementById("quiz").innerHTML += grid;
+document.getElementById("quiz").innerHTML+=grid;
 
 }
 
 function answer(i){
 
-userAnswers[currentQuestion] = i;
+userAnswers[currentQuestion]=i;
 
 render();
 
@@ -115,16 +170,16 @@ render();
 
 function next(){
 
-if(currentQuestion < questions.length-1){
+if(currentQuestion<questions.length-1){
 currentQuestion++;
 render();
 }
 
 }
 
-function previous(){
+function prev(){
 
-if(currentQuestion > 0){
+if(currentQuestion>0){
 currentQuestion--;
 render();
 }
@@ -133,17 +188,14 @@ render();
 
 function goto(i){
 
-currentQuestion = i;
+currentQuestion=i;
 render();
 
 }
 
 function mark(){
 
-markedQuestions[currentQuestion] = !markedQuestions[currentQuestion];
-
+marked[currentQuestion]=!marked[currentQuestion];
 render();
 
 }
-
-loadQuestions();
