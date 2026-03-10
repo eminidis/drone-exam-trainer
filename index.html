@@ -13,7 +13,7 @@ margin:0;
 text-align:center;
 background-image:url("background.jpg");
 background-size:cover;
-background-position:center;
+background-position:center 70%;
 background-attachment:fixed;
 }
 
@@ -77,7 +77,7 @@ box-shadow:0 2px 6px rgba(0,0,0,0.2);
 
 <div id="toolbar">
 
-<button onclick="goHome()">🏠 Menu</button> <button onclick="restartExam()">🔄 Restart</button>
+<button onclick="goHome()">🏠 Menu</button>
 
 <span id="timer">⏱ 0:00</span>
 
@@ -195,14 +195,6 @@ initExam();
 
 function goHome(){
 location.reload();
-}
-
-function restartExam(){
-
-if(confirm("Restart study session?")){
-initExam();
-}
-
 }
 
 function shuffle(array){
