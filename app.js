@@ -162,6 +162,8 @@ document.getElementById("quiz").innerHTML+=grid;
 
 function answer(i){
 
+if(userAnswers[currentQuestion]!==null) return;
+
 userAnswers[currentQuestion]=i;
 
 render();
