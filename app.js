@@ -3,25 +3,29 @@ let questions = [
 {
 question:"Πόσο ψηλά επιτρέπεται να πετάει ένα drone ανοιχτής κατηγορίας;",
 answers:["50m","120m","300m","500m"],
-correct:1
+correct:1,
+explanation:"Το μέγιστο επιτρεπόμενο ύψος στην open category είναι 120m."
 },
 
 {
 question:"Πρέπει να υπάρχει οπτική επαφή με το drone;",
 answers:["Ναι πάντα","Όχι","Μόνο τη νύχτα","Μόνο σε πόλη"],
-correct:0
+correct:0,
+explanation:"Ο χειριστής πρέπει να διατηρεί VLOS (Visual Line of Sight)."
 },
 
 {
 question:"Μπορεί drone να πετάξει πάνω από συγκεντρωμένο πλήθος;",
 answers:["Ναι","Όχι","Μόνο με άδεια","Μόνο χαμηλά"],
-correct:1
+correct:1,
+explanation:"Η πτήση πάνω από συγκεντρωμένο πλήθος απαγορεύεται."
 },
 
 {
 question:"Ποιος είναι υπεύθυνος για την πτήση;",
 answers:["Κατασκευαστής","Πιλότος","Αστυνομία","Δήμος"],
-correct:1
+correct:1,
+explanation:"Ο pilot in command είναι πάντα υπεύθυνος."
 }
 
 ];
@@ -100,6 +104,17 @@ ${a}
 
 });
 
+if(userAnswers[currentQuestion]!==null && userAnswers[currentQuestion]!==q.correct){
+
+html+=`
+<div style="margin-top:20px;padding:15px;background:#f4f4f4;border-radius:8px">
+<b>Explanation:</b><br>
+${q.explanation}
+</div>
+`;
+
+}
+
 html+=`
 
 <br>
@@ -107,6 +122,7 @@ html+=`
 <button onclick="prev()">Previous</button>
 <button onclick="next()">Next</button>
 <button onclick="mark()">❗ Mark</button>
+<button onclick="finishExam()">Finish</button>
 
 </div>
 
@@ -212,5 +228,39 @@ function mark(){
 
 marked[currentQuestion]=!marked[currentQuestion];
 render();
+
+}
+
+function finishExam(){
+
+if(!confirm("Θέλεις σίγουρα να ολοκληρώσεις το test;")) return;
+
+clearInterval(timerInterval);
+
+let correct=0;
+
+questions.forEach((q,i)=>{
+if(userAnswers[i]===q.correct) correct++;
+});
+
+let percent=Math.round((correct/questions.length)*100);
+
+document.getElementById("quiz").innerHTML=`
+
+<div style="width:50%;margin:auto;background:white;padding:30px;border-radius:10px">
+
+<h2>Αποτέλεσμα</h2>
+
+<p>Σωστές απαντήσεις: ${correct} / ${questions.length}</p>
+
+<p>Ποσοστό: ${percent}%</p>
+
+<h3>${percent>=75 ? "PASS" : "FAIL"}</h3>
+
+<button onclick="location.reload()">Restart</button>
+
+</div>
+
+`;
 
 }
