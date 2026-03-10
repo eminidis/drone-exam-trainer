@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Drone Exam Trainer</title>
@@ -8,528 +7,391 @@
 <style>
 
 body{
-font-family:Arial;
 margin:0;
-text-align:center;
-background-image:url("background.jpg");
-background-size:cover;
-background-position:center 70%;
-background-attachment:fixed;
-}
-
-#home{
-margin-top:120px;
-background:rgba(255,255,255,0.9);
-display:inline-block;
-padding:40px;
-border-radius:12px;
-}
-
-select,button{
-padding:12px;
-font-size:18px;
-margin:10px;
-}
-
-#toolbar{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-background:#222;
+font-family:Arial;
+background:url("background.jpg") center/cover no-repeat fixed;
 color:white;
-padding:10px;
-z-index:100;
 }
 
-#toolbar button{
-margin-right:10px;
-padding:8px 14px;
+.overlay{
+background:rgba(0,0,0,0.65);
+min-height:100vh;
+padding:40px;
+}
+
+h1{
+text-align:center;
+font-size:40px;
+margin-bottom:30px;
+}
+
+.menu{
+text-align:center;
+}
+
+button{
+padding:12px 20px;
+margin:6px;
 font-size:16px;
+border:none;
+border-radius:8px;
+cursor:pointer;
 }
 
-#timer{
-font-weight:bold;
-margin-left:20px;
+.studyBtn{background:#2ecc71;color:white;}
+.examBtn{background:#3498db;color:white;}
+
+.toolbar{
+display:flex;
+justify-content:space-between;
+margin-bottom:15px;
 }
 
-#quiz{
-margin-top:80px;
+.progress{
+height:10px;
+background:#444;
+border-radius:5px;
+overflow:hidden;
+margin-bottom:20px;
 }
 
-#stats{
+.progressBar{
+height:100%;
+background:#2ecc71;
+width:0%;
+}
+
+.question{
+font-size:22px;
+margin-bottom:20px;
+}
+
+.answers button{
+display:block;
+width:100%;
+text-align:left;
+background:#333;
+color:white;
+margin-bottom:10px;
+}
+
+.correct{background:#2ecc71!important;}
+.wrong{background:#e74c3c!important;}
+
+.grid{
 position:absolute;
-top:90px;
+top:20px;
 right:20px;
-background:white;
-padding:12px;
-border-radius:10px;
-font-size:16px;
-box-shadow:0 2px 6px rgba(0,0,0,0.2);
+display:grid;
+grid-template-columns:repeat(5,40px);
+gap:6px;
+}
+
+.grid div{
+width:40px;
+height:40px;
+background:#555;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:5px;
+font-size:14px;
+}
+
+.green{background:#2ecc71;}
+.red{background:#e74c3c;}
+.marked::after{
+content:"!";
+color:yellow;
+font-weight:bold;
+margin-left:3px;
+}
+
+.timer{
+font-size:18px;
+}
+
+.result{
+text-align:center;
+font-size:22px;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<div id="toolbar">
-
-<button onclick="goHome()">🏠 Menu</button>
-
-<span id="timer">⏱ 0:00</span>
-
-</div>
-
-<div id="home">
+<div class="overlay" id="app">
 
 <h1>Drone Exam Trainer</h1>
 
-<select id="categorySelect">
+<div class="menu" id="menu">
 
-<option value="All">All Questions</option>
-<option value="Air Law">Air Law</option>
-<option value="Meteorology">Meteorology</option>
-<option value="Human Performance">Human Performance</option>
-<option value="Operational Procedures">Operational Procedures</option>
-
-</select>
-
-<br>
-
-<select id="questionAmount">
-<option value="5">5 Questions</option>
-<option value="10">10 Questions</option>
-<option value="30">30 Questions</option>
-<option value="all">All Questions</option>
-</select>
-
-<br>
-
-<button onclick="startStudy()">Start Study</button>
+<button class="studyBtn" onclick="startStudy()">Study Mode</button>
+<button class="examBtn">Exam Mode</button>
 
 </div>
 
-<div id="quiz"></div>
+</div>
 
 <script>
 
-let allQuestions=[
+let questions=[
 
 {
-category:"Air Law",
-question:"Πόσο ψηλά επιτρέπεται να πετάει ένα drone;",
-answers:["50m","120m","300m","500m"],
+q:"How far can an open category drone fly?",
+a:["Unlimited","Within VLOS","50km","100m"],
 correct:1,
-explanation:"Το μέγιστο επιτρεπόμενο ύψος είναι 120m."
+cat:"Airlaw"
 },
 
 {
-category:"Air Law",
-question:"Μπορεί drone να πετάξει πάνω από πλήθος;",
-answers:["Ναι","Όχι","Μόνο με άδεια","Μόνο χαμηλά"],
-correct:1,
-explanation:"Η πτήση πάνω από πλήθος απαγορεύεται."
-},
-
-{
-category:"Human Performance",
-question:"Ποιος είναι υπεύθυνος για την πτήση;",
-answers:["Κατασκευαστής","Πιλότος","Αστυνομία","Δήμος"],
-correct:1,
-explanation:"Ο pilot είναι υπεύθυνος."
-},
-
-{
-category:"Operational Procedures",
-question:"Πρέπει να υπάρχει οπτική επαφή με το drone;",
-answers:["Ναι πάντα","Όχι","Μόνο τη νύχτα","Μόνο σε πόλη"],
+q:"What does VLOS mean?",
+a:["Visual Line of Sight","Very Long Operating System","Vision Link","Visual Level"],
 correct:0,
-explanation:"Πρέπει να υπάρχει VLOS."
+cat:"Airlaw"
+},
+
+{
+q:"Wind affects drone:",
+a:["Stability","Battery","Both","None"],
+correct:2,
+cat:"Meteorology"
 }
 
-];
+]
 
-let questions=[];
-let wrongQuestions=[];
-let currentQuestion=0;
-let userAnswers=[];
-let marked=[];
-let startTime;
-let timerInterval;
-let examFinished=false;
+let current=0
+let answers=[]
+let marked=[]
+let startTime
+let timerInterval
 
 function startStudy(){
 
-document.getElementById("toolbar").style.display="block";
-document.body.style.backgroundImage="none";
+startTime=Date.now()
 
-let category=document.getElementById("categorySelect").value;
-let amount=document.getElementById("questionAmount").value;
+document.getElementById("app").innerHTML=`
 
-let filtered;
+<div class="toolbar">
 
-if(category==="All"){
+<div class="timer" id="timer">00:00</div>
 
-filtered=[...allQuestions];
+<div>
+<button onclick="menu()">Menu</button>
+<button onclick="prev()">Previous</button>
+<button onclick="next()">Next</button>
+<button onclick="mark()">Mark</button>
+<button onclick="finish()">Finish</button>
+</div>
 
-}else{
+</div>
 
-filtered=allQuestions.filter(q=>q.category===category);
+<div class="progress">
+<div class="progressBar" id="progressBar"></div>
+</div>
 
-}
+<div class="question" id="question"></div>
 
-shuffle(filtered);
+<div class="answers" id="answers"></div>
 
-if(amount==="all"){
-questions=filtered;
-}else{
-questions=filtered.slice(0,Number(amount));
-}
+<div class="grid" id="grid"></div>
 
-initExam();
+`
 
-}
-
-function goHome(){
-location.reload();
-}
-
-function shuffle(array){
-
-for(let i=array.length-1;i>0;i--){
-
-let j=Math.floor(Math.random()*(i+1));
-[array[i],array[j]]=[array[j],array[i]];
-
-}
-
-}
-
-function initExam(){
-
-document.getElementById("home").style.display="none";
-
-currentQuestion=0;
-userAnswers=new Array(questions.length).fill(null);
-marked=new Array(questions.length).fill(false);
-
-startTime=Date.now();
-clearInterval(timerInterval);
-timerInterval=setInterval(updateTimer,1000);
-
-examFinished=false;
-
-render();
-
-}
-
-function updateTimer(){
-
-let seconds=Math.floor((Date.now()-startTime)/1000);
-
-let min=Math.floor(seconds/60);
-let sec=seconds%60;
-
-document.getElementById("timer").innerHTML="⏱ "+min+":"+sec.toString().padStart(2,"0");
+render()
+startTimer()
 
 }
 
 function render(){
 
-showQuestion();
-showGrid();
-showStats();
-checkAutoFinish();
+let q=questions[current]
+
+document.getElementById("question").innerText=(current+1)+". "+q.q
+
+let answersDiv=document.getElementById("answers")
+answersDiv.innerHTML=""
+
+q.a.forEach((ans,i)=>{
+
+let btn=document.createElement("button")
+btn.innerText=ans
+
+btn.onclick=()=>answer(i,btn)
+
+answersDiv.appendChild(btn)
+
+})
+
+renderGrid()
+updateProgress()
 
 }
 
-function showStats(){
+function answer(i,btn){
 
-let correct=0;
-let wrong=0;
+if(answers[current]!=undefined)return
 
-userAnswers.forEach((a,i)=>{
+answers[current]=i
 
-if(a!==null){
-
-if(a===questions[i].correct) correct++;
-else wrong++;
-
+if(i==questions[current].correct){
+btn.classList.add("correct")
+setTimeout(()=>next(),600)
+}else{
+btn.classList.add("wrong")
 }
 
-});
-
-let remaining=questions.length-(correct+wrong);
-
-let statsHTML=`
-
-<div id="stats">
-
-<b>Statistics</b><br><br>
-
-Correct: ${correct}<br>
-Wrong: ${wrong}<br>
-Remaining: ${remaining}
-
-</div>
-
-`;
-
-document.getElementById("quiz").innerHTML+=statsHTML;
-
-}
-
-function showQuestion(){
-
-let q=questions[currentQuestion];
-
-let progress=Math.round(((currentQuestion+1)/questions.length)*100);
-
-let html=`
-
-<div style="width:60%;margin:auto;background:white;padding:20px;border-radius:10px">
-
-<h3>Question ${currentQuestion+1} / ${questions.length}</h3>
-
-<div style="width:100%;background:#ddd;border-radius:10px;overflow:hidden;margin-bottom:20px">
-<div style="width:${progress}%;background:#4caf50;height:16px"></div>
-</div>
-
-<p style="font-size:22px">${q.question}</p>
-`;
-
-q.answers.forEach((a,i)=>{
-
-let color="";
-
-if(userAnswers[currentQuestion]!==null){
-
-if(i===q.correct) color="background:#9cff9c";
-
-if(i===userAnswers[currentQuestion] && i!==q.correct)
-color="background:#ff8f8f";
-
-}
-
-html+=`
-<button onclick="answer(${i})"
-style="display:block;margin:10px auto;padding:15px;width:320px;font-size:18px;${color}">
-${a}
-</button>
-`;
-
-});
-
-if(userAnswers[currentQuestion]!==null && userAnswers[currentQuestion]!==q.correct){
-
-html+=`
-<div style="margin-top:20px;padding:15px;background:#f4f4f4;border-radius:8px">
-<b>Explanation:</b><br>
-${q.explanation}
-</div>
-`;
-
-}
-
-html+=`
-
-<br>
-
-<button onclick="prev()" style="padding:14px 24px;font-size:20px;margin:6px">Previous</button>
-<button onclick="next()" style="padding:14px 24px;font-size:20px;margin:6px">Next</button>
-<button onclick="mark()" style="padding:14px 24px;font-size:20px;margin:6px">Mark</button>
-<button onclick="finishExam()" style="padding:14px 24px;font-size:20px;margin:6px;background:#444;color:white">Finish</button>
-
-</div>
-`;
-
-document.getElementById("quiz").innerHTML=html;
-
-}
-
-function showGrid(){
-
-let grid=`<div style="position:absolute;top:200px;right:20px;background:white;padding:12px;border-radius:10px">`;
-
-questions.forEach((q,i)=>{
-
-let color="white";
-
-if(userAnswers[i]!==null){
-
-if(userAnswers[i]===questions[i].correct)
-color="#9cff9c";
-else
-color="#ff8f8f";
-
-}
-
-let markBadge="";
-
-if(marked[i]){
-
-markBadge=`<span style="position:absolute;top:-6px;right:-6px;background:yellow;font-weight:bold;padding:2px 6px;border-radius:50%">!</span>`;
-
-}
-
-grid+=`
-
-<div style="position:relative;display:inline-block">
-
-<button onclick="goto(${i})"
-style="width:38px;height:38px;margin:3px;background:${color}">
-${i+1}
-</button>
-
-${markBadge}
-
-</div>
-`;
-
-});
-
-grid+="</div>";
-
-document.getElementById("quiz").innerHTML+=grid;
-
-}
-
-function answer(i){
-
-if(userAnswers[currentQuestion]!==null) return;
-
-userAnswers[currentQuestion]=i;
-
-render();
-
-if(i===questions[currentQuestion].correct){
-
-setTimeout(()=>{
-
-if(currentQuestion<questions.length-1){
-currentQuestion++;
-render();
-}
-
-},600);
-
-}
+renderGrid()
 
 }
 
 function next(){
-
-if(currentQuestion<questions.length-1){
-currentQuestion++;
-render();
+if(current<questions.length-1){
+current++
+render()
+}else{
+finishPrompt()
 }
-
 }
 
 function prev(){
-
-if(currentQuestion>0){
-currentQuestion--;
-render();
+if(current>0){
+current--
+render()
 }
-
-}
-
-function goto(i){
-
-currentQuestion=i;
-render();
-
 }
 
 function mark(){
-
-marked[currentQuestion]=!marked[currentQuestion];
-render();
-
-}
-
-function checkAutoFinish(){
-
-if(examFinished) return;
-
-let allAnswered=userAnswers.every(a=>a!==null);
-
-if(allAnswered){
-
-examFinished=true;
-
-setTimeout(()=>{
-
-if(confirm("All questions answered. Finish exam?")){
-showResults();
+if(!marked.includes(current)){
+marked.push(current)
 }else{
-examFinished=false;
+marked=marked.filter(x=>x!=current)
+}
+renderGrid()
 }
 
-},300);
+function renderGrid(){
 
-}
-
-}
-
-function finishExam(){
-
-let unanswered=userAnswers.includes(null);
-
-if(unanswered){
-
-if(!confirm("You still have unanswered questions. Finish anyway?")) return;
-
-}
-
-showResults();
-
-}
-
-function showResults(){
-
-clearInterval(timerInterval);
-
-let correct=0;
-wrongQuestions=[];
+let grid=document.getElementById("grid")
+grid.innerHTML=""
 
 questions.forEach((q,i)=>{
 
-if(userAnswers[i]===q.correct){
-correct++;
+let box=document.createElement("div")
+box.innerText=i+1
+
+if(answers[i]!=undefined){
+
+if(answers[i]==questions[i].correct){
+box.classList.add("green")
 }else{
-wrongQuestions.push(i);
+box.classList.add("red")
 }
 
-});
+}
 
-let percent=Math.round((correct/questions.length)*100);
+if(marked.includes(i)){
+box.classList.add("marked")
+}
 
-document.getElementById("quiz").innerHTML=`
+box.onclick=()=>{
+current=i
+render()
+}
 
-<div style="width:50%;margin:auto;background:white;padding:30px;border-radius:10px">
+grid.appendChild(box)
 
-<h2>Results</h2>
+})
 
-<p>Correct answers: ${correct} / ${questions.length}</p>
+}
 
-<p>Score: ${percent}%</p>
+function updateProgress(){
 
-<h3>${percent>=75?"PASS":"FAIL"}</h3>
+let done=answers.filter(x=>x!=undefined).length
+let percent=(done/questions.length)*100
 
-<br>
+document.getElementById("progressBar").style.width=percent+"%"
 
-<button onclick="location.reload()" style="padding:14px 25px;font-size:18px;margin:8px">
-Restart
-</button>
+}
+
+function startTimer(){
+
+timerInterval=setInterval(()=>{
+
+let sec=Math.floor((Date.now()-startTime)/1000)
+let m=Math.floor(sec/60)
+let s=sec%60
+
+document.getElementById("timer").innerText=
+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")
+
+},1000)
+
+}
+
+function finishPrompt(){
+
+if(confirm("You answered all questions. Finish exam?")){
+finish()
+}
+
+}
+
+function finish(){
+
+clearInterval(timerInterval)
+
+let correct=0
+
+answers.forEach((a,i)=>{
+if(a==questions[i].correct)correct++
+})
+
+let wrong=answers.length-correct
+
+let time=document.getElementById("timer").innerText
+
+document.getElementById("app").innerHTML=`
+
+<h1>Results</h1>
+
+<div class="result">
+
+Correct: ${correct} <br><br>
+
+Wrong: ${wrong} <br><br>
+
+Marked: ${marked.length} <br><br>
+
+Time: ${time} <br><br>
+
+<button onclick="practiceWrong()">Practice Wrong Questions</button>
+
+<button onclick="menu()">Menu</button>
 
 </div>
-`;
 
+`
+
+}
+
+function practiceWrong(){
+
+let wrongQuestions=questions.filter((q,i)=>answers[i]!=q.correct)
+
+questions=wrongQuestions
+
+answers=[]
+marked=[]
+current=0
+
+startStudy()
+
+}
+
+function menu(){
+location.reload()
 }
 
 </script>
