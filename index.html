@@ -3,63 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <title>Drone Exam Trainer</title>
-<style>
-body{font-family:Arial;text-align:center;padding:40px;background:#111;color:white}
-button{padding:15px 30px;margin:10px;font-size:18px;border:none;border-radius:8px}
-.study{background:#4CAF50}
-.exam{background:#2196F3}
-</style>
 </head>
 
-<body>
+<body style="font-family:Arial;text-align:center;margin-top:80px">
 
 <h1>Drone Exam Trainer</h1>
 
-<button class="study" onclick="startStudy()">Study Mode</button>
-<button class="exam" onclick="startExam()">Exam Mode</button>
+<button onclick="startStudy()" style="font-size:20px;padding:15px;margin:10px">
+Study Mode
+</button>
 
-<div id="app"></div>
+<br>
 
-<script>
+<button onclick="startExam()" style="font-size:20px;padding:15px;margin:10px">
+Exam Mode
+</button>
 
-let questions=[]
-
-fetch('questions.json')
-.then(r=>r.json())
-.then(data=>{
-questions=data.categories[0].questions
-})
-
-function startStudy(){
-showQuestion(0)
-}
-
-function startExam(){
-showQuestion(0)
-}
-
-function showQuestion(i){
-
-let q=questions[i]
-
-let html="<h2>"+q.question+"</h2>"
-
-q.answers.forEach((a,index)=>{
-html+="<button onclick='check("+index+","+q.correct+")'>"+a+"</button><br><br>"
-})
-
-document.getElementById("app").innerHTML=html
-}
-
-function check(a,c){
-if(a==c){
-alert("Σωστό")
-}else{
-alert("Λάθος")
-}
-}
-
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
