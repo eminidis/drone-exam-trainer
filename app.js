@@ -1,4 +1,4 @@
-let questions = [
+let allQuestions = [
 
 {
 question:"Πόσο ψηλά επιτρέπεται να πετάει ένα drone ανοιχτής κατηγορίας;",
@@ -30,21 +30,48 @@ explanation:"Ο pilot είναι υπεύθυνος για την πτήση."
 
 ];
 
+let questions=[];
+let wrongQuestions=[];
 let currentQuestion=0;
 let userAnswers=[];
 let marked=[];
 let startTime;
 let timerInterval;
+let examFinished=false;
 
 function startStudy(){
 
+questions=[...allQuestions];
+
+initExam();
+
+}
+
+function practiceWrong(){
+
+if(wrongQuestions.length===0){
+alert("No wrong questions to practice.");
+return;
+}
+
+questions=wrongQuestions.map(i=>allQuestions[i]);
+
+initExam();
+
+}
+
+function initExam(){
+
 document.getElementById("home").style.display="none";
 
+currentQuestion=0;
 userAnswers=new Array(questions.length).fill(null);
 marked=new Array(questions.length).fill(false);
 
 startTime=Date.now();
 timerInterval=setInterval(updateTimer,1000);
+
+examFinished=false;
 
 render();
 
@@ -254,15 +281,21 @@ render();
 
 function checkAutoFinish(){
 
+if(examFinished) return;
+
 let allAnswered=userAnswers.every(a=>a!==null);
 
 if(allAnswered){
 
+examFinished=true;
+
 setTimeout(()=>{
 
-alert("Finished! All questions answered.");
-
+if(confirm("All questions are answered. Finish exam?")){
 showResults();
+}else{
+examFinished=false;
+}
 
 },300);
 
@@ -276,7 +309,7 @@ let unanswered=userAnswers.includes(null);
 
 if(unanswered){
 
-if(!confirm("You have unanswered questions. Finish anyway?")) return;
+if(!confirm("You still have unanswered questions. Finish anyway?")) return;
 
 }
 
@@ -289,9 +322,16 @@ function showResults(){
 clearInterval(timerInterval);
 
 let correct=0;
+wrongQuestions=[];
 
 questions.forEach((q,i)=>{
-if(userAnswers[i]===q.correct) correct++;
+
+if(userAnswers[i]===q.correct){
+correct++;
+}else{
+wrongQuestions.push(i);
+}
+
 });
 
 let percent=Math.round((correct/questions.length)*100);
@@ -308,7 +348,15 @@ document.getElementById("quiz").innerHTML=`
 
 <h3>${percent>=75 ? "PASS" : "FAIL"}</h3>
 
-<button onclick="location.reload()" style="padding:14px 25px;font-size:18px">Restart</button>
+<br>
+
+<button onclick="location.reload()" style="padding:14px 25px;font-size:18px;margin:8px">
+Restart Exam
+</button>
+
+<button onclick="practiceWrong()" style="padding:14px 25px;font-size:18px;margin:8px;background:#ffc107">
+Practice Wrong Questions (${wrongQuestions.length})
+</button>
 
 </div>
 
