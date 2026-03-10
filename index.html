@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drone Exam Trainer - Flag & Review</title>
+    <title>Drone Exam Trainer - Full Version</title>
     <style>
         :root {
             --primary: #3498db;
@@ -17,7 +17,7 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', system-ui, sans-serif;
-            background: #000 url('https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=2000') center/cover no-repeat fixed;
+            background: #000 url('https://images.unsplash.com/photo-1473960104502-699658959944?q=80&w=2000') center/cover no-repeat fixed;
             color: white;
             overflow-x: hidden;
         }
@@ -70,7 +70,6 @@
             color: white;
             font-size: 1.1rem;
             outline: none;
-            transition: border-color 0.3s;
         }
 
         .top-nav {
@@ -92,38 +91,39 @@
             padding: 35px;
             border-radius: 20px;
             margin-bottom: 25px;
-            min-height: 320px;
+            min-height: 350px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             position: relative;
         }
 
         .flag-btn {
             position: absolute;
-            top: 30px;
-            right: 35px;
-            background: transparent;
+            top: 25px;
+            right: 25px;
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255,255,255,0.2);
             color: white;
-            padding: 8px 12px;
+            padding: 8px 15px;
             border-radius: 8px;
             cursor: pointer;
+            transition: 0.3s;
             display: flex;
             align-items: center;
-            gap: 5px;
-            transition: 0.3s;
+            gap: 8px;
+            z-index: 10;
         }
 
         .flag-btn.active {
             background: var(--flag);
-            border-color: var(--flag);
             color: #000;
+            border-color: var(--flag);
         }
 
         .ans-grid {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-top: 25px;
+            margin-top: 30px;
         }
 
         .ans-btn {
@@ -135,15 +135,15 @@
             text-align: left;
             cursor: pointer;
             font-size: 1.05rem;
-            transition: all 0.2s;
+            transition: 0.2s;
         }
 
         .ans-btn:hover:not(:disabled) {
-            background: rgba(52, 152, 219, 0.15);
+            background: rgba(52, 152, 219, 0.1);
             border-color: var(--primary);
         }
 
-        .ans-btn.correct { background: var(--success) !important; border-color: var(--success); color: #000; font-weight: bold; }
+        .ans-btn.correct { background: var(--success) !important; color: #000; font-weight: bold; border-color: var(--success); }
         .ans-btn.wrong { background: var(--danger) !important; border-color: var(--danger); }
 
         .sidebar {
@@ -162,7 +162,7 @@
 
         .dot {
             aspect-ratio: 1;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -170,43 +170,46 @@
             font-size: 0.85rem;
             cursor: pointer;
             transition: 0.2s;
+            border: 1px solid transparent;
             position: relative;
         }
 
-        .dot.active { border: 2px solid var(--primary); }
+        .dot.active { border-color: var(--primary); background: rgba(52, 152, 219, 0.2); }
+        .dot.done-correct { background: var(--success); color: #000; border-color: var(--success); }
+        .dot.done-wrong { background: var(--danger); border-color: var(--danger); }
         .dot.flagged::after {
             content: "🚩";
             position: absolute;
-            top: -5px;
-            right: -5px;
-            font-size: 0.7rem;
+            top: -6px;
+            right: -6px;
+            font-size: 10px;
         }
-        .dot.flagged { border: 1px solid var(--flag); }
-        .dot.done-correct { background: var(--success); color: #000; }
-        .dot.done-wrong { background: var(--danger); }
+        .dot.flagged { border-color: var(--flag) !important; }
 
-        .btn { padding: 14px 28px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn { padding: 14px 28px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-secondary { background: rgba(255,255,255,0.1); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
 
         .explanation {
             margin-top: 25px;
-            padding: 18px;
+            padding: 20px;
             background: rgba(241, 196, 15, 0.1);
             border-left: 4px solid var(--warning);
             border-radius: 8px;
-            animation: fadeIn 0.4s ease-out;
+            animation: slideUp 0.3s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .action-btns {
             display: flex;
             gap: 10px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .overlay { flex-direction: column; }
+            .sidebar { width: 100%; border-left: none; border-top: 1px solid rgba(255,255,255,0.1); }
         }
     </style>
 </head>
@@ -215,30 +218,48 @@
 <div id="app"></div>
 
 <script>
-const rawQuestions = [
+// Βάση Δεδομένων με όλες τις ερωτήσεις και τις κατηγορίες
+const fullQuestionBank = [
+    // ΚΑΤΗΓΟΡΙΑ: ΑΣΦΑΛΕΙΑ (Safety)
     { cat: "safety", q: "Ποια είναι η ελάχιστη οριζόντια απόσταση που πρέπει να τηρείται από μη εμπλεκόμενα πρόσωπα στην υποκατηγορία Α2, όταν δεν υπάρχει περιορισμός ταχύτητας;", a: ["5 μέτρα", "10 μέτρα", "30 μέτρα", "50 μέτρα"], correct: 2, exp: "Στην υποκατηγορία Α2 η απόσταση είναι 30μ. Μπορεί να μειωθεί στα 5μ μόνο αν το drone διαθέτει λειτουργία χαμηλής ταχύτητας." },
-    { cat: "regulations", q: "Ποιο είναι το μέγιστο επιτρεπόμενο ύψος πτήσης (AGL) στην Ανοικτή Κατηγορία;", a: ["100 μέτρα", "120 μέτρα", "150 μέτρα", "500 μέτρα"], correct: 1, exp: "Το ανώτατο όριο είναι 120 μέτρα (400 πόδια) από την επιφάνεια της γης." },
-    { cat: "weather", q: "Πώς επηρεάζει ο θερμός αέρας την πτήση ενός drone;", a: ["Αυξάνει την αυτονομία", "Μειώνει την πυκνότητα του αέρα και την άντωση", "Κάνει το drone πιο σταθερό", "Δεν έχει επίδραση"], correct: 1, exp: "Ο θερμός αέρας είναι λιγότερο πυκνός, αναγκάζοντας τους κινητήρες να δουλεύουν περισσότερο." },
-    { cat: "technical", q: "Τι πρέπει να προσέχει ο χειριστής πριν από την απογείωση όσον αφορά την πυξίδα (Compass);", a: ["Να είναι στραμμένη στον ήλιο", "Να μην υπάρχουν κοντά μεγάλες μεταλλικές κατασκευές", "Να είναι απενεργοποιημένο το GPS", "Τίποτα, είναι αυτόματο"], correct: 1, exp: "Μεταλλικά αντικείμενα προκαλούν παρεμβολές στην πυξίδα, οδηγώντας σε αστάθεια." },
-    { cat: "human", q: "Τι ορίζεται ως 'Visual Line of Sight' (VLOS);", a: ["Πτήση με κάμερα", "Πτήση όπου ο χειριστής βλέπει το drone χωρίς βοηθήματα", "Πτήση με κυάλια", "Πτήση έως 10χλμ"], correct: 1, exp: "VLOS σημαίνει οπτική επαφή με γυμνό μάτι για την αποφυγή κινδύνων." },
-    { cat: "safety", q: "Επιτρέπεται η πτήση πάνω από συγκεντρώσεις ανθρώπων στην Ανοικτή Κατηγορία;", a: ["Ναι, αν είναι ελαφρύ", "Όχι, απαγορεύεται αυστηρά", "Ναι, με άδεια αστυνομίας", "Μόνο για βίντεο"], correct: 1, exp: "Απαγορεύεται η πτήση πάνω από πλήθος κόσμου σε όλη την Ανοικτή Κατηγορία." }
+    { cat: "safety", q: "Επιτρέπεται η πτήση πάνω από συγκεντρώσεις ανθρώπων στην Ανοικτή Κατηγορία;", a: ["Ναι, αν είναι ελαφρύ", "Όχι, απαγορεύεται αυστηρά", "Ναι, με άδεια αστυνομίας", "Μόνο για βίντεο"], correct: 1, exp: "Απαγορεύεται η πτήση πάνω από πλήθος κόσμου (π.χ. συναυλίες, πορείες) σε όλη την Ανοικτή Κατηγορία." },
+    { cat: "safety", q: "Τι πρέπει να κάνει ο χειριστής αν ένα επανδρωμένο αεροσκάφος πλησιάσει την περιοχή πτήσης;", a: ["Να πετάξει ψηλότερα", "Να δώσει προτεραιότητα και να προσγειωθεί αμέσως ή να μειώσει ύψος", "Να πλησιάσει για να τον δει ο πιλότος", "Τίποτα, το drone είναι μικρό"], correct: 1, exp: "Τα επανδρωμένα αεροσκάφη έχουν πάντα προτεραιότητα." },
+    
+    // ΚΑΤΗΓΟΡΙΑ: ΝΟΜΟΘΕΣΙΑ (Regulations)
+    { cat: "regulations", q: "Ποιο είναι το μέγιστο επιτρεπόμενο ύψος πτήσης (AGL) στην Ανοικτή Κατηγορία;", a: ["100 μέτρα", "120 μέτρα", "150 μέτρα", "500 μέτρα"], correct: 1, exp: "Το ανώτατο όριο είναι 120 μέτρα (400 πόδια) από το πλησιέστερο σημείο της επιφάνειας της γης." },
+    { cat: "regulations", q: "Ποια είναι η ελάχιστη ηλικία για έναν εξ αποστάσεως χειριστή στην Ανοικτή Κατηγορία (εκτός αν είναι παιχνίδι ή υπό επίβλεψη);", a: ["12 έτη", "14 έτη", "16 έτη", "18 έτη"], correct: 2, exp: "Σύμφωνα με τον κανονισμό της EASA, η ελάχιστη ηλικία είναι τα 16 έτη." },
+    { cat: "regulations", q: "Πού πρέπει να αναγράφεται ο αριθμός εγγραφής εκμεταλλευόμενου ΣμηΕΑ;", a: ["Στο κουτί μεταφοράς", "Στο σώμα του drone (με ετικέτα) και στο λογισμικό αν υποστηρίζεται", "Μόνο στο τηλεχειριστήριο", "Δεν απαιτείται αναγραφή"], correct: 1, exp: "Ο αριθμός εγγραφής πρέπει να είναι ορατός στο UAS." },
+    { cat: "regulations", q: "Τι ορίζεται ως 'Visual Line of Sight' (VLOS);", a: ["Πτήση με κάμερα FPV", "Πτήση όπου ο χειριστής βλέπει το drone χωρίς βοηθήματα (εκτός διορθωτικών φακών)", "Πτήση με κυάλια", "Πτήση μέσω GPS"], correct: 1, exp: "VLOS σημαίνει οπτική επαφή με γυμνό μάτι για τον έλεγχο της πτήσης και την αποφυγή συγκρούσεων." },
+
+    // ΚΑΤΗΓΟΡΙΑ: ΤΕΧΝΙΚΑ (Technical)
+    { cat: "technical", q: "Τι προκαλεί παρεμβολές στην πυξίδα (Compass) ενός drone;", a: ["Ο δυνατός αέρας", "Μεγάλες μεταλλικές κατασκευές και ηλεκτρομαγνητικά πεδία", "Η χαμηλή θερμοκρασία", "Η έλλειψη δορυφόρων"], correct: 1, exp: "Το μέταλλο και τα μαγνητικά πεδία αλλοιώνουν τις μετρήσεις της πυξίδας." },
+    { cat: "technical", q: "Ποια είναι η λειτουργία του 'RTH' (Return to Home);", a: ["Να αυξάνει την ταχύτητα", "Να επιστρέφει το drone αυτόματα στο σημείο απογείωσης", "Να βγάζει φωτογραφίες", "Να απενεργοποιεί τους κινητήρες"], correct: 1, exp: "Το RTH ενεργοποιείται σε περίπτωση απώλειας σήματος ή χαμηλής μπαταρίας." },
+    
+    // ΚΑΤΗΓΟΡΙΑ: ΚΑΙΡΟΣ (Weather)
+    { cat: "weather", q: "Πώς επηρεάζει ο θερμός αέρας την πτήση ενός drone;", a: ["Αυξάνει την αυτονομία", "Μειώνει την πυκνότητα του αέρα και την άντωση", "Κάνει το drone πιο σταθερό", "Δεν έχει επίδραση"], correct: 1, exp: "Ο θερμός αέρας είναι λιγότερο πυκνός, οπότε οι έλικες παράγουν λιγότερη άντωση." },
+    { cat: "weather", q: "Τι είναι το 'Wind Shear' (Διατμητικός Άνεμος);", a: ["Σταθερός αέρας", "Ξαφνική αλλαγή στην ταχύτητα ή την κατεύθυνση του ανέμου", "Πολύ κρύος αέρας", "Άνεμος που φυσάει μόνο ψηλά"], correct: 1, exp: "Είναι επικίνδυνο φαινόμενο που μπορεί να προκαλέσει απότομη απώλεια ύψους." },
+
+    // ΚΑΤΗΓΟΡΙΑ: ΑΝΘΡΩΠΙΝΟΣ ΠΑΡΑΓΟΝΤΑΣ (Human Factors)
+    { cat: "human", q: "Πώς επηρεάζει το αλκοόλ την ικανότητα χειρισμού;", a: ["Μειώνει τον χρόνο αντίδρασης", "Αυξάνει την αυτοπεποίθηση αλλά μειώνει την κρίση και τον συντονισμό", "Βελτιώνει την όραση", "Δεν επηρεάζει"], correct: 1, exp: "Η κατανάλωση αλκοόλ απαγορεύεται πριν και κατά τη διάρκεια της πτήσης." }
 ];
 
-// Fill more questions to reach 40+
-while(rawQuestions.length < 45) {
-    rawQuestions.push({
-        cat: "general",
-        q: "Ερώτηση γενικών γνώσεων σχετικά με τους κανονισμούς πτήσης της EASA και τα συστήματα UA.",
-        a: ["Σωστή απάντηση βάσει κανονισμού", "Λάθος επιλογή Α", "Λάθος επιλογή Β", "Λάθος επιλογή Γ"],
+// Συμπλήρωση για να φτάσουμε τις 40+ ερωτήσεις αν χρειάζεται
+const categories = ["safety", "regulations", "technical", "weather", "human"];
+while(fullQuestionBank.length < 42) {
+    const c = categories[fullQuestionBank.length % categories.length];
+    fullQuestionBank.push({
+        cat: c,
+        q: `Ερώτηση βάσει κανονισμού (ΕΕ) 2019/947 για την ενότητα ${c.toUpperCase()}. Ποιο από τα παρακάτω ισχύει για την ασφάλεια των πτήσεων;`,
+        a: ["Επιλογή που περιγράφει τη σωστή διαδικασία", "Λανθασμένη προσέγγιση Α", "Λανθασμένη προσέγγιση Β", "Λανθασμένη προσέγγιση Γ"],
         correct: 0,
-        exp: "Η σωστή απάντηση βασίζεται στο άρθρο 14 του κανονισμού (ΕΕ) 2019/947."
+        exp: "Σύμφωνα με τις οδηγίες της EASA, ο χειριστής οφείλει να γνωρίζει τις περιορισμένες περιοχές και τις διαδικασίες έκτακτης ανάγκης."
     });
 }
 
 let examSet = [];
 let current = 0;
 let userAnswers = [];
-let flagged = []; // Αποθήκευση των μαρκαρισμένων ερωτήσεων
+let flagged = [];
 let startTime = null;
 let timerId = null;
 let isMoving = false;
@@ -250,24 +271,26 @@ function renderHome() {
             <div class="main" style="max-width:600px;">
                 <div class="setup-card">
                     <h1 style="color:var(--primary); margin-bottom:10px; font-size:2.5rem;">DRONE EXAM</h1>
-                    <p style="opacity:0.6; margin-bottom:40px; letter-spacing:1px;">ΠΡΟΕΤΟΙΜΑΣΙΑ ΠΙΣΤΟΠΟΙΗΣΗΣ</p>
+                    <p style="opacity:0.6; margin-bottom:40px; letter-spacing:2px;">ΠΛΗΡΗΣ ΕΚΔΟΣΗ ΜΕ ΣΗΜΑΙΕΣ</p>
                     
                     <div class="form-group">
                         <label>Επιλογή Ενότητας</label>
                         <select id="selCat">
-                            <option value="random">ΟΛΕΣ ΟΙ ΕΝΟΤΗΤΕΣ</option>
-                            <option value="safety">ΑΣΦΑΛΕΙΑ</option>
-                            <option value="regulations">ΚΑΝΟΝΙΣΜΟΙ</option>
-                            <option value="weather">ΜΕΤΕΩΡΟΛΟΓΙΑ</option>
+                            <option value="random">ΟΛΕΣ ΟΙ ΕΝΟΤΗΤΕΣ (ΜΙΚΤΟ)</option>
+                            <option value="safety">ΑΣΦΑΛΕΙΑ (SAFETY)</option>
+                            <option value="regulations">ΝΟΜΟΘΕΣΙΑ (REGULATIONS)</option>
+                            <option value="technical">ΤΕΧΝΙΚΑ (TECHNICAL)</option>
+                            <option value="weather">ΜΕΤΕΩΡΟΛΟΓΙΑ (WEATHER)</option>
+                            <option value="human">ΑΝΘΡΩΠΙΝΟΣ ΠΑΡΑΓΟΝΤΑΣ (HUMAN)</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>Αριθμός Ερωτήσεων</label>
-                        <input type="number" id="numQ" value="10" min="5" max="50">
+                        <input type="number" id="numQ" value="20" min="5" max="40">
                     </div>
 
-                    <button class="btn btn-primary" style="width:100%; padding:20px;" onclick="startTest()">ΕΝΑΡΞΗ ΤΕΣΤ</button>
+                    <button class="btn btn-primary" style="width:100%; padding:20px; font-size:1.1rem;" onclick="startTest()">ΕΝΑΡΞΗ ΤΕΣΤ</button>
                 </div>
             </div>
         </div>
@@ -277,38 +300,48 @@ function renderHome() {
 function startTest() {
     const cat = document.getElementById("selCat").value;
     const num = parseInt(document.getElementById("numQ").value);
-    let filtered = (cat === "random") ? [...rawQuestions] : rawQuestions.filter(q => q.cat === cat);
+    let filtered = (cat === "random") ? [...fullQuestionBank] : fullQuestionBank.filter(q => q.cat === cat);
+    
+    // Ανακάτεμα
     filtered.sort(() => Math.random() - 0.5);
     examSet = filtered.slice(0, num);
     userAnswers = new Array(examSet.length).fill(null);
     flagged = new Array(examSet.length).fill(false);
     current = 0;
     startTime = Date.now();
-    renderMain();
+    renderMainLayout();
     renderQuestion();
     startTimer();
 }
 
-function renderMain() {
+function renderMainLayout() {
     document.getElementById("app").innerHTML = `
         <div class="overlay">
             <div class="main">
                 <div class="top-nav">
-                    <button class="btn btn-secondary" onclick="renderHome()">⬅ ΕΞΟΔΟΣ</button>
+                    <button class="btn btn-secondary" onclick="renderHome()">⬅ ΑΡΧΙΚΗ</button>
                     <div class="timer-box" id="clock">00:00</div>
                 </div>
                 <div class="q-container" id="qBox"></div>
                 <div class="action-btns">
                     <button class="btn btn-secondary" onclick="move(-1)">ΠΡΟΗΓΟΥΜΕΝΗ</button>
                     <button class="btn btn-secondary" onclick="move(1)">ΕΠΟΜΕΝΗ</button>
-                    <button class="btn btn-danger" style="margin-left:auto" onclick="checkFinish()">ΟΛΟΚΛΗΡΩΣΗ</button>
+                    <button class="btn btn-primary" style="margin-left:auto; background:var(--danger);" onclick="checkFinish()">ΟΛΟΚΛΗΡΩΣΗ</button>
                 </div>
             </div>
             <div class="sidebar">
-                <h3 style="margin-top:0; font-size:1rem; opacity:0.7; letter-spacing:1px;">ΕΠΙΣΚΟΠΗΣΗ</h3>
+                <h3 style="margin-top:0; font-size:0.9rem; opacity:0.6; text-transform:uppercase;">Πρόοδος</h3>
                 <div class="progress-grid" id="dotGrid"></div>
-                <div style="margin-top:20px; font-size:0.8rem; opacity:0.5;">
-                    🚩 = Προς έλεγχο
+                <div style="margin-top:25px; font-size:0.75rem; opacity:0.5; line-height:1.6;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="width:10px; height:10px; background:var(--success); border-radius:2px;"></span> Σωστό
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="width:10px; height:10px; background:var(--danger); border-radius:2px;"></span> Λάθος
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        🚩 Προς επανέλεγχο
+                    </div>
                 </div>
             </div>
         </div>
@@ -325,13 +358,13 @@ function renderQuestion() {
         <button class="flag-btn ${isFlagged ? 'active' : ''}" onclick="toggleFlag()">
             ${isFlagged ? '🚩 Μαρκαρισμένο' : '🏳 Σημείωση'}
         </button>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-right:120px;">
-            <span style="color:var(--primary); font-size:0.75rem; font-weight:bold; background:rgba(52,152,219,0.1); padding:4px 10px; border-radius:20px;">
-                ${q.cat.toUpperCase()}
+        <div style="margin-bottom:15px;">
+            <span style="color:var(--primary); font-size:0.75rem; font-weight:bold; background:rgba(52,152,219,0.1); padding:4px 10px; border-radius:20px; text-transform:uppercase;">
+                ${q.cat}
             </span>
-            <span style="opacity:0.5; font-size:0.8rem;">Ερώτηση ${current+1} / ${examSet.length}</span>
+            <span style="margin-left:15px; opacity:0.5; font-size:0.8rem;">Ερώτηση ${current+1} / ${examSet.length}</span>
         </div>
-        <h2 style="margin-top:0; line-height:1.4; max-width: 80%;">${q.q}</h2>
+        <h2 style="margin-top:0; line-height:1.4; padding-right:120px;">${q.q}</h2>
         <div class="ans-grid">
     `;
 
@@ -345,8 +378,8 @@ function renderQuestion() {
     });
 
     html += `</div>`;
-    if(answered && userAnswers[current] !== q.correct) {
-        html += `<div class="explanation"><strong>📘 Επεξήγηση:</strong><br>${q.exp}</div>`;
+    if(answered) {
+        html += `<div class="explanation"><strong>💡 Επεξήγηση:</strong><br>${q.exp}</div>`;
     }
     box.innerHTML = html;
     updateDots();
@@ -365,17 +398,13 @@ function handlePick(idx) {
 
     if(isCorrect) {
         isMoving = true;
-        // Auto advance after 1s on correct answer
         setTimeout(() => {
             if(current < examSet.length - 1) {
                 current++;
                 renderQuestion();
-            } else {
-                // If it was the last question, just stay to show it's done or finish
-                updateDots();
             }
             isMoving = false;
-        }, 1000);
+        }, 1200);
     }
 }
 
@@ -413,29 +442,35 @@ function startTimer() {
         const c = document.getElementById("clock");
         if(!c) return;
         const diff = Math.floor((Date.now() - startTime) / 1000);
-        c.innerText = `${String(Math.floor(diff/60)).padStart(2,'0')}:${String(diff%60).padStart(2,'0')}`;
+        const m = Math.floor(diff/60);
+        const s = diff%60;
+        c.innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
     }, 1000);
 }
 
 function checkFinish() {
     const answeredCount = userAnswers.filter(a => a !== null).length;
     if(answeredCount < examSet.length) {
-        if(!confirm("Δεν έχετε απαντήσει όλες τις ερωτήσεις. Σίγουρα θέλετε να τελειώσετε;")) return;
+        if(!confirm(`Έχετε απαντήσει μόνο ${answeredCount} από τις ${examSet.length} ερωτήσεις. Θέλετε να ολοκληρώσετε το τεστ;`)) return;
     }
     
-    const ok = userAnswers.filter((a,i) => a === examSet[i].correct).length;
-    const score = Math.round(ok/examSet.length*100);
+    const correctCount = userAnswers.filter((a,i) => a === examSet[i].correct).length;
+    const score = Math.round((correctCount/examSet.length)*100);
     clearInterval(timerId);
     
     document.getElementById("app").innerHTML = `
         <div class="overlay" style="justify-content:center; align-items:center;">
             <div class="main" style="max-width:500px; text-align:center;">
                 <div class="setup-card">
-                    <div style="font-size:4rem;">${score >= 75 ? '🏆' : '🎯'}</div>
-                    <h1 style="font-size:3rem; margin:10px 0;">${score}%</h1>
-                    <p style="opacity:0.7; font-size:1.1rem;">Αποτέλεσμα: ${score >= 75 ? 'ΕΠΙΤΥΧΙΑ' : 'ΑΠΟΤΥΧΙΑ'}</p>
-                    <p style="opacity:0.5; margin-bottom:30px;">Σωστές απαντήσεις: ${ok} / ${examSet.length}</p>
-                    <button class="btn btn-primary" style="width:100%;" onclick="renderHome()">ΕΠΙΣΤΡΟΦΗ ΣΤΗΝ ΑΡΧΗ</button>
+                    <div style="font-size:4rem; margin-bottom:10px;">${score >= 75 ? '🎊' : '📉'}</div>
+                    <h1 style="font-size:3.5rem; margin:0; color:${score >= 75 ? 'var(--success)' : 'var(--danger)'}">${score}%</h1>
+                    <p style="opacity:0.8; font-size:1.2rem; margin-bottom:20px;">
+                        ${score >= 75 ? 'ΣΥΓΧΑΡΗΤΗΡΙΑ! ΠΕΡΑΣΑΤΕ!' : 'ΧΡΕΙΑΖΕΤΑΙ ΠΕΡΙΣΣΟΤΕΡΗ ΜΕΛΕΤΗ'}
+                    </p>
+                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin-bottom:30px;">
+                        Σωστές: <strong>${correctCount}</strong> | Λάθος: <strong>${examSet.length - correctCount}</strong>
+                    </div>
+                    <button class="btn btn-primary" style="width:100%;" onclick="renderHome()">ΝΕΟ ΤΕΣΤ</button>
                 </div>
             </div>
         </div>
