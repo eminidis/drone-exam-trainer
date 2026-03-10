@@ -17,17 +17,38 @@ color:white;
 background:rgba(0,0,0,0.65);
 min-height:100vh;
 padding:30px;
+display:flex;
 }
 
-h1{
-text-align:center;
+.main{
+flex:1;
+padding-right:40px;
+}
+
+.gridContainer{
+width:220px;
 }
 
 .topbar{
 display:flex;
 justify-content:space-between;
-align-items:center;
 margin-bottom:20px;
+}
+
+.lang{
+position:absolute;
+top:20px;
+right:30px;
+}
+
+.theme{
+position:absolute;
+bottom:20px;
+left:30px;
+}
+
+button{
+cursor:pointer;
 }
 
 .timer{
@@ -47,18 +68,12 @@ padding:14px;
 border:none;
 border-radius:6px;
 font-size:16px;
-cursor:pointer;
 background:#333;
 color:white;
 }
 
-.correct{
-background:#2ecc71!important;
-}
-
-.wrong{
-background:#e74c3c!important;
-}
+.correct{background:#2ecc71!important;}
+.wrong{background:#e74c3c!important;}
 
 .explanation{
 margin-top:15px;
@@ -68,12 +83,26 @@ border-left:4px solid orange;
 display:none;
 }
 
+.controls{
+margin-top:20px;
+}
+
+.controls button{
+padding:14px 22px;
+font-size:16px;
+border:none;
+border-radius:8px;
+margin-right:6px;
+}
+
+.navBtn{background:#555;color:white}
+.menuBtn{background:#3498db;color:white}
+.finishBtn{background:#e74c3c;color:white}
+
 .grid{
 display:grid;
-grid-template-columns:repeat(8,40px);
+grid-template-columns:repeat(5,40px);
 gap:6px;
-justify-content:center;
-margin-top:30px;
 }
 
 .grid div{
@@ -94,54 +123,49 @@ cursor:pointer;
 content:"!";
 color:yellow;
 font-weight:bold;
-margin-left:3px;
 }
 
-.controls{
-display:flex;
-justify-content:center;
-gap:10px;
-margin-top:20px;
+.dark{
+background-color:black;
 }
 
-.controls button{
-padding:14px 22px;
-font-size:16px;
-border:none;
-border-radius:8px;
-cursor:pointer;
+.light{
+background-color:#f2f2f2;
+color:black;
 }
-
-.menuBtn{background:#3498db;color:white}
-.navBtn{background:#555;color:white}
-.finishBtn{background:#e74c3c;color:white}
 
 </style>
 </head>
 
 <body>
 
-<div class="overlay" id="app"></div>
+<div id="app"></div>
 
 <script>
 
-const questions=[
+let language="gr"
 
+const questions={
+
+gr:[
 {
 q:"Τι σημαίνει VLOS;",
 a:["Visual Line of Sight","Vision Link","Video Line","Visual Lock"],
 correct:0,
 exp:"VLOS σημαίνει ότι ο χειριστής πρέπει να βλέπει το drone με γυμνό μάτι."
-},
-
-{
-q:"Ο άνεμος επηρεάζει το drone;",
-a:["Ναι","Όχι","Μόνο το GPS","Μόνο την μπαταρία"],
-correct:0,
-exp:"Ο άνεμος επηρεάζει τη σταθερότητα και την κατανάλωση ενέργειας."
 }
+],
 
+en:[
+{
+q:"What does VLOS mean?",
+a:["Visual Line of Sight","Vision Link","Video Line","Visual Lock"],
+correct:0,
+exp:"VLOS means the pilot must keep the drone in visual line of sight."
+}
 ]
+
+}
 
 let current=0
 let answers=[]
@@ -155,6 +179,20 @@ function renderMenu(){
 
 document.getElementById("app").innerHTML=`
 
+<div class="lang">
+<button onclick="setLang('gr')">Ελληνικά</button>
+<button onclick="setLang('en')">English</button>
+</div>
+
+<div class="theme">
+<button onclick="setTheme('dark')">Dark</button>
+<button onclick="setTheme('light')">Light</button>
+</div>
+
+<div class="overlay">
+
+<div class="main">
+
 <h1>Drone Exam Trainer</h1>
 
 <div style="text-align:center">
@@ -163,7 +201,24 @@ document.getElementById("app").innerHTML=`
 
 </div>
 
+</div>
+
+</div>
+
 `
+
+}
+
+function setLang(l){
+
+language=l
+renderMenu()
+
+}
+
+function setTheme(t){
+
+document.body.className=t
 
 }
 
@@ -172,6 +227,10 @@ function startStudy(){
 startTime=Date.now()
 
 document.getElementById("app").innerHTML=`
+
+<div class="overlay">
+
+<div class="main">
 
 <div class="topbar">
 
@@ -196,7 +255,15 @@ document.getElementById("app").innerHTML=`
 
 </div>
 
+</div>
+
+<div class="gridContainer">
+
 <div class="grid" id="grid"></div>
+
+</div>
+
+</div>
 
 `
 
@@ -207,7 +274,7 @@ startTimer()
 
 function render(){
 
-let q=questions[current]
+let q=questions[language][current]
 
 document.getElementById("question").innerText=(current+1)+". "+q.q
 
@@ -237,7 +304,7 @@ if(answers[current]!=undefined)return
 
 answers[current]=i
 
-if(i==questions[current].correct){
+if(i==questions[language][current].correct){
 
 btn.classList.add("correct")
 setTimeout(()=>next(),600)
@@ -248,7 +315,7 @@ btn.classList.add("wrong")
 
 let exp=document.getElementById("explanation")
 exp.style.display="block"
-exp.innerText="Επεξήγηση: "+questions[current].exp
+exp.innerText="Επεξήγηση: "+questions[language][current].exp
 
 }
 
@@ -258,7 +325,7 @@ renderGrid()
 
 function next(){
 
-if(current<questions.length-1){
+if(current<questions[language].length-1){
 current++
 render()
 }
@@ -291,7 +358,7 @@ function renderGrid(){
 let grid=document.getElementById("grid")
 grid.innerHTML=""
 
-questions.forEach((q,i)=>{
+questions[language].forEach((q,i)=>{
 
 let box=document.createElement("div")
 box.innerText=i+1
@@ -343,7 +410,7 @@ clearInterval(timerInterval)
 let correct=0
 
 answers.forEach((a,i)=>{
-if(a==questions[i].correct)correct++
+if(a==questions[language][i].correct)correct++
 })
 
 let wrong=answers.length-correct
@@ -352,15 +419,23 @@ let time=document.getElementById("timer").innerText
 
 document.getElementById("app").innerHTML=`
 
+<div class="overlay">
+
+<div class="main">
+
 <h1>Αποτελέσματα</h1>
 
-<div style="text-align:center;font-size:22px">
+<div style="font-size:22px">
 
 Σωστές: ${correct}<br><br>
 Λάθος: ${wrong}<br><br>
 Χρόνος: ${time}<br><br>
 
 <button onclick="renderMenu()" style="padding:14px 24px">Μενού</button>
+
+</div>
+
+</div>
 
 </div>
 
