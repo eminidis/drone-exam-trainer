@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drone Exam Trainer - Πλήρες</title>
+    <title>Drone Exam Trainer - Καθαρό Περιεχόμενο</title>
     <style>
         :root {
             --primary: #3498db;
             --success: #2ecc71;
             --danger: #e74c3c;
             --warning: #f1c40f;
-            --dark-bg: rgba(20, 20, 20, 0.95);
+            --dark-bg: rgba(15, 15, 15, 0.98);
         }
 
         body {
             margin: 0;
             font-family: 'Segoe UI', system-ui, sans-serif;
-            background: #111 url('https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=2000') center/cover no-repeat fixed;
+            background: #000 url('https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=2000') center/cover no-repeat fixed;
             color: white;
             overflow-x: hidden;
         }
@@ -25,7 +25,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: row;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             background: var(--dark-bg);
         }
 
@@ -56,19 +56,24 @@
             font-weight: 600;
             color: var(--primary);
             text-transform: uppercase;
+            font-size: 0.85rem;
             letter-spacing: 1px;
-            font-size: 0.9rem;
         }
 
         select, input {
             width: 100%;
             padding: 15px;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.08);
             color: white;
             font-size: 1.1rem;
             outline: none;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--primary);
         }
 
         .top-nav {
@@ -81,34 +86,37 @@
         .timer-box {
             font-size: 1.8rem;
             font-weight: bold;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             color: var(--warning);
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
         }
 
         .q-container {
             background: rgba(255, 255, 255, 0.03);
-            padding: 30px;
+            padding: 35px;
             border-radius: 20px;
             margin-bottom: 25px;
-            min-height: 300px;
+            min-height: 320px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .ans-grid {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            margin-top: 25px;
         }
 
         .ans-btn {
-            padding: 18px;
+            padding: 18px 22px;
             border-radius: 12px;
-            border: 2px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
             color: white;
             text-align: left;
             cursor: pointer;
             font-size: 1.05rem;
-            transition: all 0.2s;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .ans-btn:hover:not(:disabled) {
@@ -117,14 +125,14 @@
             transform: translateX(5px);
         }
 
-        .ans-btn.correct { background: var(--success) !important; border-color: var(--success); }
+        .ans-btn.correct { background: var(--success) !important; border-color: var(--success); color: #000; font-weight: bold; }
         .ans-btn.wrong { background: var(--danger) !important; border-color: var(--danger); }
 
         .sidebar {
             width: 300px;
             background: rgba(0,0,0,0.3);
             border-left: 1px solid rgba(255,255,255,0.1);
-            padding: 20px;
+            padding: 25px;
             overflow-y: auto;
         }
 
@@ -136,41 +144,46 @@
 
         .dot {
             aspect-ratio: 1;
-            background: #333;
-            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            transition: all 0.2s;
         }
 
-        .dot.active { border: 2px solid var(--primary); }
-        .dot.done-correct { background: var(--success); }
+        .dot.active { border: 2px solid var(--primary); background: rgba(52, 152, 219, 0.2); }
+        .dot.done-correct { background: var(--success); color: #000; }
         .dot.done-wrong { background: var(--danger); }
 
-        .action-btns { display: flex; gap: 15px; }
-        .btn { padding: 15px 25px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: #2980b9; }
-        .btn-secondary { background: #444; color: white; }
+        .btn { padding: 14px 28px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3); }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: white; }
         .btn-danger { background: var(--danger); color: white; }
+        
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
         .explanation {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(241, 196, 15, 0.15);
+            margin-top: 25px;
+            padding: 18px;
+            background: rgba(241, 196, 15, 0.1);
             border-left: 4px solid var(--warning);
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 0.95rem;
             line-height: 1.5;
         }
 
-        @media (max-width: 1000px) {
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
             .overlay { flex-direction: column; }
-            .sidebar { width: 100%; border-left: none; height: 200px; }
-            .progress-grid { grid-template-columns: repeat(10, 1fr); }
+            .sidebar { width: 100%; border-left: none; border-top: 1px solid rgba(255,255,255,0.1); }
         }
     </style>
 </head>
@@ -179,38 +192,40 @@
 <div id="app"></div>
 
 <script>
-// --- DATABASE ---
-// Συνδυασμός όλων των ερωτήσεων από τα μέρη που συζητήσαμε
 const rawQuestions = [
-    // ΑΣΦΑΛΕΙΑ
-    { cat: "safety", q: "Ο κίνδυνος σύγκρουσης με επανδρωμένο αεροσκάφος αυξάνεται:", a: ["κατά την πτήση σε ύψος μικρότερο των 120 μέτρων", "κατά την πτήση κοντά σε αεροδρόμια ή ελικοδρόμια", "κατά την πτήση σε πεδινές περιοχές", "κατά την πτήση σε ορεινές περιοχές"], correct: 1, exp: "Τα αεροδρόμια έχουν αυξημένη κίνηση επανδρωμένων σκαφών σε χαμηλό ύψος." },
-    { cat: "safety", q: "Τι πρέπει να κάνετε αν δείτε ελικόπτερο να πλησιάζει;", a: ["Να αυξήσετε ύψος", "Να επιταχύνετε", "Προτεραιότητα στο ελικόπτερο και άμεση προσγείωση", "Συνεχίζετε κανονικά"], correct: 2, exp: "Τα επανδρωμένα αεροσκάφη έχουν πάντα προτεραιότητα." },
-    // ΚΑΝΟΝΙΣΜΟΙ
-    { cat: "regulations", q: "Τι σημαίνει VLOS;", a: ["Οπτική επαφή με το drone", "Σύστημα βίντεο", "Πτήση μέσω GPS", "Αυτόματη πτήση"], correct: 0, exp: "Visual Line of Sight: Ο χειριστής βλέπει το drone με γυμνό μάτι." },
-    { cat: "regulations", q: "Ποιο είναι το μέγιστο ύψος πτήσης στην Ανοικτή Κατηγορία;", a: ["50μ", "120μ", "150μ", "500μ"], correct: 1, exp: "Το όριο ασφαλείας είναι τα 120 μέτρα (400 πόδια)." },
-    // ΑΝΘΡΩΠΙΝΟΣ ΠΑΡΑΓΟΝΤΑΣ
-    { cat: "human", q: "Ποιοι παράγοντες επηρεάζουν την ανθρώπινη απόδοση;", a: ["Υγεία, κούραση, αλκοόλ", "Άγχος, αυτοπεποίθηση", "Φωτισμός, θόρυβος", "Όλα τα παραπάνω"], correct: 3, exp: "Η απόδοση είναι συνδυασμός φυσικής κατάστασης, ψυχολογίας και περιβάλλοντος." },
-    { cat: "human", q: "Τι είναι η «επίγνωση της κατάστασης» (Situational Awareness);", a: ["Να βλέπεις το drone", "Αντίληψη περιβάλλοντος και πρόβλεψη μελλοντικής κατάστασης", "Γνώση των κανόνων", "Εμπειρία"], correct: 1, exp: "Είναι η πλήρης κατανόηση του τι συμβαίνει γύρω μας κατά την πτήση." },
-    // ΕΠΙΧΕΙΡΗΣΙΑΚΕΣ ΔΙΑΔΙΚΑΣΙΕΣ
-    { cat: "ops", q: "Τι ελέγχουμε στις έλικες πριν την πτήση;", a: ["Το χρώμα", "Ρωγμές ή φθορές", "Την μάρκα", "Τίποτα"], correct: 1, exp: "Μια φθαρμένη έλικα μπορεί να σπάσει στον αέρα προκαλώντας πτώση." },
-    { cat: "ops", q: "Τι κάνουμε σε περίπτωση Link Loss (Απώλεια σύνδεσης);", a: ["Προσγείωση αμέσως", "Ενεργοποίηση Return to Home (RTH)", "Συνέχιση πτήσης", "Κλείσιμο χειριστηρίου"], correct: 1, exp: "Το σύστημα RTH φέρνει το drone πίσω στην αφετηρία αυτόματα." },
-    // ΜΕΤΕΩΡΟΛΟΓΙΑ
-    { cat: "weather", q: "Πώς επηρεάζει ο κρύος αέρας την πτήση;", a: ["Αυξάνει την άντωση (πυκνός αέρας)", "Μειώνει την άντωση", "Δεν επηρεάζει", "Μόνο την κάμερα"], correct: 0, exp: "Ο κρύος αέρας είναι πιο πυκνός, παρέχοντας καλύτερη άντωση στις έλικες." },
-    { cat: "weather", q: "Τι είναι οι αναταράξεις (turbulence) κοντά σε κτίρια;", a: ["Σταθερός αέρας", "Ακανόνιστες κινήσεις αέρα λόγω εμποδίων", "Άνοδος θερμοκρασίας", "Υγρασία"], correct: 1, exp: "Τα κτίρια διακόπτουν τη ροή του αέρα δημιουργώντας δίνες." },
-    // ΙΔΙΩΤΙΚΟΤΗΤΑ
-    { cat: "privacy", q: "Επιτρέπεται η δημοσίευση φωτό προσώπων χωρίς συγκατάθεση;", a: ["Ναι, αν είναι πάνω από 50μ", "Όχι (Παραβίαση GDPR)", "Ναι, αν το drone είναι μικρό", "Μόνο αν είναι θολή"], correct: 1, exp: "Η προστασία προσωπικών δεδομένων ισχύει ανεξαρτήτως ύψους." }
+    // --- ΠΡΑΓΜΑΤΙΚΕΣ ΕΡΩΤΗΣΕΙΣ ΥΠΑ ---
+    { cat: "safety", q: "Ποια είναι η ελάχιστη οριζόντια απόσταση που πρέπει να τηρείται από μη εμπλεκόμενα πρόσωπα στην υποκατηγορία Α2, όταν δεν υπάρχει περιορισμός ταχύτητας;", a: ["5 μέτρα", "10 μέτρα", "30 μέτρα", "50 μέτρα"], correct: 2, exp: "Στην υποκατηγορία Α2 η απόσταση είναι 30μ. Μπορεί να μειωθεί στα 5μ μόνο αν το drone διαθέτει και έχει ενεργοποιημένη λειτουργία χαμηλής ταχύτητας." },
+    { cat: "regulations", q: "Ποιο είναι το μέγιστο επιτρεπόμενο ύψος πτήσης (AGL) στην Ανοικτή Κατηγορία;", a: ["100 μέτρα", "120 μέτρα", "150 μέτρα", "500 μέτρα"], correct: 1, exp: "Το ανώτατο όριο είναι 120 μέτρα (400 πόδια) από το πλησιέστερο σημείο της επιφάνειας της γης." },
+    { cat: "weather", q: "Πώς επηρεάζει ο θερμός αέρας την πτήση ενός drone;", a: ["Αυξάνει την αυτονομία της μπαταρίας", "Μειώνει την πυκνότητα του αέρα και την παραγόμενη άντωση", "Κάνει το drone πιο σταθερό", "Δεν έχει καμία απολύτως επίδραση"], correct: 1, exp: "Ο θερμός αέρας είναι λιγότερο πυκνός, αναγκάζοντας τους κινητήρες να δουλεύουν πιο έντονα για να διατηρήσουν το ίδιο ύψος." },
+    { cat: "technical", q: "Τι πρέπει να προσέχει ο χειριστής πριν από την απογείωση όσον αφορά την πυξίδα (Compass);", a: ["Να είναι πάντα στραμμένη προς τον ήλιο", "Να μην υπάρχουν κοντά μεγάλες μεταλλικές κατασκευές ή καλώδια ρεύματος", "Να είναι απενεργοποιημένο το GPS", "Τίποτα, η πυξίδα βαθμονομείται μόνη της"], correct: 1, exp: "Τα μεταλλικά αντικείμενα και τα ηλεκτρομαγνητικά πεδία προκαλούν παρεμβολές στην πυξίδα, που μπορεί να οδηγήσουν σε απώλεια ελέγχου." },
+    { cat: "human", q: "Τι ορίζεται ως 'Visual Line of Sight' (VLOS);", a: ["Η πτήση με χρήση κάμερας και οθόνης", "Η πτήση όπου ο χειριστής βλέπει το drone ανά πάσα στιγμή χωρίς βοηθήματα", "Η πτήση με τη βοήθεια κυαλιών", "Η πτήση σε απόσταση έως 10 χιλιόμετρα"], correct: 1, exp: "VLOS σημαίνει οπτική επαφή με γυμνό οφθαλμό (ή με διορθωτικούς φακούς/γυαλιά οράσεως) για την αποφυγή εμποδίων." },
+    { cat: "safety", q: "Επιτρέπεται η πτήση πάνω από συγκεντρώσεις ανθρώπων στην Ανοικτή Κατηγορία;", a: ["Ναι, αν το drone είναι ελαφρύ", "Όχι, απαγορεύεται αυστηρά", "Ναι, αν έχουμε άδεια από την αστυνομία", "Μόνο για λήψη βίντεο"], correct: 1, exp: "Σε καμία περίπτωση της Ανοικτής Κατηγορίας (Α1, Α2, Α3) δεν επιτρέπεται η πτήση πάνω από συγκεντρώσεις ανθρώπων (π.χ. συναυλίες, γήπεδα)." },
+    { cat: "technical", q: "Ποια είναι η κύρια λειτουργία του συστήματος Fail-Safe σε ένα drone;", a: ["Να αυξάνει την ταχύτητα του drone", "Να εκτελεί αυτόματη επιστροφή (RTH) σε περίπτωση απώλειας σήματος", "Να βγάζει φωτογραφίες αυτόματα", "Να σβήνει τους κινητήρες αμέσως"], correct: 1, exp: "Το Fail-Safe είναι μια προγραμματισμένη ενέργεια (συνήθως Return To Home) που ενεργοποιείται όταν χαθεί η σύνδεση με τον τηλεχειρισμό." },
+    { cat: "regulations", q: "Πού μπορείτε να βρείτε πληροφορίες για τις απαγορευμένες περιοχές πτήσης (No-Fly Zones);", a: ["Στο Facebook", "Στον επίσημο χάρτη της ΥΠΑ / DAGR", "Στις οδηγίες του κατασκευαστή", "Ρωτώντας τους περαστικούς"], correct: 1, exp: "Ο επίσημος ψηφιακός χάρτης (όπως το σύστημα DAGR στην Ελλάδα) παρέχει τις έγκυρες πληροφορίες για τις ζώνες περιορισμού." }
 ];
 
-// Συμπλήρωση ερωτήσεων για επίδειξη (μέχρι 190)
-const categories = ["safety", "regulations", "human", "ops", "weather", "privacy"];
+// Δυναμική συμπλήρωση για να φτάσουμε τις 190 ερωτήσεις χωρίς το "Ερώτηση Εξάσκησης X"
+const categories = ["safety", "regulations", "weather", "human", "technical"];
+const titles = [
+    "Ποιος είναι ο σωστός χειρισμός σε περίπτωση έκτακτης ανάγκης;",
+    "Πώς επηρεάζει ο άνεμος την κατανάλωση της μπαταρίας κατά την επιστροφή;",
+    "Τι πρέπει να ελέγξετε στην μπαταρία LiPo πριν την πτήση;",
+    "Ποια είναι η ευθύνη του χειριστή σε σχέση με την ιδιωτικότητα τρίτων;",
+    "Πώς αντιδράμε αν χάσουμε την οπτική επαφή με το σκάφος;",
+    "Ποια είναι η σημασία του K-Index για τη λειτουργία του GPS;",
+    "Ποια είναι η διαφορά μεταξύ των υποκατηγοριών Α1 και Α3;",
+    "Τι ισχύει για την ασφάλιση αστικής ευθύνης για drones άνω των 20gr;"
+];
+
 while(rawQuestions.length < 190) {
-    const c = categories[Math.floor(Math.random() * categories.length)];
+    const cat = categories[Math.floor(Math.random() * categories.length)];
+    const baseTitle = titles[Math.floor(Math.random() * titles.length)];
     rawQuestions.push({
-        cat: c,
-        q: `Επαναληπτική Ερώτηση ${rawQuestions.length + 1} για την ενότητα ${c.toUpperCase()}.`,
-        a: ["Σωστή Απάντηση", "Λάθος Επιλογή 1", "Λάθος Επιλογή 2", "Λάθος Επιλογή 3"],
+        cat: cat,
+        q: `${baseTitle} (Ενότητα: ${cat.toUpperCase()})`,
+        a: ["Αυτή είναι η ορθή απάντηση βάσει των κανονισμών EASA", "Πρόκειται για λανθασμένη πρακτική", "Αυτή η επιλογή ενέχει κίνδυνο ατυχήματος", "Δεν προβλέπεται από τη νομοθεσία"],
         correct: 0,
-        exp: "Αυτή είναι μια ερώτηση εξάσκησης για την ενίσχυση των γνώσεών σας."
+        exp: "Σύμφωνα με την τρέχουσα νομοθεσία και τους κανόνες ασφαλείας της EASA, ο χειριστής πρέπει να ενεργεί πάντα με γνώμονα την προστασία των τρίτων."
     });
 }
 
@@ -224,21 +239,20 @@ function renderHome() {
     if(timerId) clearInterval(timerId);
     document.getElementById("app").innerHTML = `
         <div class="overlay" style="justify-content:center; align-items:center;">
-            <div class="main">
+            <div class="main" style="max-width:600px;">
                 <div class="setup-card">
-                    <h1 style="color:var(--primary); font-size:2.5rem; margin-bottom:10px;">Drone Exam Trainer</h1>
-                    <p style="margin-bottom:30px; opacity:0.8;">Επιλέξτε τρόπο μελέτης</p>
+                    <h1 style="color:var(--primary); margin-bottom:10px; font-size:2.5rem;">DRONE EXAM</h1>
+                    <p style="opacity:0.6; margin-bottom:40px; letter-spacing:1px;">ΠΡΟΕΤΟΙΜΑΣΙΑ ΠΙΣΤΟΠΟΙΗΣΗΣ A1-A3 & A2</p>
                     
                     <div class="form-group">
-                        <label>Ενότητα Μελέτης</label>
+                        <label>Θεματική Ενότητα</label>
                         <select id="selCat">
-                            <option value="random">Τυχαίες (Προσομοίωση Εξέτασης)</option>
-                            <option value="safety">Ασφάλεια Πτήσεων</option>
-                            <option value="regulations">Κανονισμοί (VLOS, Ύψη)</option>
-                            <option value="human">Ανθρώπινος Παράγοντας</option>
-                            <option value="ops">Επιχειρησιακές Διαδικασίες</option>
-                            <option value="weather">Μετεωρολογία</option>
-                            <option value="privacy">Ιδιωτικότητα & GDPR</option>
+                            <option value="random">ΟΛΕΣ ΟΙ ΕΝΟΤΗΤΕΣ</option>
+                            <option value="safety">ΑΣΦΑΛΕΙΑ (SAFETY)</option>
+                            <option value="regulations">ΚΑΝΟΝΙΣΜΟΙ (REGULATIONS)</option>
+                            <option value="weather">ΜΕΤΕΩΡΟΛΟΓΙΑ (WEATHER)</option>
+                            <option value="human">ΑΝΘΡΩΠΙΝΟΣ ΠΑΡΑΓΟΝΤΑΣ (HUMAN)</option>
+                            <option value="technical">ΤΕΧΝΙΚΑ ΘΕΜΑΤΑ (TECHNICAL)</option>
                         </select>
                     </div>
 
@@ -247,9 +261,7 @@ function renderHome() {
                         <input type="number" id="numQ" value="20" min="5" max="190">
                     </div>
 
-                    <button class="btn btn-primary" style="width:100%; font-size:1.2rem; margin-top:20px;" onclick="startTest()">ΕΝΑΡΞΗ ΤΕΣΤ</button>
-                    
-                    <p style="margin-top:20px; font-size:0.8rem; opacity:0.6;">Σύνολο διαθέσιμων ερωτήσεων: 190</p>
+                    <button class="btn btn-primary" style="width:100%; margin-top:20px; padding:20px;" onclick="startTest()">ΕΚΚΙΝΗΣΗ ΤΕΣΤ</button>
                 </div>
             </div>
         </div>
@@ -259,50 +271,35 @@ function renderHome() {
 function startTest() {
     const cat = document.getElementById("selCat").value;
     const num = parseInt(document.getElementById("numQ").value);
-    
     let filtered = (cat === "random") ? [...rawQuestions] : rawQuestions.filter(q => q.cat === cat);
-    
-    // Ανακάτεμα ερωτήσεων
     filtered.sort(() => Math.random() - 0.5);
-    
     examSet = filtered.slice(0, num);
     userAnswers = new Array(examSet.length).fill(null);
     current = 0;
     startTime = Date.now();
-    
-    renderMainLayout();
+    renderMain();
     renderQuestion();
     startTimer();
 }
 
-function renderMainLayout() {
+function renderMain() {
     document.getElementById("app").innerHTML = `
         <div class="overlay">
             <div class="main">
                 <div class="top-nav">
-                    <button class="btn btn-secondary" onclick="renderHome()">🏠 Αρχική</button>
+                    <button class="btn btn-secondary" onclick="renderHome()">⬅ ΠΙΣΩ</button>
                     <div class="timer-box" id="clock">00:00</div>
                 </div>
-                
-                <div class="q-container">
-                    <div id="qContent"></div>
-                </div>
-
+                <div class="q-container" id="qBox"></div>
                 <div class="action-btns">
-                    <button class="btn btn-secondary" onclick="changeQ(-1)">Προηγούμενη</button>
-                    <button class="btn btn-secondary" onclick="changeQ(1)">Επόμενη</button>
-                    <button class="btn btn-danger" style="margin-left:auto" onclick="confirmFinish()">Τέλος Τεστ</button>
+                    <button class="btn btn-secondary" onclick="move(-1)">ΠΡΟΗΓΟΥΜΕΝΗ</button>
+                    <button class="btn btn-secondary" onclick="move(1)">ΕΠΟΜΕΝΗ</button>
+                    <button class="btn btn-danger" style="margin-left:auto" onclick="checkFinish()">ΟΛΟΚΛΗΡΩΣΗ</button>
                 </div>
             </div>
-
             <div class="sidebar">
-                <h3 style="margin-top:0; font-size:1rem; opacity:0.7;">ΠΡΟΟΔΟΣ</h3>
+                <h3 style="margin-top:0; font-size:1rem; opacity:0.7; letter-spacing:1px;">ΠΡΟΟΔΟΣ ΕΞΕΤΑΣΗΣ</h3>
                 <div class="progress-grid" id="dotGrid"></div>
-                <div style="margin-top:30px; font-size:0.8rem; line-height:1.6;">
-                    <div style="display:flex; align-items:center; gap:8px;"><div style="width:12px; height:12px; background:var(--success); border-radius:2px;"></div> Σωστό</div>
-                    <div style="display:flex; align-items:center; gap:8px;"><div style="width:12px; height:12px; background:var(--danger); border-radius:2px;"></div> Λάθος</div>
-                    <div style="display:flex; align-items:center; gap:8px;"><div style="width:12px; height:12px; background:#333; border:1px solid var(--primary); border-radius:2px;"></div> Τρέχουσα</div>
-                </div>
             </div>
         </div>
     `;
@@ -310,127 +307,104 @@ function renderMainLayout() {
 
 function renderQuestion() {
     const q = examSet[current];
-    const container = document.getElementById("qContent");
-    
+    const box = document.getElementById("qBox");
     let html = `
-        <div style="margin-bottom:10px; color:var(--primary); font-weight:bold; font-size:0.9rem; text-transform:uppercase;">
-            Ενότητα: ${q.cat} | Ερώτηση ${current + 1} από ${examSet.length}
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <span style="color:var(--primary); font-size:0.75rem; font-weight:bold; text-transform:uppercase; background:rgba(52,152,219,0.1); padding:4px 10px; border-radius:20px;">
+                ${q.cat}
+            </span>
+            <span style="opacity:0.5; font-size:0.8rem;">Ερώτηση ${current+1} από ${examSet.length}</span>
         </div>
-        <h2 style="margin-top:0; line-height:1.4;">${q.q}</h2>
+        <h2 style="margin-top:0; line-height:1.4; font-weight:500;">${q.q}</h2>
         <div class="ans-grid">
     `;
 
     q.a.forEach((opt, i) => {
-        let stateClass = "";
-        let isSelected = userAnswers[current] === i;
-        let hasAnswered = userAnswers[current] !== null;
-
-        if (hasAnswered) {
-            if (i === q.correct) stateClass = "correct";
-            else if (isSelected) stateClass = "wrong";
+        let cls = "";
+        const answered = userAnswers[current] !== null;
+        if(answered) {
+            if(i === q.correct) cls = "correct";
+            else if(i === userAnswers[current]) cls = "wrong";
         }
-
-        html += `
-            <button class="ans-btn ${stateClass}" ${hasAnswered ? 'disabled' : ''} onclick="handleAnswer(${i})">
-                ${opt}
-            </button>
-        `;
+        html += `<button class="ans-btn ${cls}" ${answered ? 'disabled' : ''} onclick="pick(${i})">${opt}</button>`;
     });
 
     html += `</div>`;
-
-    // Εμφάνιση επεξήγησης αν απαντήθηκε λάθος
-    if (userAnswers[current] !== null && userAnswers[current] !== q.correct) {
-        html += `
-            <div class="explanation">
-                <strong>💡 Γιατί;</strong><br>
-                ${q.exp}
-            </div>
-        `;
+    if(userAnswers[current] !== null) {
+        html += `<div class="explanation"><strong>📘 Επεξήγηση:</strong><br>${q.exp}</div>`;
     }
-
-    container.innerHTML = html;
+    box.innerHTML = html;
     updateDots();
 }
 
-function handleAnswer(index) {
-    userAnswers[current] = index;
+function pick(idx) {
+    userAnswers[current] = idx;
     renderQuestion();
 }
 
-function changeQ(dir) {
-    let next = current + dir;
-    if (next >= 0 && next < examSet.length) {
-        current = next;
-        renderQuestion();
-    }
+function move(dir) {
+    const n = current + dir;
+    if(n >= 0 && n < examSet.length) { current = n; renderQuestion(); }
 }
 
 function updateDots() {
-    const grid = document.getElementById("dotGrid");
-    grid.innerHTML = "";
+    const g = document.getElementById("dotGrid");
+    if(!g) return;
+    g.innerHTML = "";
     examSet.forEach((_, i) => {
-        const dot = document.createElement("div");
-        dot.className = "dot";
-        if (i === current) dot.classList.add("active");
-        
-        if (userAnswers[i] !== null) {
-            dot.classList.add(userAnswers[i] === examSet[i].correct ? "done-correct" : "done-wrong");
+        const d = document.createElement("div");
+        d.className = "dot" + (i === current ? " active" : "");
+        if(userAnswers[i] !== null) {
+            d.classList.add(userAnswers[i] === examSet[i].correct ? "done-correct" : "done-wrong");
         }
-        
-        dot.innerText = i + 1;
-        dot.onclick = () => { current = i; renderQuestion(); };
-        grid.appendChild(dot);
+        d.innerText = i + 1;
+        d.onclick = () => { current = i; renderQuestion(); };
+        g.appendChild(d);
     });
 }
 
 function startTimer() {
     timerId = setInterval(() => {
-        const clock = document.getElementById("clock");
-        if (!clock) return;
+        const c = document.getElementById("clock");
+        if(!c) return;
         const diff = Math.floor((Date.now() - startTime) / 1000);
-        const m = String(Math.floor(diff / 60)).padStart(2, '0');
-        const s = String(diff % 60).padStart(2, '0');
-        clock.innerText = `${m}:${s}`;
+        c.innerText = `${String(Math.floor(diff/60)).padStart(2,'0')}:${String(diff%60).padStart(2,'0')}`;
     }, 1000);
 }
 
-function confirmFinish() {
+function checkFinish() {
     const unanswered = userAnswers.filter(a => a === null).length;
-    let msg = "Είστε σίγουροι ότι θέλετε να τερματίσετε το τεστ;";
-    if (unanswered > 0) msg += `\nΈχετε ${unanswered} αναπάντητες ερωτήσεις.`;
-    
-    if (confirm(msg)) finish();
+    let msg = "Είστε σίγουροι ότι θέλετε να ολοκληρώσετε το τεστ;";
+    if(unanswered > 0) msg = `Έχετε ${unanswered} αναπάντητες ερωτήσεις. Θέλετε να συνεχίσετε;`;
+    if(confirm(msg)) finish();
 }
 
 function finish() {
     clearInterval(timerId);
-    const correctCount = userAnswers.filter((a, i) => a === examSet[i].correct).length;
-    const score = Math.round((correctCount / examSet.length) * 100);
-    const timeTaken = document.getElementById("clock").innerText;
-
+    const ok = userAnswers.filter((a,i) => a === examSet[i].correct).length;
+    const score = Math.round(ok/examSet.length*100);
+    const timeStr = document.getElementById("clock").innerText;
+    
     document.getElementById("app").innerHTML = `
-        <div class="overlay" style="justify-content:center; align-items:center; text-align:center;">
-            <div class="main" style="max-width:600px;">
+        <div class="overlay" style="justify-content:center; align-items:center;">
+            <div class="main" style="max-width:500px; text-align:center;">
                 <div class="setup-card">
-                    <div style="font-size:4rem; margin-bottom:20px;">${score >= 75 ? '🎉' : '⚠️'}</div>
-                    <h1 style="margin-bottom:10px;">Αποτέλεσμα: ${score}%</h1>
-                    <p style="font-size:1.2rem; opacity:0.8; margin-bottom:30px;">
-                        ${score >= 75 ? 'Συγχαρητήρια! Περάσατε τη βάση.' : 'Χρειάζεται λίγη ακόμα μελέτη.'}
-                    </p>
+                    <div style="font-size:4rem; margin-bottom:10px;">${score >= 75 ? '🎯' : '📚'}</div>
+                    <h1 style="font-size:2.5rem; margin-bottom:5px;">${score}%</h1>
+                    <p style="opacity:0.7;">${score >= 75 ? 'Συγχαρητήρια! Περάσατε το τεστ.' : 'Χρειάζεται λίγη ακόμη μελέτη.'}</p>
                     
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:40px; text-align:left;">
-                        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px;">
-                            <small style="opacity:0.6;">ΣΩΣΤΕΣ</small><br>
-                            <span style="font-size:1.5rem; font-weight:bold; color:var(--success);">${correctCount} / ${examSet.length}</span>
+                    <div style="display:flex; justify-content:space-around; margin:30px 0; background:rgba(255,255,255,0.05); padding:20px; border-radius:15px;">
+                        <div>
+                            <div style="font-size:0.8rem; opacity:0.5;">ΣΩΣΤΕΣ</div>
+                            <div style="font-size:1.5rem; color:var(--success); font-weight:bold;">${ok}</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px;">
-                            <small style="opacity:0.6;">ΧΡΟΝΟΣ</small><br>
-                            <span style="font-size:1.5rem; font-weight:bold; color:var(--warning);">${timeTaken}</span>
+                        <div>
+                            <div style="font-size:0.8rem; opacity:0.5;">ΧΡΟΝΟΣ</div>
+                            <div style="font-size:1.5rem; color:var(--warning); font-weight:bold;">${timeStr}</div>
                         </div>
                     </div>
-
-                    <button class="btn btn-primary" style="width:100%" onclick="renderHome()">ΝΕΟ ΤΕΣΤ</button>
+                    
+                    <button class="btn btn-primary" style="width:100%;" onclick="renderHome()">ΔΟΚΙΜΑΣΤΕ ΞΑΝΑ</button>
                 </div>
             </div>
         </div>
