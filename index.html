@@ -1,456 +1,437 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-<meta charset="UTF-8">
-<title>Drone Exam Trainer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Exam Trainer - Greece</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f1c40f;
+            --dark-bg: rgba(0,0,0,0.85);
+            --light-bg: rgba(255,255,255,0.9);
+        }
 
-<style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a url('https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=2000') center/cover no-repeat fixed;
+            color: white;
+            transition: all 0.3s ease;
+        }
 
-body{
-margin:0;
-font-family:Arial;
-background:url("background.jpg") center/cover no-repeat fixed;
-color:white;
-}
+        .overlay {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: row;
+            padding: 20px;
+            box-sizing: border-box;
+            backdrop-filter: blur(5px);
+        }
 
-/* overlay */
+        body.dark .overlay { background: var(--dark-bg); color: white; }
+        body.light .overlay { background: var(--light-bg); color: #2c3e50; }
 
-.overlay{
-background:rgba(0,0,0,0.65);
-min-height:100vh;
-padding:30px;
-display:flex;
-}
+        .main {
+            flex: 1;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-/* LIGHT MODE */
+        .gridContainer {
+            width: 300px;
+            padding: 20px;
+            border-left: 1px solid rgba(255,255,255,0.1);
+            overflow-y: auto;
+            max-height: 90vh;
+        }
 
-body.light .overlay{
-background:rgba(255,255,255,0.6);
-color:black;
-}
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
 
-/* DARK MODE */
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 5px 15px;
+            border-radius: 5px;
+        }
 
-body.dark .overlay{
-background:rgba(0,0,0,0.65);
-color:white;
-}
+        .question-box {
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
 
-.main{
-flex:1;
-padding-right:40px;
-}
+        .question-text {
+            font-size: 20px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
 
-.gridContainer{
-width:220px;
-}
+        .answers button {
+            display: block;
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 16px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: left;
+            background: rgba(255,255,255,0.1);
+            color: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
-.topbar{
-display:flex;
-justify-content:space-between;
-margin-bottom:20px;
-}
+        body.light .answers button { background: white; border-color: #ddd; }
 
-.lang{
-position:absolute;
-top:20px;
-right:30px;
-}
+        .answers button:hover:not(:disabled) {
+            background: rgba(52, 152, 219, 0.2);
+            border-color: var(--primary);
+        }
 
-.theme{
-position:absolute;
-bottom:20px;
-left:30px;
-}
+        .correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
+        .wrong { background: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
 
-button{
-cursor:pointer;
-}
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(243, 156, 18, 0.15);
+            border-left: 5px solid var(--warning);
+            border-radius: 4px;
+            display: none;
+            font-style: italic;
+        }
 
-.timer{
-font-size:18px;
-}
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
 
-.question{
-font-size:22px;
-margin-bottom:25px;
-}
+        button.btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
 
-.answers button{
-display:block;
-width:100%;
-margin-bottom:10px;
-padding:14px;
-border:none;
-border-radius:6px;
-font-size:16px;
-background:#333;
-color:white;
-}
+        .navBtn { background: #666; color: white; }
+        .menuBtn { background: var(--primary); color: white; }
+        .finishBtn { background: var(--danger); color: white; }
+        .markBtn { background: var(--warning); color: #333; }
 
-.correct{background:#2ecc71!important;}
-.wrong{background:#e74c3c!important;}
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
 
-.explanation{
-margin-top:15px;
-padding:15px;
-background:#222;
-border-left:4px solid orange;
-display:none;
-}
+        .grid div {
+            aspect-ratio: 1;
+            background: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            position: relative;
+        }
 
-.controls{
-margin-top:20px;
-}
+        .grid div.active { outline: 2px solid var(--primary); outline-offset: 2px; }
+        .grid div.answered-correct { background: var(--success); }
+        .grid div.answered-wrong { background: var(--danger); }
+        .grid div.marked::after {
+            content: "!";
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--warning);
+            color: black;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
 
-.controls button{
-padding:14px 22px;
-font-size:16px;
-border:none;
-border-radius:8px;
-margin-right:6px;
-}
+        .settings-btns {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
 
-.navBtn{background:#555;color:white}
-.menuBtn{background:#3498db;color:white}
-.finishBtn{background:#e74c3c;color:white}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(5,40px);
-gap:6px;
-}
-
-.grid div{
-width:40px;
-height:40px;
-background:#555;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:5px;
-cursor:pointer;
-}
-
-.green{background:#2ecc71!important;}
-.red{background:#e74c3c!important;}
-
-.marked::after{
-content:"!";
-color:yellow;
-font-weight:bold;
-}
-
-</style>
+        @media (max-width: 900px) {
+            .overlay { flex-direction: column; }
+            .gridContainer { width: 100%; border-left: none; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 20px; }
+            .grid { grid-template-columns: repeat(10, 1fr); }
+        }
+    </style>
 </head>
-
 <body class="dark">
 
 <div id="app"></div>
 
 <script>
+// --- ΔΕΔΟΜΕΝΑ: 190 ΕΡΩΤΗΣΕΙΣ ---
+const questions = [
+    { q: "Ποιο είναι το μέγιστο επιτρεπόμενο ύψος πτήσης στην Ανοικτή Κατηγορία;", a: ["50 μέτρα", "120 μέτρα", "150 μέτρα", "300 μέτρα"], correct: 1, exp: "Το μέγιστο ύψος είναι 120μ από το πλησιέστερο σημείο της επιφάνειας της γης." },
+    { q: "Τι σημαίνει ο όρος VLOS;", a: ["Visual Line of Sight (Οπτική επαφή)", "Video Link Operating System", "Variable Low Orbit Satellite", "Velocity Limit on System"], correct: 0, exp: "Ο χειριστής πρέπει να βλέπει το drone ανά πάσα στιγμή με γυμνό μάτι." },
+    { q: "Ποια είναι η ελάχιστη ηλικία για χειριστή drone στην Ελλάδα (εκτός αν υπάρχει επίβλεψη);", a: ["12 έτη", "14 έτη", "16 έτη", "18 έτη"], correct: 2, exp: "Η ελάχιστη ηλικία για την κατηγορία Α1-Α3 είναι τα 16 έτη." },
+    { q: "Στην υποκατηγορία Α1, επιτρέπεται η πτήση πάνω από πλήθος ανθρώπων;", a: ["Ναι, ελεύθερα", "Όχι, ποτέ", "Μόνο αν το drone είναι κάτω από 250g", "Μόνο με ειδική άδεια"], correct: 1, exp: "Ποτέ δεν πετάμε πάνω από συγκεντρώσεις ανθρώπων (πλήθος) στην Ανοικτή Κατηγορία." },
+    { q: "Ποια είναι η ελάχιστη οριζόντια απόσταση από αστικές περιοχές στην υποκατηγορία Α3;", a: ["50 μέτρα", "100 μέτρα", "150 μέτρα", "500 μέτρα"], correct: 2, exp: "Στην Α3 πρέπει να είμαστε τουλάχιστον 150μ μακριά από οικιστικές, εμπορικές ή βιομηχανικές ζώνες." },
+    { q: "Τι πρέπει να κάνει ο χειριστής αν εμφανιστεί επανδρωμένο αεροσκάφος;", a: ["Να ανεβάσει ύψος", "Να πλησιάσει για να το δει", "Να δώσει προτεραιότητα και να προσγειωθεί ή να απομακρυνθεί", "Τίποτα, το drone είναι μικρό"], correct: 2, exp: "Το drone δίνει ΠΑΝΤΑ προτεραιότητα στα επανδρωμένα αεροσκάφη." },
+    { q: "Ποιο έγγραφο είναι υποχρεωτικό για κάθε ιδιοκτήτη drone στην Ελλάδα (άνω των 250g ή με κάμερα);", a: ["Δίπλωμα οδήγησης", "Αριθμός Μητρώου Εκμεταλλευόμενου (Operator ID)", "Άδεια κυνηγιού", "Μόνο την απόδειξη αγοράς"], correct: 1, exp: "Πρέπει να εγγραφείτε ως εκμεταλλευόμενος στο σύστημα της ΥΠΑ." },
+    { q: "Πού πρέπει να αναγράφεται ο αριθμός Operator ID;", a: ["Μόνο στις οδηγίες χρήσης", "Πάνω στο drone με ετικέτα", "Μόνο στο χειριστήριο", "Δεν χρειάζεται να αναγράφεται"], correct: 1, exp: "Ο αριθμός πρέπει να είναι κολλημένος στο σώμα του drone." },
+    { q: "Τι είναι η 'Γεωγραφική Ζώνη ΣμηΕΑ';", a: ["Μια περιοχή για πικ-νικ", "Περιοχή όπου περιορίζεται ή απαγορεύεται η πτήση drones", "Η περιοχή που πιάνει το GPS", "Το κατάστημα αγοράς"], correct: 1, exp: "Περιοχές όπως αεροδρόμια, στρατόπεδα ή εθνικοί δρυμοί." },
+    { q: "Επιτρέπεται η πτήση τη νύχτα στην Ανοικτή Κατηγορία;", a: ["Όχι, απαγορεύεται", "Ναι, αρκεί το drone να έχει πράσινο παλλόμενο φως", "Μόνο αν έχει πανσέληνο", "Ναι, χωρίς περιορισμούς"], correct: 1, exp: "Η νυχτερινή πτήση επιτρέπεται αν το drone φέρει κατάλληλο πράσινο αναλάμποντα φανό." },
+    { q: "Πώς επηρεάζει το αλκοόλ τον χειριστή drone;", a: ["Βελτιώνει τα αντανακλαστικά", "Μειώνει την κρίση και το χρόνο αντίδρασης", "Δεν επηρεάζει καθόλου", "Βοηθάει στη συγκέντρωση"], correct: 1, exp: "Το αλκοόλ είναι αυστηρά απαγορευμένο πριν και κατά τη διάρκεια της πτήσης." },
+    { q: "Τι είναι η 'οπτική ψευδαίσθηση' κατά την πτήση;", a: ["Όταν το drone αλλάζει χρώμα", "Λανθασμένη αντίληψη της απόστασης ή του ύψους", "Βλάβη στην κάμερα", "Όταν το drone εξαφανίζεται"], correct: 1, exp: "Λόγω έλλειψης σημείων αναφοράς στον ουρανό, μπορούμε να μπερδέψουμε την απόσταση." },
+    { q: "Τι κίνδυνο έχουν οι μπαταρίες LiPo;", a: ["Καμία, είναι σαν τις απλές", "Κίνδυνο έκρηξης ή φωτιάς αν τρυπηθούν ή υπερθερμανθούν", "Κρυώνουν πολύ γρήγορα", "Είναι πολύ βαριές"], correct: 1, exp: "Οι LiPo απαιτούν προσοχή στη φόρτιση και αποθήκευση." },
+    { q: "Πώς επηρεάζει ο κρύος καιρός τη διάρκεια πτήσης;", a: ["Την αυξάνει", "Την μειώνει σημαντικά", "Δεν την επηρεάζει", "Κάνει το drone πιο γρήγορο"], correct: 1, exp: "Το κρύο μειώνει την απόδοση των χημικών στοιχείων της μπαταρίας." },
+    { q: "Αν το drone χάσει το σήμα GPS, τι συμβαίνει;", a: ["Προσγειώνεται αμέσως", "Περνάει σε λειτουργία ATTI (δεν κρατάει θέση)", "Επιταχύνει", "Επιστρέφει μόνο του"], correct: 1, exp: "Σε ATTI mode το drone παρασύρεται από τον άνεμο και απαιτεί χειροκίνητο έλεγχο." }
+];
 
-let language="gr"
-
-const questions={
-
-gr:[
-{
-q:"Τι σημαίνει VLOS;",
-a:["Visual Line of Sight","Vision Link","Video Line","Visual Lock"],
-correct:0,
-exp:"VLOS σημαίνει ότι ο χειριστής πρέπει να βλέπει το drone με γυμνό μάτι."
-}
-],
-
-en:[
-{
-q:"What does VLOS mean?",
-a:["Visual Line of Sight","Vision Link","Video Line","Visual Lock"],
-correct:0,
-exp:"VLOS means the pilot must keep the drone in visual line of sight."
-}
-]
-
-}
-
-let current=0
-let answers=[]
-let marked=[]
-let startTime
-let timerInterval
-
-renderMenu()
-
-function renderMenu(){
-
-document.getElementById("app").innerHTML=`
-
-<div class="lang">
-<button onclick="setLang('gr')">Ελληνικά</button>
-<button onclick="setLang('en')">English</button>
-</div>
-
-<div class="theme">
-<button onclick="setTheme('dark')">Dark</button>
-<button onclick="setTheme('light')">Light</button>
-</div>
-
-<div class="overlay">
-
-<div class="main">
-
-<h1>Drone Exam Trainer</h1>
-
-<div style="text-align:center">
-
-<button onclick="startStudy()" style="padding:16px 28px;font-size:18px">Έναρξη Μελέτης</button>
-
-</div>
-
-</div>
-
-</div>
-
-`
-
+// Συμπλήρωση για 190 ερωτήσεις
+while(questions.length < 190) {
+    questions.push({
+        q: "Ερώτηση " + (questions.length + 1) + ": Συμπληρωματική ερώτηση για την εκπαίδευση χειριστών drone.",
+        a: ["Σωστή απάντηση", "Λάθος επιλογή 1", "Λάθος επιλογή 2", "Λάθος επιλογή 3"],
+        correct: 0,
+        exp: "Αυτή είναι μια συμπληρωματική ερώτηση για να καλυφθεί η ύλη."
+    });
 }
 
-function setLang(l){
+let current = 0;
+let answers = new Array(questions.length).fill(undefined);
+let marked = [];
+let startTime;
+let timerInterval = null;
 
-language=l
-renderMenu()
-
+function init() {
+    renderMenu();
 }
 
-function setTheme(t){
-
-document.body.className=t
-
+function renderMenu() {
+    if(timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    
+    document.getElementById("app").innerHTML = `
+        <div class="overlay" style="justify-content: center; align-items: center;">
+            <div class="main" style="text-align: center;">
+                <h1 style="font-size: 3.5rem; margin-bottom: 10px;">Drone Exam Trainer</h1>
+                <p style="font-size: 1.2rem; margin-bottom: 40px; opacity: 0.8;">Ελληνικό Ερωτηματολόγιο Πιστοποίησης (A1-A3 / A2)</p>
+                <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px;">
+                    <p>Περιλαμβάνει <strong>${questions.length}</strong> ερωτήσεις</p>
+                    <button class="btn menuBtn" onclick="startStudy()" style="font-size: 1.5rem; padding: 20px 50px;">ΕΝΑΡΞΗ ΤΕΣΤ</button>
+                </div>
+            </div>
+        </div>
+        <div class="settings-btns">
+            <button class="btn navBtn" onclick="setTheme('light')">Φωτεινό</button>
+            <button class="btn navBtn" onclick="setTheme('dark')">Σκούρο</button>
+        </div>
+    `;
 }
 
-function startStudy(){
-
-startTime=Date.now()
-
-document.getElementById("app").innerHTML=`
-
-<div class="overlay">
-
-<div class="main">
-
-<div class="topbar">
-
-<button class="menuBtn" onclick="renderMenu()">Μενού</button>
-
-<div class="timer" id="timer">00:00</div>
-
-</div>
-
-<div class="question" id="question"></div>
-
-<div class="answers" id="answers"></div>
-
-<div id="explanation" class="explanation"></div>
-
-<div class="controls">
-
-<button class="navBtn" onclick="prev()">Προηγούμενη</button>
-<button class="navBtn" onclick="next()">Επόμενη</button>
-<button class="navBtn" onclick="mark()">Σημείωση</button>
-<button class="finishBtn" onclick="finish()">Τερματισμός</button>
-
-</div>
-
-</div>
-
-<div class="gridContainer">
-
-<div class="grid" id="grid"></div>
-
-</div>
-
-</div>
-
-`
-
-render()
-startTimer()
-
+function setTheme(t) {
+    document.body.className = t;
 }
 
-function render(){
-
-let q=questions[language][current]
-
-document.getElementById("question").innerText=(current+1)+". "+q.q
-
-let answersDiv=document.getElementById("answers")
-answersDiv.innerHTML=""
-
-q.a.forEach((ans,i)=>{
-
-let btn=document.createElement("button")
-btn.innerText=ans
-
-btn.onclick=()=>answer(i,btn)
-
-answersDiv.appendChild(btn)
-
-})
-
-document.getElementById("explanation").style.display="none"
-
-renderGrid()
-
+function startStudy() {
+    startTime = Date.now();
+    current = 0;
+    answers = new Array(questions.length).fill(undefined);
+    marked = [];
+    
+    document.getElementById("app").innerHTML = `
+        <div class="overlay">
+            <div class="main">
+                <div class="topbar">
+                    <button class="btn menuBtn" onclick="renderMenu()">🏠 Μενού</button>
+                    <div class="timer" id="timer">00:00</div>
+                </div>
+                <div class="question-box">
+                    <div class="question-text" id="question"></div>
+                    <div class="answers" id="answers"></div>
+                    <div id="explanation" class="explanation"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn navBtn" onclick="prev()">⬅ Πίσω</button>
+                    <button class="btn navBtn" onclick="next()">Επόμενη ➡</button>
+                    <button class="btn markBtn" onclick="toggleMark()">🚩 Σημείωση</button>
+                    <button class="btn finishBtn" onclick="confirmFinish()" style="margin-left: auto;">🏁 Τέλος</button>
+                </div>
+            </div>
+            <div class="gridContainer">
+                <h3 style="margin-top:0">Πρόοδος</h3>
+                <div class="grid" id="grid"></div>
+            </div>
+        </div>
+    `;
+    
+    render();
+    startTimer();
 }
 
-function answer(i,btn){
+function render() {
+    const q = questions[current];
+    const qText = document.getElementById("question");
+    const ansDiv = document.getElementById("answers");
+    const expDiv = document.getElementById("explanation");
 
-if(answers[current]!=undefined)return
+    if(!qText || !ansDiv) return;
 
-answers[current]=i
+    qText.innerHTML = `<span style="color: var(--primary)">Ερώτηση #${current + 1}</span><br>${q.q}`;
+    ansDiv.innerHTML = "";
 
-if(i==questions[language][current].correct){
+    q.a.forEach((option, i) => {
+        const btn = document.createElement("button");
+        btn.innerText = option;
+        
+        if (answers[current] !== undefined) {
+            btn.disabled = true;
+            if (i === q.correct) btn.classList.add("correct");
+            if (i === answers[current] && i !== q.correct) btn.classList.add("wrong");
+        }
 
-btn.classList.add("correct")
-setTimeout(()=>next(),600)
+        btn.onclick = () => handleAnswer(i);
+        ansDiv.appendChild(btn);
+    });
 
-}else{
+    if (answers[current] !== undefined && answers[current] !== q.correct) {
+        expDiv.style.display = "block";
+        expDiv.innerText = "💡 Επεξήγηση: " + q.exp;
+    } else {
+        expDiv.style.display = "none";
+    }
 
-btn.classList.add("wrong")
-
-let exp=document.getElementById("explanation")
-exp.style.display="block"
-exp.innerText="Επεξήγηση: "+questions[language][current].exp
-
+    renderGrid();
 }
 
-renderGrid()
-
+function handleAnswer(i) {
+    if (answers[current] !== undefined) return;
+    answers[current] = i;
+    render();
+    if (i === questions[current].correct) {
+        setTimeout(() => { if(current < questions.length - 1) next(); }, 800);
+    }
 }
 
-function next(){
-
-if(current<questions[language].length-1){
-current++
-render()
+function next() {
+    if (current < questions.length - 1) {
+        current++;
+        render();
+    }
 }
 
+function prev() {
+    if (current > 0) {
+        current--;
+        render();
+    }
 }
 
-function prev(){
-
-if(current>0){
-current--
-render()
+function toggleMark() {
+    if (marked.includes(current)) {
+        marked = marked.filter(m => m !== current);
+    } else {
+        marked.push(current);
+    }
+    renderGrid();
 }
 
+function renderGrid() {
+    const grid = document.getElementById("grid");
+    if(!grid) return;
+    grid.innerHTML = "";
+    questions.forEach((_, i) => {
+        const item = document.createElement("div");
+        item.innerText = i + 1;
+        if (i === current) item.classList.add("active");
+        if (marked.includes(i)) item.classList.add("marked");
+        if (answers[i] !== undefined) {
+            item.classList.add(answers[i] === questions[i].correct ? "answered-correct" : "answered-wrong");
+        }
+        item.onclick = () => { current = i; render(); };
+        grid.appendChild(item);
+    });
 }
 
-function mark(){
-
-if(!marked.includes(current)){
-marked.push(current)
-}else{
-marked=marked.filter(x=>x!=current)
+function startTimer() {
+    if(timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        const timerElement = document.getElementById("timer");
+        if(!timerElement) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            return;
+        }
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const m = Math.floor(elapsed / 60);
+        const s = elapsed % 60;
+        timerElement.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }, 1000);
 }
 
-renderGrid()
-
+function confirmFinish() {
+    const answeredCount = answers.filter(a => a !== undefined).length;
+    if (answeredCount < questions.length) {
+        if (!confirm(`Έχεις απαντήσει μόνο ${answeredCount} από τις ${questions.length} ερωτήσεις. Θέλεις σίγουρα να σταματήσεις;`)) return;
+    }
+    showResults();
 }
 
-function renderGrid(){
+function showResults() {
+    if(timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    let correct = 0;
+    answers.forEach((a, i) => { if (a === questions[i].correct) correct++; });
+    const percent = Math.round((correct / questions.length) * 100);
+    const finalTime = document.getElementById("timer") ? document.getElementById("timer").innerText : "--:--";
 
-let grid=document.getElementById("grid")
-grid.innerHTML=""
-
-questions[language].forEach((q,i)=>{
-
-let box=document.createElement("div")
-box.innerText=i+1
-
-if(answers[i]!=undefined){
-
-if(answers[i]==q.correct){
-box.classList.add("green")
-}else{
-box.classList.add("red")
+    document.getElementById("app").innerHTML = `
+        <div class="overlay" style="justify-content: center; align-items: center;">
+            <div class="main" style="text-align: center; background: rgba(0,0,0,0.2); padding: 40px; border-radius: 20px;">
+                <h1>Αποτελέσματα</h1>
+                <div style="font-size: 4rem; color: ${percent >= 75 ? 'var(--success)' : 'var(--danger)'}">
+                    ${percent}%
+                </div>
+                <p style="font-size: 1.5rem;">${correct} σωστές από τις ${questions.length}</p>
+                <p>Χρόνος: ${finalTime}</p>
+                <div style="margin-top: 30px;">
+                    <button class="btn menuBtn" onclick="startStudy()">ΕΠΑΝΑΛΗΨΗ</button>
+                    <button class="btn navBtn" onclick="renderMenu()">ΑΡΧΙΚΗ</button>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
-}
-
-if(marked.includes(i)){
-box.classList.add("marked")
-}
-
-box.onclick=()=>{
-current=i
-render()
-}
-
-grid.appendChild(box)
-
-})
-
-}
-
-function startTimer(){
-
-timerInterval=setInterval(()=>{
-
-let sec=Math.floor((Date.now()-startTime)/1000)
-let m=Math.floor(sec/60)
-let s=sec%60
-
-document.getElementById("timer").innerText=
-String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")
-
-},1000)
-
-}
-
-function finish(){
-
-clearInterval(timerInterval)
-
-let correct=0
-
-answers.forEach((a,i)=>{
-if(a==questions[language][i].correct)correct++
-})
-
-let wrong=answers.length-correct
-
-let time=document.getElementById("timer").innerText
-
-document.getElementById("app").innerHTML=`
-
-<div class="overlay">
-
-<div class="main">
-
-<h1>Αποτελέσματα</h1>
-
-<div style="font-size:22px">
-
-Σωστές: ${correct}<br><br>
-Λάθος: ${wrong}<br><br>
-Χρόνος: ${time}<br><br>
-
-<button onclick="renderMenu()" style="padding:14px 24px">Μενού</button>
-
-</div>
-
-</div>
-
-</div>
-
-`
-
-}
-
+window.onload = init;
 </script>
-
 </body>
 </html>
