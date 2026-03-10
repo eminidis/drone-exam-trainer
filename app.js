@@ -65,6 +65,7 @@ function render(){
 
 showQuestion();
 showGrid();
+checkAutoFinish();
 
 }
 
@@ -80,25 +81,11 @@ let html=`
 
 <h3>Question ${currentQuestion+1} / ${questions.length}</h3>
 
-<div style="
-width:100%;
-background:#ddd;
-border-radius:10px;
-overflow:hidden;
-margin-bottom:20px;
-">
-
-<div style="
-width:${progress}%;
-background:#4caf50;
-height:16px;
-">
-</div>
-
+<div style="width:100%;background:#ddd;border-radius:10px;overflow:hidden;margin-bottom:20px">
+<div style="width:${progress}%;background:#4caf50;height:16px"></div>
 </div>
 
 <p style="font-size:22px">${q.question}</p>
-
 `;
 
 q.answers.forEach((a,i)=>{
@@ -114,18 +101,16 @@ color="background:#ff8f8f";
 
 }
 
-html+=`
-<button onclick="answer(${i})"
+html+=`<button onclick="answer(${i})"
 style="display:block;margin:10px auto;padding:15px;width:320px;font-size:18px;${color}">
-${a}
-</button>
-`;
+${a} </button>`;
 
 });
 
 if(userAnswers[currentQuestion]!==null && userAnswers[currentQuestion]!==q.correct){
 
 html+=`
+
 <div style="margin-top:20px;padding:15px;background:#f4f4f4;border-radius:8px">
 <b>Explanation:</b><br>
 ${q.explanation}
@@ -147,7 +132,6 @@ html+=`
 <button onclick="finishExam()" style="padding:14px 24px;font-size:20px;margin:6px;background:#444;color:white">Finish</button>
 
 </div>
-
 `;
 
 document.getElementById("quiz").innerHTML=html;
@@ -157,15 +141,8 @@ document.getElementById("quiz").innerHTML=html;
 function showGrid(){
 
 let grid=`
-<div style="
-position:absolute;
-top:20px;
-right:20px;
-background:white;
-padding:12px;
-border-radius:10px;
-">
 
+<div style="position:absolute;top:20px;right:20px;background:white;padding:12px;border-radius:10px">
 `;
 
 questions.forEach((q,i)=>{
@@ -185,8 +162,7 @@ let markBadge="";
 
 if(marked[i]){
 
-markBadge=`
-<span style="
+markBadge=`<span style="
 position:absolute;
 top:-6px;
 right:-6px;
@@ -196,10 +172,7 @@ font-weight:bold;
 font-size:14px;
 padding:2px 6px;
 border-radius:50%;
-">
-!
-</span>
-`;
+">!</span>`;
 
 }
 
@@ -208,20 +181,12 @@ grid+=`
 <div style="position:relative;display:inline-block;">
 
 <button onclick="goto(${i})"
-style="
-width:38px;
-height:38px;
-margin:3px;
-background:${color};
-font-weight:bold;
-">
-${i+1}
-</button>
+style="width:38px;height:38px;margin:3px;background:${color};font-weight:bold">
+${i+1} </button>
 
 ${markBadge}
 
 </div>
-
 `;
 
 });
@@ -287,9 +252,39 @@ render();
 
 }
 
+function checkAutoFinish(){
+
+let allAnswered=userAnswers.every(a=>a!==null);
+
+if(allAnswered){
+
+setTimeout(()=>{
+
+alert("Finished! All questions answered.");
+
+showResults();
+
+},300);
+
+}
+
+}
+
 function finishExam(){
 
-if(!confirm("Θέλεις σίγουρα να ολοκληρώσεις το test;")) return;
+let unanswered=userAnswers.includes(null);
+
+if(unanswered){
+
+if(!confirm("You have unanswered questions. Finish anyway?")) return;
+
+}
+
+showResults();
+
+}
+
+function showResults(){
 
 clearInterval(timerInterval);
 
@@ -305,11 +300,11 @@ document.getElementById("quiz").innerHTML=`
 
 <div style="width:50%;margin:auto;background:white;padding:30px;border-radius:10px">
 
-<h2>Αποτέλεσμα</h2>
+<h2>Results</h2>
 
-<p>Σωστές απαντήσεις: ${correct} / ${questions.length}</p>
+<p>Correct answers: ${correct} / ${questions.length}</p>
 
-<p>Ποσοστό: ${percent}%</p>
+<p>Score: ${percent}%</p>
 
 <h3>${percent>=75 ? "PASS" : "FAIL"}</h3>
 
