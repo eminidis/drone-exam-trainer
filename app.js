@@ -4,7 +4,7 @@ let questions = [
 question:"Πόσο ψηλά επιτρέπεται να πετάει ένα drone ανοιχτής κατηγορίας;",
 answers:["50m","120m","300m","500m"],
 correct:1,
-explanation:"Το μέγιστο επιτρεπόμενο ύψος στην open category είναι 120m."
+explanation:"Το μέγιστο επιτρεπόμενο ύψος είναι 120m."
 },
 
 {
@@ -18,7 +18,7 @@ explanation:"Ο χειριστής πρέπει να διατηρεί VLOS."
 question:"Μπορεί drone να πετάξει πάνω από συγκεντρωμένο πλήθος;",
 answers:["Ναι","Όχι","Μόνο με άδεια","Μόνο χαμηλά"],
 correct:1,
-explanation:"Η πτήση πάνω από συγκεντρωμένο πλήθος απαγορεύεται."
+explanation:"Απαγορεύεται η πτήση πάνω από πλήθος."
 },
 
 {
@@ -72,11 +72,30 @@ function showQuestion(){
 
 let q=questions[currentQuestion];
 
+let progress=Math.round(((currentQuestion+1)/questions.length)*100);
+
 let html=`
 
 <div style="width:60%;margin:auto;background:white;padding:20px;border-radius:10px">
 
-<h2>Ερώτηση ${currentQuestion+1}</h2>
+<h3>Question ${currentQuestion+1} / ${questions.length}</h3>
+
+<div style="
+width:100%;
+background:#ddd;
+border-radius:10px;
+overflow:hidden;
+margin-bottom:20px;
+">
+
+<div style="
+width:${progress}%;
+background:#4caf50;
+height:16px;
+">
+</div>
+
+</div>
 
 <p style="font-size:22px">${q.question}</p>
 
@@ -186,10 +205,7 @@ border-radius:50%;
 
 grid+=`
 
-<div style="
-position:relative;
-display:inline-block;
-">
+<div style="position:relative;display:inline-block;">
 
 <button onclick="goto(${i})"
 style="
