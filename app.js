@@ -8,9 +8,11 @@ questions = await response.json();
 }
 
 function startStudy(){
+document.getElementById("home").style.display="none";
+
 currentQuestion = 0;
+
 showQuestion();
-}
 
 function showQuestion(){
 
