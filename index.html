@@ -33,7 +33,6 @@ width:100%;
 background:#222;
 color:white;
 padding:10px;
-box-shadow:0 2px 6px rgba(0,0,0,0.2);
 z-index:100;
 }
 
@@ -50,6 +49,17 @@ margin-left:20px;
 
 #quiz{
 margin-top:80px;
+}
+
+#stats{
+position:absolute;
+top:90px;
+right:20px;
+background:white;
+padding:12px;
+border-radius:10px;
+font-size:16px;
+box-shadow:0 2px 6px rgba(0,0,0,0.2);
 }
 
 </style>
@@ -70,13 +80,14 @@ margin-top:80px;
 
 <h1>Drone Exam Trainer</h1>
 
-<br>
-
 <select id="categorySelect">
+
+<option value="All">All Questions</option>
 <option value="Air Law">Air Law</option>
 <option value="Meteorology">Meteorology</option>
 <option value="Human Performance">Human Performance</option>
 <option value="Operational Procedures">Operational Procedures</option>
+
 </select>
 
 <br>
@@ -84,6 +95,7 @@ margin-top:80px;
 <select id="questionAmount">
 <option value="5">5 Questions</option>
 <option value="10">10 Questions</option>
+<option value="30">30 Questions</option>
 <option value="all">All Questions</option>
 </select>
 
@@ -120,7 +132,7 @@ category:"Human Performance",
 question:"Ποιος είναι υπεύθυνος για την πτήση;",
 answers:["Κατασκευαστής","Πιλότος","Αστυνομία","Δήμος"],
 correct:1,
-explanation:"Ο pilot είναι υπεύθυνος για την πτήση."
+explanation:"Ο pilot είναι υπεύθυνος."
 },
 
 {
@@ -128,7 +140,7 @@ category:"Operational Procedures",
 question:"Πρέπει να υπάρχει οπτική επαφή με το drone;",
 answers:["Ναι πάντα","Όχι","Μόνο τη νύχτα","Μόνο σε πόλη"],
 correct:0,
-explanation:"Ο χειριστής πρέπει να διατηρεί VLOS."
+explanation:"Πρέπει να υπάρχει VLOS."
 }
 
 ];
@@ -149,7 +161,17 @@ document.getElementById("toolbar").style.display="block";
 let category=document.getElementById("categorySelect").value;
 let amount=document.getElementById("questionAmount").value;
 
-let filtered=allQuestions.filter(q=>q.category===category);
+let filtered;
+
+if(category==="All"){
+
+filtered=[...allQuestions];
+
+}else{
+
+filtered=allQuestions.filter(q=>q.category===category);
+
+}
 
 shuffle(filtered);
 
@@ -164,14 +186,12 @@ initExam();
 }
 
 function goHome(){
-
 location.reload();
-
 }
 
 function restartExam(){
 
-if(confirm("Restart the study session?")){
+if(confirm("Restart study session?")){
 initExam();
 }
 
@@ -221,7 +241,44 @@ function render(){
 
 showQuestion();
 showGrid();
+showStats();
 checkAutoFinish();
+
+}
+
+function showStats(){
+
+let correct=0;
+let wrong=0;
+
+userAnswers.forEach((a,i)=>{
+
+if(a!==null){
+
+if(a===questions[i].correct) correct++;
+else wrong++;
+
+}
+
+});
+
+let remaining=questions.length-(correct+wrong);
+
+let statsHTML=`
+
+<div id="stats">
+
+<b>Statistics</b><br><br>
+
+Correct: ${correct}<br>
+Wrong: ${wrong}<br>
+Remaining: ${remaining}
+
+</div>
+
+`;
+
+document.getElementById("quiz").innerHTML+=statsHTML;
 
 }
 
@@ -282,11 +339,8 @@ html+=`
 <br>
 
 <button onclick="prev()" style="padding:14px 24px;font-size:20px;margin:6px">Previous</button>
-
 <button onclick="next()" style="padding:14px 24px;font-size:20px;margin:6px">Next</button>
-
 <button onclick="mark()" style="padding:14px 24px;font-size:20px;margin:6px">Mark</button>
-
 <button onclick="finishExam()" style="padding:14px 24px;font-size:20px;margin:6px;background:#444;color:white">Finish</button>
 
 </div>
@@ -298,7 +352,7 @@ document.getElementById("quiz").innerHTML=html;
 
 function showGrid(){
 
-let grid=`<div style="position:absolute;top:100px;right:20px;background:white;padding:12px;border-radius:10px">`;
+let grid=`<div style="position:absolute;top:200px;right:20px;background:white;padding:12px;border-radius:10px">`;
 
 questions.forEach((q,i)=>{
 
