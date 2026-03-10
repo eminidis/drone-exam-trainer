@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drone Exam Trainer</title>
+
+<style>
+body{font-family:Arial;margin:20px;background:#f2f2f2;}
+button{display:block;width:100%;padding:15px;margin:10px 0;font-size:16px;}
+#answers button{background:white;border:1px solid #ccc;}
+.hidden{display:none;}
+</style>
+
+</head>
+
+<body>
+
+<h1>🚁 Drone Exam Trainer</h1>
+
+<div id="menu">
+
+<button onclick="startStudy()">Study Mode</button>
+
+<button onclick="startExam()">Exam Mode</button>
+
+</div>
+
+<div id="quiz" class="hidden">
+
+<div id="timer"></div>
+
+<h2 id="question"></h2>
+
+<div id="answers"></div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
