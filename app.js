@@ -6,6 +6,7 @@ let isStudyMode = false;
 let timer = null;
 let timeLeft = 2700;
 
+// Σύνδεση με το αρχείο σου
 const githubURL = "https://raw.githubusercontent.com/eminidis/drone-exam-trainer/refs/heads/main/31filesQuestions.json?v=" + new Date().getTime();
 
 async function loadAllQuestions() {
@@ -13,7 +14,7 @@ async function loadAllQuestions() {
         const response = await fetch(githubURL);
         const data = await response.json();
         allQuestions = data.ερωτήσεις || [];
-    } catch (e) { console.error("Σφάλμα JSON:", e); }
+    } catch (e) { console.error("Error loading JSON:", e); }
 }
 loadAllQuestions();
 
@@ -78,7 +79,6 @@ function renderQuestion() {
         container.appendChild(btn);
     }
     document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / currentQuestions.length) * 100}%`;
-    document.getElementById('prev-btn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
 }
 
 window.nextQ = function() { if (currentIndex < currentQuestions.length - 1) { currentIndex++; renderQuestion(); renderDots(); } }
