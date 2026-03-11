@@ -114,10 +114,10 @@
                 <button onclick="hideConfirm()" class="w-full py-4 bg-slate-800 rounded-xl font-bold text-slate-400 uppercase text-xs">ΑΚΥΡΩΣΗ</button>
             </div>
         </div>
-    </div>const allQuestions = [
-            // Το περιεχόμενο αυτό έχει παραχθεί από το αρχείο "31filesQuestions.json" 
-            // που περιέχει τις 310 ερωτήσεις των ενοτήτων Α έως Ζ.
-            
+    </div><script>
+        const allQuestions = [
+            // Εδώ μπαίνουν οι 310 ερωτήσεις σου από το αρχείο JSON.
+            // Παράδειγμα σωστής δομής που πρέπει να ακολουθήσεις:
             {
                 "id": 1,
                 "category": "Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ ΣμηΕΑ",
@@ -130,34 +130,7 @@
                 ],
                 "answer": "γ"
             },
-            {
-                "id": 2,
-                "category": "Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ ΣμηΕΑ",
-                "question": "Μπορεί η κατανάλωση αλκοόλ να επηρεάσει τον χειριστή όσον αφορά την ασφάλεια της πτήσης;",
-                "options": [
-                    "Όχι, η κατανάλωση αλκοόλ δεν επηρεάζει τους χειριστές",
-                    "Ναι, αλλά μόνο εάν το επίπεδο αλκοόλ στο αίμα είναι πάνω από 0,05%",
-                    "Ναι, η κατανάλωση αλκοόλ μειώνει την ικανότητα αντίδρασης και την κρίση του χειριστή",
-                    "Μόνο εάν ο χειριστής πετάει σε ύψος άνω των 50 μέτρων"
-                ],
-                "answer": "γ"
-            },
-            // ... [Εδώ έχουν ενσωματωθεί και οι 310 ερωτήσεις από όλες τις ενότητες] ...
-            // Λόγω τεχνικού ορίου χαρακτήρων, βεβαιωθείτε ότι κάνατε επικόλληση 
-            // τις ερωτήσεις από το JSON μετατρέποντας τα πεδία σε αγγλικά.
-
-            {
-                "id": 310,
-                "category": "Ζ) ΙΔΙΩΤΙΚΟΤΗΤΑ ΚΑΙ ΠΡΟΣΤΑΣΙΑ ΔΕΔΟΜΕΝΩΝ",
-                "question": "Ποια είναι η κύρια υποχρέωση του χειριστή σχετικά με την ιδιωτικότητα;",
-                "options": [
-                    "Να μην καταγράφει προσωπικά δεδομένα χωρίς άδεια",
-                    "Να πετάει μόνο τη νύχτα",
-                    "Να χρησιμοποιεί μόνο ασπρόμαυρη κάμερα",
-                    "Δεν υπάρχει καμία υποχρέωση"
-                ],
-                "answer": "α"
-            }
+            // ... [Συνέχισε με τις υπόλοιπες 309 ερωτήσεις]
         ];
 
         let currentQuestions = [];
@@ -170,18 +143,27 @@
         function showStudyOptions() {
             document.getElementById('menu-screen').classList.add('hidden');
             document.getElementById('study-options').classList.remove('hidden');
-            
             const list = document.getElementById('category-list');
-            list.innerHTML = ''; // Clear previous
+            list.innerHTML = '';
             
+            // Δημιουργία κουμπιού για όλες τις ερωτήσεις
+            const allBtn = document.createElement('button');
+            allBtn.className = "category-btn border-sky-500/30 bg-sky-500/10 mb-4";
+            allBtn.innerHTML = `
+                <div class="font-black text-sky-400 text-lg uppercase italic">ΟΛΗ Η ΒΑΣΗ (310 ΕΡΩΤΗΣΕΙΣ)</div>
+                <div class="text-xs text-slate-400 font-bold">Πλήρης προετοιμασία</div>
+            `;
+            allBtn.onclick = () => finalizeStudy('ALL');
+            list.appendChild(allBtn);
+
+            // Δυναμική δημιουργία κατηγοριών από το allQuestions
             const categories = [...new Set(allQuestions.map(q => q.category))];
-            
             categories.forEach(cat => {
                 const count = allQuestions.filter(q => q.category === cat).length;
                 const btn = document.createElement('button');
                 btn.className = "category-btn";
                 btn.innerHTML = `
-                    <div class="font-black text-sky-400 uppercase italic">${cat}</div>
+                    <div class="font-black text-sky-400 uppercase italic text-sm">${cat}</div>
                     <div class="text-[10px] text-slate-500 font-bold">${count} ΕΡΩΤΗΣΕΙΣ</div>
                 `;
                 btn.onclick = () => finalizeStudy(cat);
@@ -191,11 +173,7 @@
 
         function finalizeStudy(category) {
             isStudyMode = true;
-            if(category === 'ALL') {
-                currentQuestions = [...allQuestions];
-            } else {
-                currentQuestions = allQuestions.filter(q => q.category === category);
-            }
+            currentQuestions = (category === 'ALL') ? [...allQuestions] : allQuestions.filter(q => q.category === category);
             startQuiz();
         }
 
@@ -260,7 +238,6 @@
                     btn.disabled = true;
                 }
 
-                // ΕΔΩ ΕΓΙΝΕ Η ΔΙΟΡΘΩΣΗ: Αφαίρεση του substring(2)
                 btn.innerHTML = `<span class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-[10px] font-black">${char.toUpperCase()}</span> ${opt}`;
                 btn.onclick = () => selectOption(char);
                 container.appendChild(btn);
@@ -269,7 +246,6 @@
             const exp = document.getElementById('explanation');
             if(isStudyMode && answers[currentIndex]) {
                 exp.classList.remove('hidden');
-                // Εύρεση της σωστής απάντησης για το explanation
                 const correctIdx = ['α','β','γ','δ'].indexOf(q.answer);
                 document.getElementById('exp-text').innerText = q.options[correctIdx];
             } else {
@@ -286,69 +262,31 @@
             answers[currentIndex] = char;
             const dot = document.getElementById(`dot-${currentIndex}`);
             dot.classList.add('answered');
-            
             if(isStudyMode) {
                 if(char === currentQuestions[currentIndex].answer) dot.classList.add('correct-dot');
                 else dot.classList.add('wrong-dot');
             }
-            
             showQuestion();
             if(!isStudyMode) setTimeout(nextQ, 400);
         }
 
-        function nextQ() {
-            if(currentIndex < currentQuestions.length - 1) {
-                currentIndex++;
-                showQuestion();
-            }
-        }
-
-        function prevQ() {
-            if(currentIndex > 0) {
-                currentIndex--;
-                showQuestion();
-            }
-        }
-
-        function jumpTo(i) {
-            currentIndex = i;
-            showQuestion();
-        }
-
-        function showConfirm() {
-            document.getElementById('confirm-modal').classList.remove('hidden');
-        }
-
-        function hideConfirm() {
-            document.getElementById('confirm-modal').classList.add('hidden');
-        }
+        function nextQ() { if(currentIndex < currentQuestions.length - 1) { currentIndex++; showQuestion(); } }
+        function prevQ() { if(currentIndex > 0) { currentIndex--; showQuestion(); } }
+        function jumpTo(i) { currentIndex = i; showQuestion(); }
+        function showConfirm() { document.getElementById('confirm-modal').classList.remove('hidden'); }
+        function hideConfirm() { document.getElementById('confirm-modal').classList.add('hidden'); }
 
         function submitQuiz() {
             if(timer) clearInterval(timer);
             hideConfirm();
             document.getElementById('quiz-screen').classList.add('hidden');
-            document.getElementById('active-timer').classList.add('hidden');
             document.getElementById('results-screen').classList.remove('hidden');
-
             let correct = 0;
-            answers.forEach((ans, i) => {
-                if(ans === currentQuestions[i].answer) correct++;
-            });
-
+            answers.forEach((ans, i) => { if(ans === currentQuestions[i].answer) correct++; });
             const score = Math.round((correct / currentQuestions.length) * 100);
-            const scoreEl = document.getElementById('res-score');
-            scoreEl.innerText = score + '%';
-            
-            if(score >= 75) {
-                document.getElementById('res-icon').innerText = "🏆";
-                document.getElementById('res-title').innerText = "ΕΠΙΤΥΧΙΑ!";
-                scoreEl.className = "text-8xl font-black mb-2 text-emerald-400";
-            } else {
-                document.getElementById('res-icon').innerText = "📉";
-                document.getElementById('res-title').innerText = "ΑΠΟΤΥΧΙΑ";
-                scoreEl.className = "text-8xl font-black mb-2 text-rose-400";
-            }
-
+            document.getElementById('res-score').innerText = score + '%';
+            document.getElementById('res-title').innerText = score >= 75 ? "ΕΠΙΤΥΧΙΑ!" : "ΑΠΟΤΥΧΙΑ";
+            document.getElementById('res-icon').innerText = score >= 75 ? "🏆" : "📉";
             document.getElementById('res-stats').innerText = `${correct} ΣΩΣΤΕΣ / ${currentQuestions.length} ΕΡΩΤΗΣΕΙΣ`;
         }
     </script>
