@@ -3,140 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drone Pilot Pro - 310 Questions Full Database</title>
+    <title>Drone Exam Trainer</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f1f5f9; overflow-x: hidden; }
-        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .option-btn { width: 100%; text-align: left; padding: 1rem; background: rgba(51, 65, 85, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.75rem; transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
-        .option-btn:hover:not(:disabled) { background: rgba(71, 85, 105, 0.6); transform: translateY(-1px); border-color: rgba(255, 255, 255, 0.2); }
-        .option-btn.selected { background: #3b82f6 !important; border-color: #60a5fa; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
-        .option-btn.correct-choice { background: #10b981 !important; border-color: #34d399; }
-        .option-btn.wrong-choice { background: #ef4444 !important; border-color: #f87171; }
-        .dot { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 12px; font-weight: bold; transition: all 0.2s; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(51, 65, 85, 0.4); }
-        .dot.active { border: 2px solid #3b82f6; background: rgba(59, 130, 246, 0.2); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
-        .dot.answered { background: #334155; color: #94a3b8; }
-        .dot.correct-dot { background: #064e3b; color: #34d399; border-color: #065f46; }
-        .dot.wrong-dot { background: #450a0a; color: #f87171; border-color: #7f1d1d; }
-        .marked { border-color: #eab308 !important; color: #eab308 !important; position: relative; }
-        .marked::after { content: '🚩'; position: absolute; -top: 8px; -right: 8px; font-size: 10px; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-slide { animation: slideIn 0.3s ease-out forwards; }
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: white; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .option-btn { width: 100%; text-align: left; padding: 1rem; margin-bottom: 0.5rem; border-radius: 0.75rem; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(255,255,255,0.05); transition: 0.2s; display: flex; align-items: center; }
+        .option-btn:hover { background: rgba(51, 65, 85, 0.8); }
+        .option-btn.selected { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .correct-choice { border-color: #10b981 !important; background: rgba(16, 185, 129, 0.1) !important; }
+        .wrong-choice { border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.1) !important; }
+        .dot { width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); }
+        .dot.active { border-color: #3b82f6; color: #3b82f6; }
+        .dot.answered { background: #3b82f6; color: white; border-color: #3b82f6; }
+        .hidden { display: none; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <nav class="p-6 border-b border-white/5 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-black text-white shadow-lg shadow-blue-500/20">D</div>
-                <h1 class="text-xl font-black italic tracking-tighter uppercase">Drone<span class="text-blue-500">Pilot</span>Pro</h1>
-            </div>
-            <div id="active-timer" class="hidden font-mono text-xl bg-blue-500/10 text-blue-400 px-4 py-2 rounded-lg border border-blue-500/20">00:00</div>
-        </div>
-    </nav>
-
-    <main class="flex-grow flex items-center justify-center p-4">
-        
-        <div id="start-screen" class="w-full max-w-4xl text-center animate-slide">
-            <div class="mb-12">
-                <h2 class="text-6xl md:text-8xl font-black mb-6 tracking-tighter italic uppercase italic">ΠΛΗΡΗΣ ΒΑΣΗ <br><span class="text-blue-500">310 ΕΡΩΤΗΣΕΩΝ</span> <span class="text-2xl block mt-4 text-slate-400 normal-case not-italic font-medium">(A1-A3 & A2)</span></h2>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-6 mb-12">
-                <button onclick="startStudy()" class="glass-card p-10 rounded-3xl hover:bg-slate-800/50 transition group">
-                    <div class="w-16 h-16 bg-blue-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition">📖</div>
-                    <h3 class="text-2xl font-bold mb-2 uppercase italic">Study Mode</h3>
-                    <p class="text-slate-400">Μελέτη ανά ενότητα ή ολόκληρη η βάση</p>
-                </button>
-                <button onclick="startExam()" class="glass-card p-10 rounded-3xl hover:bg-slate-800/50 transition group">
-                    <div class="w-16 h-16 bg-purple-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition">✅</div>
-                    <h3 class="text-2xl font-bold mb-2 uppercase italic text-purple-400">Exam Mode</h3>
-                    <p class="text-slate-400">Τυχαία 40 ερωτήματα - 45 λεπτά - 75% βάση</p>
-                </button>
-            </div>
-
-            <div class="max-w-md mx-auto space-y-4">
-                <select id="categorySelect" class="w-full bg-slate-800 border border-white/10 p-4 rounded-xl text-lg focus:ring-2 ring-blue-500 outline-none">
-                    <option value="all">Όλες οι Ενότητες (310 Ερωτήσεις)</option>
-                    <option value="Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ ΣμηΕΑ">Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ ΣμηΕΑ</option>
-                    <option value="Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ">Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ</option>
-                    <option value="Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ">Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ</option>
-                    <option value="Δ) ΑΝΘΡΩΠΙΝΗ ΑΠΟΔΟΣΗ ΚΑΙ ΠΕΡΙΟΡΙΣΜΟΙ">Δ) ΑΝΘΡΩΠΙΝΗ ΑΠΟΔΟΣΗ ΚΑΙ ΠΕΡΙΟΡΙΣΜΟΙ</option>
-                    <option value="Ε) ΛΕΙΤΟΥΡΓΙΚΕΣ ΔΙΑΔΙΚΑΣΙΕΣ">Ε) ΛΕΙΤΟΥΡΓΙΚΕΣ ΔΙΑΔΙΚΑΣΙΕΣ</option>
-                    <option value="ΣΤ) ΓΕΝΙΚΕΣ ΓΝΩΣΕΙΣ ΣμηΕΑ">ΣΤ) ΓΕΝΙΚΕΣ ΓΝΩΣΕΙΣ ΣμηΕΑ</option>
-                    <option value="Ζ) ΙΔΙΩΤΙΚΟ ΑΠΟΡΡΗΤΟ ΚΑΙ ΠΡΟΣΤΑΣΙΑ ΔΕΔΟΜΕΝΩΝ">Ζ) ΙΔΙΩΤΙΚΟ ΑΠΟΡΡΗΤΟ ΚΑΙ ΠΡΟΣΤΑΣΙΑ ΔΕΔΟΜΕΝΩΝ</option>
-                    <option value="Η) ΑΣΦΑΛΙΣΗ">Η) ΑΣΦΑΛΙΣΗ</option>
-                    <option value="Θ) ΑΣΦΑΛΕΙΑ">Θ) ΑΣΦΑΛΕΙΑ</option>
-                    <option value="I) ΜΕΤΕΩΡΟΛΟΓΙΑ">I) ΜΕΤΕΩΡΟΛΟΓΙΑ</option>
-                    <option value="K) ΕΠΙΔΟΣΕΙΣ ΠΤΗΣΗΣ ΣμηΕΑ">K) ΕΠΙΔΟΣΕΙΣ ΠΤΗΣΗΣ ΣμηΕΑ</option>
-                    <option value="Λ) ΤΕΧΝΙΚΑ ΚΑΙ ΛΕΙΤΟΥΡΓΙΚΑ ΜΕΤΡΑ ΓΙΑ ΤΟΝ ΜΕΤΡΙΑΣΜΟ ΤΩΝ ΚΙΝΔΥΝΩΝ ΣΤΟ ΕΔΑΦΟΣ">Λ) ΤΕΧΝΙΚΑ ΚΑΙ ΛΕΙΤΟΥΡΓΙΚΑ ΜΕΤΡΑ</option>
-                </select>
-                <select id="amountSelect" class="w-full bg-slate-800 border border-white/10 p-4 rounded-xl text-lg focus:ring-2 ring-blue-500 outline-none">
-                    <option value="all">Όλες οι ερωτήσεις</option>
-                    <option value="10">10 Ερωτήσεις</option>
-                    <option value="20">20 Ερωτήσεις</option>
-                    <option value="50">50 Ερωτήσεις</option>
-                    <option value="100">100 Ερωτήσεις</option>
-                </select>
-            </div>
-        </div>
-
-        <div id="quiz-screen" class="hidden w-full max-w-5xl grid lg:grid-cols-3 gap-8 animate-slide">
-            <div class="lg:col-span-2 space-y-6">
-                <div class="glass-card p-8 rounded-3xl relative overflow-hidden">
-                    <div id="progress-bar" class="absolute top-0 left-0 h-1 bg-blue-500 transition-all duration-300" style="width: 0%"></div>
-                    <div class="flex justify-between items-start mb-6">
-                        <span id="q-header" class="text-xs font-bold uppercase tracking-widest text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full">SECTION A</span>
-                        <span id="q-counter" class="font-mono text-slate-500">01 / 40</span>
-                    </div>
-                    <h3 id="q-text" class="text-2xl font-bold mb-8 leading-snug">Φορτώνει ερώτηση...</h3>
-                    <div id="options-container" class="space-y-3"></div>
-                    <div id="exp-text" class="hidden mt-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-sm italic"></div>
-                </div>
-                <div class="flex gap-4">
-                    <button id="prev-btn" onclick="prevQ()" class="glass-card px-8 py-4 rounded-2xl hover:bg-slate-800 transition font-bold flex-1">ΠΡΟΗΓΟΥΜΕΝΗ</button>
-                    <button id="mark-btn" onclick="toggleMark()" class="glass-card px-8 py-4 rounded-2xl hover:bg-slate-800 transition font-bold">🚩</button>
-                    <button id="next-btn" onclick="nextQ()" class="bg-blue-600 px-8 py-4 rounded-2xl hover:bg-blue-500 transition font-bold flex-1 shadow-lg shadow-blue-500/20">ΕΠΟΜΕΝΗ</button>
-                </div>
+    <main id="start-screen" class="flex-1 flex items-center justify-center p-6">
+        <div class="max-w-md w-full glass-card rounded-3xl p-8 text-center border border-white/10 shadow-2xl">
+            <div class="w-20 h-20 bg-blue-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-blue-600/20">
+                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
             </div>
             
-            <div class="space-y-6">
-                <div class="glass-card p-6 rounded-3xl">
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Επισκόπηση</h4>
-                    <div id="dot-grid" class="flex flex-wrap gap-2"></div>
-                </div>
-                <button onclick="showConfirm()" class="w-full bg-rose-600/10 text-rose-500 border border-rose-600/20 p-4 rounded-2xl hover:bg-rose-600 hover:text-white transition font-bold uppercase tracking-widest text-sm">ΥΠΟΒΟΛΗ ΤΕΣΤ</button>
-            </div>
-        </div>
+            <h1 class="text-4xl font-extrabold mb-2 uppercase tracking-tight">Drone Exam</h1>
+            <h2 class="text-xl font-bold mb-8 text-slate-400 uppercase tracking-widest">
+                Προετοιμασία <span class="text-blue-500">310 ΕΡΩΤΗΣΕΩΝ</span> (A1-A3 & A2)
+            </h2>
 
-        <div id="results-screen" class="hidden w-full max-w-2xl text-center animate-slide">
-            <div class="glass-card p-12 rounded-[3rem] relative overflow-hidden">
-                <div id="res-icon" class="text-8xl mb-6">🏆</div>
-                <h2 id="res-title" class="text-4xl font-black mb-2 uppercase italic tracking-tighter">ΕΠΙΤΥΧΙΑ!</h2>
-                <div id="res-score" class="text-8xl font-black mb-2 text-emerald-400 tracking-tighter">0%</div>
-                <p id="res-stats" class="text-slate-400 text-xl mb-12">0 ΣΩΣΤΕΣ / 40 ΕΡΩΤΗΣΕΙΣ</p>
-                <div class="grid grid-cols-2 gap-4">
-                    <button onclick="location.reload()" class="bg-white text-slate-900 p-5 rounded-2xl font-black uppercase tracking-widest hover:bg-slate-200 transition">ΑΡΧΙΚΗ</button>
-                    <button onclick="reviewMistakes()" id="review-btn" class="bg-slate-800 text-white p-5 rounded-2xl font-black uppercase tracking-widest hover:bg-slate-700 transition">REVIEW</button>
+            <div class="space-y-6 text-left">
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase ml-1 mb-2 block">Ενότητα</label>
+                    <select id="categorySelect" class="w-full bg-slate-800 border border-white/10 p-4 rounded-2xl font-bold appearance-none cursor-pointer hover:border-blue-500/50 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                        <option value="all">Όλες οι Ενότητες</option>
+                        <option value="Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ ΣμηΕΑ">Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ ΣμηΕΑ</option>
+                        <option value="Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ">Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ</option>
+                        <option value="Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ">Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ</option>
+                        <option value="Δ) ΓΕΝΙΚΕΣ ΓΝΩΣΕΙΣ ΣμηΕΑ">Δ) ΓΕΝΙΚΕΣ ΓΝΩΣΕΙΣ ΣμηΕΑ</option>
+                        <option value="Ε) ΙΔΙΩΤΙΚΟΤΗΤΑ ΚΑΙ ΠΡΟΣΤΑΣΙΑ ΔΕΔΟΜΕΝΩΝ">Ε) ΙΔΙΩΤΙΚΟΤΗΤΑ ΚΑΙ ΠΡΟΣΤΑΣΙΑ ΔΕΔΟΜΕΝΩΝ</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase ml-1 mb-2 block">Αριθμός Ερωτήσεων</label>
+                    <select id="amountSelect" class="w-full bg-slate-800 border border-white/10 p-4 rounded-2xl font-bold appearance-none cursor-pointer hover:border-blue-500/50 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                        <option value="all">Όλες οι ερωτήσεις</option>
+                        <option value="10">10 Ερωτήσεις</option>
+                        <option value="20">20 Ερωτήσεις</option>
+                        <option value="40">40 Ερωτήσεις</option>
+                        <option value="100">100 Ερωτήσεις</option>
+                    </select>
+                </div>
+
+                <div class="pt-4 space-y-4">
+                    <button onclick="startStudy()" class="w-full py-5 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-lg transition-all shadow-lg shadow-blue-600/20 transform active:scale-[0.98]">
+                        STUDY MODE
+                    </button>
+                    <button onclick="startExam()" class="w-full py-5 bg-slate-800 hover:bg-slate-700 rounded-2xl font-bold text-lg transition-all border border-white/5 transform active:scale-[0.98]">
+                        EXAM MODE (40 Ερωτήσεις)
+                    </button>
                 </div>
             </div>
         </div>
     </main>
 
-    <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-        <div class="glass-card p-8 rounded-3xl max-w-sm w-full text-center">
-            <h3 class="text-2xl font-bold mb-4">Υποβολή Τεστ;</h3>
-            <p class="text-slate-400 mb-8">Είσαι σίγουρος ότι θέλεις να ολοκληρώσεις την προσπάθεια;</p>
+    <main id="quiz-screen" class="hidden flex-1 flex flex-col p-4 md:p-8 max-w-4xl mx-auto w-full">
+        <header class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex w-12 h-12 bg-blue-600/20 rounded-xl items-center justify-center border border-blue-500/20">
+                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                </div>
+                <div>
+                    <span id="q-header" class="text-xs font-bold text-blue-500 uppercase tracking-widest block mb-1">ΚΑΤΗΓΟΡΙΑ</span>
+                    <span id="q-counter" class="text-2xl font-black">1 / 310</span>
+                </div>
+            </div>
+            <div id="active-timer" class="hidden text-2xl font-mono bg-rose-500/10 text-rose-500 px-6 py-3 rounded-2xl border border-rose-500/20">
+                45:00
+            </div>
+        </header>
+
+        <div id="progress-container" class="w-full h-2 bg-slate-800 rounded-full mb-8 overflow-hidden">
+            <div id="progress-bar" class="h-full bg-blue-600 transition-all duration-500" style="width: 0%"></div>
+        </div>
+
+        <div class="glass-card rounded-[2.5rem] p-8 md:p-12 mb-8 relative overflow-hidden">
+            <p id="q-text" class="text-xl md:text-2xl font-semibold leading-relaxed mb-10 relative z-10">
+                Φόρτωση ερώτησης...
+            </p>
+            
+            <div id="options-container" class="space-y-4 relative z-10">
+                </div>
+
+            <div id="exp-text" class="hidden mt-8 p-6 bg-emerald-500/10 border border-emerald-500/20 rounded-3xl text-emerald-400 font-medium animate-in fade-in slide-in-from-bottom-4 duration-500">
+                </div>
+        </div>
+
+        <div id="dot-grid" class="flex flex-wrap gap-2 mb-10 justify-center overflow-y-auto max-h-32 p-2">
+            </div>
+
+        <footer class="mt-auto flex gap-4">
+            <button id="prev-btn" onclick="prevQ()" class="flex-1 py-5 glass-card rounded-2xl font-bold text-lg hover:bg-slate-800 transition-all active:scale-[0.98]">
+                ΠΙΣΩ
+            </button>
+            <button onclick="nextQ()" class="flex-1 py-5 bg-blue-600 rounded-2xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 active:scale-[0.98]">
+                ΕΠΟΜΕΝΟ
+            </button>
+            <button onclick="showConfirm()" class="px-8 bg-emerald-600 rounded-2xl font-bold text-lg hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 active:scale-[0.98]">
+                ΤΕΛΟΣ
+            </button>
+        </footer>
+    </main>
+
+    <main id="results-screen" class="hidden flex-1 flex items-center justify-center p-6">
+        <div class="max-w-md w-full glass-card rounded-[3rem] p-10 text-center">
+            <div id="res-icon" class="text-8xl mb-6">🏆</div>
+            <h2 id="res-title" class="text-4xl font-black mb-2 tracking-tight">ΣΥΓΧΑΡΗΤΗΡΙΑ!</h2>
+            <div id="res-score" class="text-8xl font-black text-blue-500 mb-4">0%</div>
+            <p id="res-stats" class="text-slate-400 font-bold mb-10 uppercase tracking-widest">
+                0 ΣΩΣΤΕΣ / 40 ΕΡΩΤΗΣΕΙΣ
+            </p>
+            <button onclick="location.reload()" class="w-full py-5 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-lg transition-all shadow-lg shadow-blue-600/20">
+                ΝΕΟ ΤΕΣΤ
+            </button>
+        </div>
+    </main>
+
+    <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-6 z-50">
+        <div class="max-w-sm w-full glass-card rounded-[2.5rem] p-8 text-center border border-white/10">
+            <h3 class="text-2xl font-bold mb-2">Ολοκλήρωση;</h3>
+            <p class="text-slate-400 mb-8 font-medium">Είστε σίγουροι ότι θέλετε να υποβάλετε το τεστ;</p>
             <div class="flex gap-4">
-                <button onclick="hideConfirm()" class="flex-1 p-4 rounded-xl bg-slate-800 font-bold hover:bg-slate-700 transition">ΑΚΥΡΟ</button>
-                <button onclick="submitQuiz()" class="flex-1 p-4 rounded-xl bg-blue-600 font-bold hover:bg-blue-500 transition shadow-lg shadow-blue-500/20">ΝΑΙ, ΤΕΛΟΣ</button>
+                <button onclick="hideConfirm()" class="flex-1 py-4 bg-slate-800 rounded-2xl font-bold hover:bg-slate-700 transition-all">
+                    ΑΚΥΡΟ
+                </button>
+                <button onclick="submitQuiz()" class="flex-1 py-4 bg-emerald-600 rounded-2xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">
+                    ΝΑΙ, ΤΕΛΟΣ
+                </button>
             </div>
         </div>
     </div>
 
-    <script src="app.js?v=1.7"></script>
-
+    <script src="app.js"></script>
 </body>
 </html>
