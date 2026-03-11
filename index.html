@@ -1,113 +1,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drone Pilot Pro - Complete 80 Questions</title>
     <title>Drone Pilot Pro - 190 Questions Full Database</title>
+    <title>Drone Pilot Pro - 310 Questions Full Database</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            color: #f1f5f9;
-            overflow-x: hidden;
-        }
-
-        .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .mode-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-        .mode-card:hover {
-            transform: translateY(-5px);
-            background: rgba(51, 65, 85, 0.8);
-            border-color: #38bdf8;
-        }
-
-        .option-btn {
-            width: 100%;
-            text-align: left;
-            padding: 1.25rem;
-            background: rgba(51, 65, 85, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.2s;
-        }
-        .option-btn:hover:not(:disabled) { background: rgba(71, 85, 105, 0.8); border-color: rgba(255, 255, 255, 0.3); }
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f1f5f9; overflow-x: hidden; }
-        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .option-btn { width: 100%; text-align: left; padding: 1rem; background: rgba(51, 65, 85, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.75rem; transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
+body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f1f5f9; overflow-x: hidden; }
+.glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+.option-btn { width: 100%; text-align: left; padding: 1rem; background: rgba(51, 65, 85, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.75rem; transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
         .option-btn:hover:not(:disabled) { background: rgba(71, 85, 105, 0.7); border-color: #38bdf8; }
-.option-btn.selected { border-color: #38bdf8; background: rgba(56, 189, 248, 0.1); }
-        
-.option-btn.correct { background: #064e3b !important; border-color: #10b981 !important; }
-.option-btn.wrong { background: #7f1d1d !important; border-color: #ef4444 !important; }
-
-        .dot {
-            width: 40px;
-            height: 40px;
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .dot.active { border: 2px solid #38bdf8; color: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
-        .dot.answered { background: #334155; border-color: #475569; color: #94a3b8; }
-        .dot.correct { background: #10b981 !important; color: white; }
-        .dot.wrong { background: #ef4444 !important; color: white; }
-        .dot.flagged::after {
-            content: '🟡';
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            font-size: 12px;
-        }
-
-        #timer-display.warning { color: #ef4444; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-        input[type="range"] { accent-color: #38bdf8; }
-
-        .category-item {
-            padding: 1.25rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .category-item:hover { background: rgba(56, 189, 248, 0.1); }
-
-        /* Modal Styles */
-        #confirm-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.9);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(8px);
-        }
+        .option-btn.selected { border-color: #38bdf8; background: rgba(56, 189, 248, 0.1); }
+        .option-btn.correct { background: #064e3b !important; border-color: #10b981 !important; }
+        .option-btn.wrong { background: #7f1d1d !important; border-color: #ef4444 !important; }
         .dot { width: 32px; height: 32px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; cursor: pointer; transition: all 0.2s; font-weight: 700; }
         .dot.active { border: 2px solid #38bdf8; color: #38bdf8; }
         .dot.answered { background: #334155; border-color: #475569; }
@@ -115,154 +20,118 @@
         .dot.wrong-dot { background: #7f1d1d; border-color: #ef4444; }
         .category-btn { transition: all 0.2s; border: 1px solid rgba(255, 255, 255, 0.05); text-align: left; width: 100%; padding: 1rem; border-radius: 1rem; background: rgba(30, 41, 59, 0.5); }
         .category-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: #38bdf8; transform: translateX(4px); }
+        .option-btn:hover:not(:disabled) { background: rgba(71, 85, 105, 0.6); transform: translateY(-1px); border-color: rgba(255, 255, 255, 0.2); }
+        .option-btn.selected { background: #3b82f6 !important; border-color: #60a5fa; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+        .option-btn.correct-choice { background: #10b981 !important; border-color: #34d399; }
+        .option-btn.wrong-choice { background: #ef4444 !important; border-color: #f87171; }
+        .dot { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 12px; font-weight: bold; transition: all 0.2s; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(51, 65, 85, 0.4); }
+        .dot.active { border: 2px solid #3b82f6; background: rgba(59, 130, 246, 0.2); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+        .dot.answered { background: #334155; color: #94a3b8; }
+        .dot.correct-dot { background: #064e3b; color: #34d399; border-color: #065f46; }
+        .dot.wrong-dot { background: #450a0a; color: #f87171; border-color: #7f1d1d; }
+        .marked { border-color: #eab308 !important; color: #eab308 !important; position: relative; }
+        .marked::after { content: '🚩'; position: absolute; -top: 8px; -right: 8px; font-size: 10px; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide { animation: slideIn 0.3s ease-out forwards; }
 </style>
 </head>
 <body class="min-h-screen">
+<body class="min-h-screen flex flex-col">
 
-    <!-- Confirmation Modal -->
-    <div id="confirm-modal">
-        <div class="glass-card p-8 rounded-3xl max-w-sm w-full mx-4 text-center border-sky-500/30">
-            <div class="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-            </div>
-            <h3 class="text-xl font-black text-white mb-2 uppercase italic">Είστε σίγουροι;</h3>
-            <p class="text-slate-400 text-sm mb-8">Το τεστ θα ολοκληρωθεί και θα εμφανιστούν τα τελικά σας αποτελέσματα.</p>
-            <div class="flex gap-4">
-                <button onclick="closeModal()" class="flex-1 py-3 bg-slate-800 rounded-xl font-bold hover:bg-slate-700 transition uppercase text-xs">Ακυρωση</button>
-                <button onclick="finalizeSubmission()" class="flex-1 py-3 bg-sky-600 rounded-xl font-bold hover:bg-sky-500 transition shadow-lg shadow-sky-600/20 uppercase text-xs">Υποβολη</button>
-            </div>
-        </div>
-    </div>
-
-    <header class="bg-slate-950/80 backdrop-blur-xl border-b border-white/10 p-4 sticky top-0 z-50">
     <header class="bg-slate-950/80 p-4 sticky top-0 z-50 border-b border-white/10 backdrop-blur-md">
-<div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
-                <div class="w-10 h-10 bg-sky-500 rounded-xl flex items-center justify-center shadow-lg shadow-sky-500/20">
-                    <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.97 4.43c-.16.09-.33.14-.5.14s-.34-.05-.5-.14l-7.97-4.43c-.32-.17-.53-.5-.53-.88V7.5c0-.38.21-.71.53-.88l7.97-4.43c.16-.09.33-.14.5-.14s.34.05.5.14l7.97 4.43c.32.17.53.5.53.88v9z"/></svg>
-                </div>
-                <span class="font-black text-xl tracking-tight uppercase italic">Drone<span class="text-sky-400">Pilot</span> <span class="text-xs align-top opacity-50">PRO</span></span>
-            </div>
-            <div id="active-timer" class="hidden font-mono font-bold text-xl px-4 py-1 rounded-full bg-slate-900 border border-white/10">
-                <span id="timer-label" class="text-[10px] uppercase text-slate-500 mr-2">Χρονομετρο:</span>
-                <span id="timer-display">45:00</span>
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
                 <div class="w-10 h-10 bg-sky-500 rounded-xl flex items-center justify-center font-black shadow-lg">D</div>
                 <span class="font-black text-xl uppercase italic tracking-tighter">DRONE<span class="text-sky-400">PILOT</span> PRO</span>
+    <nav class="p-6 border-b border-white/5 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-black text-white shadow-lg shadow-blue-500/20">D</div>
+                <h1 class="text-xl font-black italic tracking-tighter uppercase">Drone<span class="text-blue-500">Pilot</span>Pro</h1>
 </div>
             <div id="active-timer" class="hidden font-mono font-bold text-sky-400 bg-slate-900 px-4 py-2 rounded-full border border-white/10">45:00</div>
+            <div id="active-timer" class="hidden font-mono text-xl bg-blue-500/10 text-blue-400 px-4 py-2 rounded-lg border border-blue-500/20">00:00</div>
 </div>
-</header>
-
-    <main class="max-w-7xl mx-auto p-4 lg:p-8">
-        
-        <!-- Menu Screen -->
-        <div id="menu-screen" class="py-12">
-            <div class="text-center mb-16">
-                <h1 class="text-5xl font-black mb-4 uppercase italic">Επιλέξτε <span class="text-sky-400">Λειτουργία</span></h1>
-                <p class="text-slate-400 text-lg">Προετοιμαστείτε για τις εξετάσεις ΣμηΕΑ (A1-A2-A3) με 80 ερωτήσεις</p>
-            </div>
+    </header>
+    </nav>
 
     <main class="max-w-6xl mx-auto p-4 lg:p-8">
         <!-- Main Menu -->
         <div id="menu-screen" class="py-12 text-center">
             <h1 class="text-4xl md:text-6xl font-black mb-16 italic uppercase leading-tight">ΠΛΗΡΗΣ ΒΑΣΗ <br><span class="text-sky-400 text-2xl md:text-4xl">190 ΕΡΩΤΗΣΕΩΝ (A1-A3 & A2)</span></h1>
-<div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div onclick="showStudyOptions()" class="mode-card glass-card p-8 rounded-3xl">
-                    <div class="w-16 h-16 bg-sky-500/10 text-sky-400 rounded-2xl flex items-center justify-center mb-6">
-                        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <div onclick="showStudyOptions()" class="glass-card p-10 rounded-3xl cursor-pointer hover:scale-[1.02] transition-all group">
                     <div class="w-16 h-16 bg-sky-500/20 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:bg-sky-500/40 transition-colors">
                         <svg class="w-8 h-8 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-</div>
-                    <h2 class="text-2xl font-black mb-2 uppercase">Study Mode</h2>
-                    <p class="text-slate-400 mb-6">Μελέτη ανά ενότητα. Οι σωστές απαντήσεις προχωρούν αυτόματα στην επόμενη ερώτηση.</p>
+                    </div>
                     <h2 class="text-3xl font-black mb-2 uppercase italic text-sky-400">STUDY MODE</h2>
                     <p class="text-slate-400 text-sm italic font-medium">Μελέτη ανά ενότητα ή ολόκληρη η βάση</p>
-</div>
-
-                <div onclick="startExamMode()" class="mode-card glass-card p-8 rounded-3xl border-purple-500/20">
-                    <div class="w-16 h-16 bg-purple-500/10 text-purple-400 rounded-2xl flex items-center justify-center mb-6">
-                        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
                 <div onclick="startExam()" class="glass-card p-10 rounded-3xl cursor-pointer hover:scale-[1.02] transition-all group border-purple-500/30">
                     <div class="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:bg-purple-500/40 transition-colors">
                         <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-</div>
-                    <h2 class="text-2xl font-black mb-2 uppercase">Exam Mode</h2>
-                    <p class="text-slate-400 mb-6">Προσομοίωση 40 ερωτήσεων σε 45 λεπτά με τυχαία επιλογή από την ύλη.</p>
+                    </div>
                     <h2 class="text-3xl font-black mb-2 uppercase italic text-purple-400">EXAM MODE</h2>
                     <p class="text-slate-400 text-sm italic font-medium">Τυχαία 40 ερωτήματα - 45 λεπτά - 75% βάση</p>
+                </div>
+    <main class="flex-grow flex items-center justify-center p-4">
+        
+        <div id="start-screen" class="w-full max-w-4xl text-center animate-slide">
+            <div class="mb-12">
+                <h2 class="text-6xl md:text-8xl font-black mb-6 tracking-tighter italic uppercase italic">ΠΛΗΡΗΣ ΒΑΣΗ <br><span class="text-blue-500">310 ΕΡΩΤΗΣΕΩΝ</span> <span class="text-2xl block mt-4 text-slate-400 normal-case not-italic font-medium">(A1-A3 & A2)</span></h2>
 </div>
-</div>
-</div>
+        </div>
 
-        <!-- Category Picker -->
-        <div id="study-options" class="hidden py-12 max-w-2xl mx-auto">
-            <button onclick="goHome()" class="text-sky-400 font-bold mb-8 flex items-center gap-2 group uppercase text-sm">
-                <svg class="group-hover:-translate-x-1 transition-transform" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg> Πίσω στην Αρχική
         <!-- Category Selection -->
         <div id="study-options" class="hidden max-w-4xl mx-auto">
             <button onclick="location.reload()" class="mb-6 flex items-center gap-2 text-sky-400 font-bold uppercase text-xs">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 ΠΙΣΩ
-</button>
-            <h2 class="text-3xl font-black mb-6 uppercase italic">Επιλογή Ενότητας</h2>
-            <div id="category-list" class="glass-card rounded-2xl overflow-hidden border-sky-500/20">
-                <!-- Category list content -->
-            </div>
-        </div>
-
-        <!-- Settings Screen -->
-        <div id="study-settings" class="hidden py-12 max-w-xl mx-auto">
-            <button onclick="showStudyOptions()" class="text-sky-400 font-bold mb-8 flex items-center gap-2 group uppercase text-sm">
-                <svg class="group-hover:-translate-x-1 transition-transform" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg> Αλλαγή Κατηγορίας
             </button>
-            <div class="glass-card p-8 rounded-3xl border-sky-500/30">
-                <h3 class="text-2xl font-black mb-2 text-white uppercase italic">Ρυθμίσεις Μελέτης</h3>
-                <p id="settings-subtitle" class="text-slate-400 mb-8 text-sm italic">Κατηγορία: ...</p>
-                
-                <div class="mb-10">
-                    <div class="flex justify-between items-end mb-4">
-                        <label class="text-sm font-bold text-slate-300 uppercase">Αριθμός Ερωτήσεων</label>
-                        <span id="count-display" class="text-4xl font-black text-sky-400">10</span>
-                    </div>
-                    <input type="range" id="q-count-range" min="1" max="50" value="10" 
-                           class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer"
-                           oninput="updateCountDisplay(this.value)">
-                    <div class="flex justify-between text-[10px] text-slate-500 mt-2 font-bold uppercase">
-                        <span>1 ΕΡΩΤΗΣΗ</span>
-                        <span id="max-label">MAX: ...</span>
-                    </div>
-                </div>
-
-                <button onclick="confirmStudyStart()" class="w-full py-5 bg-sky-600 rounded-2xl font-black text-xl hover:bg-sky-500 transition shadow-xl shadow-sky-600/20 uppercase tracking-tight text-white">
-                    Εναρξη Μελετης
             <h2 class="text-3xl font-black mb-8 uppercase italic">ΕΠΙΛΕΞΤΕ <span class="text-sky-400">ΠΕΡΙΕΧΟΜΕΝΟ</span></h2>
             <div id="category-list" class="grid gap-3">
                 <button onclick="finalizeStudy('ALL')" class="category-btn border-sky-500/30 bg-sky-500/10 mb-4">
                     <div class="font-black text-sky-400 text-lg uppercase italic">ΟΛΗ Η ΒΑΣΗ (190 ΕΡΩΤΗΣΕΙΣ)</div>
                     <div class="text-xs text-slate-400 font-bold">Πλήρης προετοιμασία για όλα τα κεφάλαια</div>
+            <div class="grid md:grid-cols-2 gap-6 mb-12">
+                <button onclick="startStudy()" class="glass-card p-10 rounded-3xl hover:bg-slate-800/50 transition group">
+                    <div class="w-16 h-16 bg-blue-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition">📖</div>
+                    <h3 class="text-2xl font-bold mb-2 uppercase italic">Study Mode</h3>
+                    <p class="text-slate-400">Μελέτη ανά ενότητα ή ολόκληρη η βάση</p>
+                </button>
+                <button onclick="startExam()" class="glass-card p-10 rounded-3xl hover:bg-slate-800/50 transition group">
+                    <div class="w-16 h-16 bg-purple-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition">✅</div>
+                    <h3 class="text-2xl font-bold mb-2 uppercase italic text-purple-400">Exam Mode</h3>
+                    <p class="text-slate-400">Τυχαία 40 ερωτήματα - 45 λεπτά - 75% βάση</p>
 </button>
 </div>
+
+            <div class="max-w-md mx-auto space-y-4">
+                <select id="categorySelect" class="w-full bg-slate-800 border border-white/10 p-4 rounded-xl text-lg focus:ring-2 ring-blue-500 outline-none">
+                    <option value="all">Όλες οι Ενότητες (310 Ερωτήσεις)</option>
+                    <option value="Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ ΣμηΕΑ">Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ ΣμηΕΑ</option>
+                    <option value="Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ">Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ</option>
+                    <option value="Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ">Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ</option>
+                    <option value="Δ) ΑΝΘΡΩΠΙΝΗ ΑΠΟΔΟΣΗ ΚΑΙ ΠΕΡΙΟΡΙΣΜΟΙ">Δ) ΑΝΘΡΩΠΙΝΗ ΑΠΟΔΟΣΗ ΚΑΙ ΠΕΡΙΟΡΙΣΜΟΙ</option>
+                    <option value="Ε) ΛΕΙΤΟΥΡΓΙΚΕΣ ΔΙΑΔΙΚΑΣΙΕΣ">Ε) ΛΕΙΤΟΥΡΓΙΚΕΣ ΔΙΑΔΙΚΑΣΙΕΣ</option>
+                    <option value="ΣΤ) ΓΕΝΙΚΕΣ ΓΝΩΣΕΙΣ ΣμηΕΑ">ΣΤ) ΓΕΝΙΚΕΣ ΓΝΩΣΕΙΣ ΣμηΕΑ</option>
+                    <option value="Ζ) ΙΔΙΩΤΙΚΟ ΑΠΟΡΡΗΤΟ ΚΑΙ ΠΡΟΣΤΑΣΙΑ ΔΕΔΟΜΕΝΩΝ">Ζ) ΙΔΙΩΤΙΚΟ ΑΠΟΡΡΗΤΟ ΚΑΙ ΠΡΟΣΤΑΣΙΑ ΔΕΔΟΜΕΝΩΝ</option>
+                    <option value="Η) ΑΣΦΑΛΙΣΗ">Η) ΑΣΦΑΛΙΣΗ</option>
+                    <option value="Θ) ΑΣΦΑΛΕΙΑ">Θ) ΑΣΦΑΛΕΙΑ</option>
+                    <option value="I) ΜΕΤΕΩΡΟΛΟΓΙΑ">I) ΜΕΤΕΩΡΟΛΟΓΙΑ</option>
+                    <option value="K) ΕΠΙΔΟΣΕΙΣ ΠΤΗΣΗΣ ΣμηΕΑ">K) ΕΠΙΔΟΣΕΙΣ ΠΤΗΣΗΣ ΣμηΕΑ</option>
+                    <option value="Λ) ΤΕΧΝΙΚΑ ΚΑΙ ΛΕΙΤΟΥΡΓΙΚΑ ΜΕΤΡΑ ΓΙΑ ΤΟΝ ΜΕΤΡΙΑΣΜΟ ΤΩΝ ΚΙΝΔΥΝΩΝ ΣΤΟ ΕΔΑΦΟΣ">Λ) ΤΕΧΝΙΚΑ ΚΑΙ ΛΕΙΤΟΥΡΓΙΚΑ ΜΕΤΡΑ</option>
+                </select>
+                <select id="amountSelect" class="w-full bg-slate-800 border border-white/10 p-4 rounded-xl text-lg focus:ring-2 ring-blue-500 outline-none">
+                    <option value="all">Όλες οι ερωτήσεις</option>
+                    <option value="10">10 Ερωτήσεις</option>
+                    <option value="20">20 Ερωτήσεις</option>
+                    <option value="50">50 Ερωτήσεις</option>
+                    <option value="100">100 Ερωτήσεις</option>
+                </select>
+            </div>
 </div>
 
-        <!-- Quiz Interface -->
-        <div id="quiz-container" class="hidden flex flex-col lg:flex-row gap-8 py-8">
-            <div class="flex-1">
-                <div class="flex justify-between items-center mb-6">
-                    <div id="mode-pill" class="px-3 py-1 rounded text-[10px] font-black uppercase tracking-tighter">STUDY MODE</div>
-                    <div id="q-progress" class="text-slate-500 font-bold text-sm uppercase">Ερώτηση 1 / 0</div>
-                </div>
-
-                <div class="glass-card p-8 lg:p-12 rounded-3xl shadow-2xl relative">
-                    <div id="q-header" class="mb-2 text-sky-500 text-[10px] font-black tracking-widest uppercase">ΚΑΤΗΓΟΡΙΑ</div>
-                    <h2 id="q-text" class="text-xl lg:text-2xl font-bold leading-snug mb-4 text-white"></h2>
-                    
-                    <div id="options-box" class="mt-8"></div>
-
-                    <div id="explanation-box" class="hidden mt-8 p-6 bg-slate-900/50 border-l-4 border-sky-500 rounded-xl">
-                        <span class="text-[10px] font-black text-sky-500 uppercase block mb-2">ΕΠΕΞΗΓΗΣΗ</span>
-                        <p id="explanation-text" class="text-slate-400 leading-relaxed italic text-sm"></p>
         <!-- Quiz Screen -->
         <div id="quiz-screen" class="hidden grid lg:grid-cols-4 gap-8 items-start">
             <div class="lg:col-span-3">
@@ -274,58 +143,64 @@
                     <div id="explanation" class="hidden mt-8 p-5 bg-emerald-500/10 border-l-4 border-emerald-500 rounded-xl">
                         <div class="text-emerald-400 font-black text-[10px] mb-1 uppercase">ΣΩΣΤΗ ΑΠΑΝΤΗΣΗ:</div>
                         <p id="exp-text" class="text-slate-200 text-sm"></p>
+        <div id="quiz-screen" class="hidden w-full max-w-5xl grid lg:grid-cols-3 gap-8 animate-slide">
+            <div class="lg:col-span-2 space-y-6">
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden">
+                    <div id="progress-bar" class="absolute top-0 left-0 h-1 bg-blue-500 transition-all duration-300" style="width: 0%"></div>
+                    <div class="flex justify-between items-start mb-6">
+                        <span id="q-header" class="text-xs font-bold uppercase tracking-widest text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full">SECTION A</span>
+                        <span id="q-counter" class="font-mono text-slate-500">01 / 40</span>
 </div>
+                    <h3 id="q-text" class="text-2xl font-bold mb-8 leading-snug">Φορτώνει ερώτηση...</h3>
+                    <div id="options-container" class="space-y-3"></div>
+                    <div id="exp-text" class="hidden mt-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-sm italic"></div>
 </div>
-
-                <div class="flex flex-wrap gap-4 mt-8">
-                    <button onclick="prevQ()" class="flex-1 py-4 bg-slate-800 rounded-2xl font-bold hover:bg-slate-700 transition uppercase text-sm">Προηγουμενη</button>
-                    <button id="next-btn-main" onclick="nextQ()" class="flex-[2] py-4 bg-sky-600 rounded-2xl font-bold hover:bg-sky-500 transition shadow-lg shadow-sky-600/20 uppercase">Επομενη</button>
-                    <button id="submit-btn" onclick="requestSubmission()" class="flex-[2] py-4 bg-emerald-600 rounded-2xl font-bold hover:bg-emerald-500 transition shadow-lg shadow-emerald-600/20 uppercase">Υποβολη & Ολοκληρωση</button>
                 <div class="flex gap-4 mt-8">
                     <button id="prev-btn" onclick="prevQ()" class="px-8 py-5 bg-slate-800 rounded-2xl font-bold uppercase text-xs">ΠΙΣΩ</button>
                     <button id="next-btn" onclick="nextQ()" class="flex-1 py-5 bg-sky-600 rounded-2xl font-black uppercase text-sm hover:bg-sky-500 transition-all">ΕΠΟΜΕΝΗ</button>
+                <div class="flex gap-4">
+                    <button id="prev-btn" onclick="prevQ()" class="glass-card px-8 py-4 rounded-2xl hover:bg-slate-800 transition font-bold flex-1">ΠΡΟΗΓΟΥΜΕΝΗ</button>
+                    <button id="mark-btn" onclick="toggleMark()" class="glass-card px-8 py-4 rounded-2xl hover:bg-slate-800 transition font-bold">🚩</button>
+                    <button id="next-btn" onclick="nextQ()" class="bg-blue-600 px-8 py-4 rounded-2xl hover:bg-blue-500 transition font-bold flex-1 shadow-lg shadow-blue-500/20">ΕΠΟΜΕΝΗ</button>
 </div>
 </div>
 
-            <aside class="w-full lg:w-80">
-                <div class="glass-card p-6 rounded-2xl sticky top-24">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xs font-black text-slate-500 uppercase font-mono tracking-widest">Πλοηγηση</h3>
-                        <button onclick="toggleFlag()" class="text-xs font-bold text-amber-500 flex items-center gap-1 uppercase">🟡 Σημειωση</button>
-            
             <div class="lg:col-span-1 space-y-6">
-                <div class="glass-card p-6 rounded-3xl">
+            <div class="space-y-6">
+<div class="glass-card p-6 rounded-3xl">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">ΕΡΩΤΗΣΕΙΣ</h3>
                         <span id="q-counter" class="text-xs font-bold text-sky-400"></span>
-</div>
-                    <div id="dot-grid" class="grid grid-cols-5 gap-2 max-h-[500px] overflow-y-auto pr-1"></div>
+                    </div>
                     <div id="dot-grid" class="grid grid-cols-5 sm:grid-cols-10 lg:grid-cols-4 gap-2 max-h-[400px] overflow-y-auto pr-2"></div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Επισκόπηση</h4>
+                    <div id="dot-grid" class="flex flex-wrap gap-2"></div>
 </div>
-            </aside>
                 <button onclick="showConfirm()" class="w-full py-5 bg-emerald-600/20 border border-emerald-500/50 text-emerald-400 rounded-2xl text-xs font-black uppercase hover:bg-emerald-600 hover:text-white transition-all">ΥΠΟΒΟΛΗ</button>
-            </div>
+                <button onclick="showConfirm()" class="w-full bg-rose-600/10 text-rose-500 border border-rose-600/20 p-4 rounded-2xl hover:bg-rose-600 hover:text-white transition font-bold uppercase tracking-widest text-sm">ΥΠΟΒΟΛΗ ΤΕΣΤ</button>
+</div>
 </div>
 
-<!-- Results Screen -->
-        <div id="results-screen" class="hidden text-center py-20 max-w-2xl mx-auto">
-            <div id="result-icon" class="text-9xl mb-8">🚁</div>
-            <h2 id="result-title" class="text-5xl font-black mb-4 uppercase text-white italic">Αποτελεσμα</h2>
-            <div class="glass-card p-12 rounded-3xl my-10 border-sky-500/20">
-                <div class="text-slate-400 uppercase font-black tracking-widest text-xs mb-2">ΣΥΝΟΛΙΚΟ ΣΚΟΡ</div>
-                <div id="result-score" class="text-8xl font-black text-sky-400">0%</div>
-                <p id="result-stats" class="text-slate-400 text-xl mt-6 font-medium font-mono"></p>
+        <!-- Results Screen -->
         <div id="results-screen" class="hidden text-center py-12">
             <div id="res-icon" class="text-8xl mb-6"></div>
             <h2 id="res-title" class="text-5xl font-black mb-4 italic uppercase"></h2>
             <div class="glass-card p-12 rounded-[3.5rem] max-w-md mx-auto my-10 border-white/5">
                 <div id="res-score" class="text-8xl font-black mb-2">0%</div>
                 <p id="res-stats" class="text-slate-400 font-bold uppercase text-[10px] tracking-widest"></p>
+        <div id="results-screen" class="hidden w-full max-w-2xl text-center animate-slide">
+            <div class="glass-card p-12 rounded-[3rem] relative overflow-hidden">
+                <div id="res-icon" class="text-8xl mb-6">🏆</div>
+                <h2 id="res-title" class="text-4xl font-black mb-2 uppercase italic tracking-tighter">ΕΠΙΤΥΧΙΑ!</h2>
+                <div id="res-score" class="text-8xl font-black mb-2 text-emerald-400 tracking-tighter">0%</div>
+                <p id="res-stats" class="text-slate-400 text-xl mb-12">0 ΣΩΣΤΕΣ / 40 ΕΡΩΤΗΣΕΙΣ</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="location.reload()" class="bg-white text-slate-900 p-5 rounded-2xl font-black uppercase tracking-widest hover:bg-slate-200 transition">ΑΡΧΙΚΗ</button>
+                    <button onclick="reviewMistakes()" id="review-btn" class="bg-slate-800 text-white p-5 rounded-2xl font-black uppercase tracking-widest hover:bg-slate-700 transition">REVIEW</button>
+                </div>
 </div>
-            <button onclick="goHome()" class="w-full py-5 bg-white text-black text-xl font-black rounded-2xl hover:bg-slate-200 transition uppercase italic">Αρχικη Σελιδα</button>
             <button onclick="location.reload()" class="px-12 py-6 bg-sky-500 text-white font-black rounded-2xl uppercase hover:bg-sky-400">ΕΠΙΣΤΡΟΦΗ</button>
 </div>
-
 </main>
 
     <!-- Modal -->
@@ -336,93 +211,18 @@
             <div class="flex flex-col gap-3">
                 <button onclick="submitQuiz()" class="w-full py-4 bg-sky-600 rounded-xl font-black uppercase">ΝΑΙ, ΟΛΟΚΛΗΡΩΣΗ</button>
                 <button onclick="hideConfirm()" class="w-full py-4 bg-slate-800 rounded-xl font-bold text-slate-400 uppercase text-xs">ΑΚΥΡΩΣΗ</button>
-            </div>
-        </div>
-    </div>
+    <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div class="glass-card p-8 rounded-3xl max-w-sm w-full text-center">
+            <h3 class="text-2xl font-bold mb-4">Υποβολή Τεστ;</h3>
+            <p class="text-slate-400 mb-8">Είσαι σίγουρος ότι θέλεις να ολοκληρώσεις την προσπάθεια;</p>
+            <div class="flex gap-4">
+                <button onclick="hideConfirm()" class="flex-1 p-4 rounded-xl bg-slate-800 font-bold hover:bg-slate-700 transition">ΑΚΥΡΟ</button>
+                <button onclick="submitQuiz()" class="flex-1 p-4 rounded-xl bg-blue-600 font-bold hover:bg-blue-500 transition shadow-lg shadow-blue-500/20">ΝΑΙ, ΤΕΛΟΣ</button>
+</div>
+</div>
+</div>
 
-<script>
-        // Database same as before
-        const db = [
-            { id: 1, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Ποια είναι η ελάχιστη απόσταση από μη εμπλεκόμενα πρόσωπα για ΣμηΕΑ κατηγορίας C2 (A2);", a: ["50 μέτρα", "30 μέτρα (ή 5 με λειτουργία χαμηλής ταχύτητας)", "120 μέτρα", "10 μέτρα"], c: 1, exp: "Στην υποκατηγορία A2, η ελάχιστη απόσταση είναι 30μ, αλλά μπορεί να μειωθεί στα 5μ αν το Drone διαθέτει λειτουργία χαμηλής ταχύτητας." },
-            { id: 2, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Πότε επιτρέπεται η πτήση πάνω από συγκεντρώσεις προσώπων στην Ανοιχτή Κατηγορία;", a: ["Ποτέ", "Μόνο αν το Drone είναι < 250γρ", "Με ειδική άδεια", "Σε μεγάλη ταχύτητα"], c: 0, exp: "Απαγορεύεται αυστηρά η πτήση πάνω από συγκεντρώσεις ανθρώπων στην Ανοιχτή Κατηγορία." },
-            { id: 3, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Ποια είναι η ενέργεια του τηλεχειριστή σε περίπτωση απώλειας σύνδεσης (C2 Link loss);", a: ["Το Drone παραμένει ακίνητο", "Το Drone εκτελεί RTH (Return to Home)", "Το Drone απενεργοποιεί κινητήρες", "Τυχαία κατεύθυνση"], c: 1, exp: "Τα σύγχρονα ΣμηΕΑ είναι προγραμματισμένα να εκτελούν αυτόματη επιστροφή." },
-            { id: 4, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Τι ελέγχουμε στις μπαταρίες LiPo πριν την πτήση;", a: ["Αν είναι ζεστές", "Αν έχουν φουσκώματα ή ζημιές", "Το χρώμα τους", "Την ημερομηνία αγοράς"], c: 1, exp: "Οι φουσκωμένες μπαταρίες LiPo αποτελούν κίνδυνο πυρκαγιάς και αστάθειας τάσης." },
-            { id: 5, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Ποια είναι η μέγιστη ταχύτητα στην A2 λειτουργία χαμηλής ταχύτητας;", a: ["1 m/s", "3 m/s", "5 m/s", "10 m/s"], c: 1, exp: "Η λειτουργία 'low speed' περιορίζει την ταχύτητα στα 3 m/s για ασφαλέστερη πτήση κοντά σε κόσμο." },
-            { id: 6, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Τι κάνουμε αν το Drone αρχίσει να συμπεριφέρεται αλλόκοτα;", a: ["Πετάμε πιο γρήγορα", "Προσγειωνόμαστε αμέσως με ασφάλεια", "Κλείνουμε τα μάτια", "Περιμένουμε να φτιάξει"], c: 1, exp: "Η ασφάλεια απαιτεί άμεση διακοπή της πτήσης αν παρατηρηθεί ανωμαλία." },
-            { id: 7, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Ποιο είναι το 'Home Point';", a: ["Το σπίτι του πιλότου", "Το σημείο από όπου απογειώθηκε το Drone", "Το κέντρο του αεροδρομίου", "Οποιοδήποτε πάρκο"], c: 1, exp: "Το Home Point είναι οι συντεταγμένες απογείωσης που αποθηκεύονται στο GPS." },
-            { id: 8, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Ποιος είναι ο κίνδυνος των ελίκων;", a: ["Κανένας", "Μπορεί να προκαλέσουν σοβαρούς τραυματισμούς", "Μόνο αν σπάσουν", "Μόνο αν είναι μεταλλικές"], c: 1, exp: "Οι έλικες περιστρέφονται με πολύ μεγάλες ταχύτητες και είναι κοφτερές." },
-            { id: 9, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Τι είναι το Geo-fencing;", a: ["Σύστημα αυτόματης προσγείωσης", "Σύστημα αποφυγής εμποδίων", "Ψηφιακόος περιορισμός εναέριου χώρου", "Λειτουργία πτήσης"], c: 2, exp: "Το Geo-fencing εμποδίζει το drone να εισέλθει σε απαγορευμένες ζώνες (No-Fly Zones)." },
-            { id: 10, cat: "Α", topic: "Ασφάλεια Πτήσεων", q: "Ποια είναι η απόσταση ασφαλείας από αεροδρόμια χωρίς άδεια;", a: ["500μ", "2χλμ", "5-8χλμ (ανάλογα τη ζώνη)", "15χλμ"], c: 2, exp: "Τα αεροδρόμια προστατεύονται από εκτεταμένες ζώνες περιορισμού πτήσεων." },
-            { id: 11, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Ποιο είναι το μέγιστο επιτρεπόμενο ύψος πτήσης στην Ανοιχτή Κατηγορία;", a: ["50μ", "100μ", "120μ", "150μ"], c: 2, exp: "Το όριο είναι τα 120 μέτρα (400 πόδια) από το έδαφος." },
-            { id: 12, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Τι σημαίνει ο όρος 'VLOS';", a: ["Vertical Lift Off", "Visual Line of Sight", "Velocity Level", "Virtual Location"], c: 1, exp: "VLOS σημαίνει διατήρηση άμεσης οπτικής επαφής με το ΣμηΕΑ χωρίς βοηθήματα." },
-            { id: 13, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Ποιο Drone επιτρέπεται να πετάει πάνω από μη εμπλεκόμενα πρόσωπα στην Α1;", a: ["C0 (<250g)", "C2", "C3", "Κανένα"], c: 0, exp: "Τα drones κάτω των 250γρ (C0) έχουν την ελάχιστη επικινδυνότητα." },
-            { id: 14, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Σε ποια ζώνη απαγορεύεται η πτήση χωρίς άδεια;", a: ["Πάνω από το σπίτι μας", "Κοντά σε αεροδρόμια", "Πάνω από δάση", "Πάνω από τη θάλασσα"], c: 1, exp: "Οι ελεγχόμενες ζώνες αεροδρομίων (CTR) απαιτούν ειδική άδεια." },
-            { id: 15, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Ποιο είναι το μέγιστο βάρος Drone στην Α1 (C0/C1);", a: ["250g / 900g", "500g", "2kg", "25kg"], c: 0, exp: "Η κατηγορία Α1 αφορά drones με βάρος έως 900γρ (για C1)." },
-            { id: 16, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Τι είναι το NOTAM;", a: ["Ειδοποίηση προς αεροναυτιλλομένους", "Νέος τύπος Drone", "Όνομα εταιρείας", "Κωδικός πρόσβασης"], c: 0, exp: "Το NOTAM περιέχει κρίσιμες πληροφορίες για προσωρινούς περιορισμούς στον αέρα." },
-            { id: 17, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Ποιο είναι το μέγιστο ύψος αν πετάμε κοντά σε εμπόδιο (π.χ. κτίριο);", a: ["Πάντα 120μ", "Έως 15μ πάνω από το εμπόδιο", "500μ", "Όσο θέλουμε"], c: 1, exp: "Επιτρέπεται η υπέρβαση των 120μ αν το ζητήσει ο ιδιοκτήτης για έλεγχο ψηλού εμποδίου." },
-            { id: 18, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Τι είναι το 'U-Space';", a: ["Χώρος για παιχνίδια", "Ψηφιακό οικοσύστημα διαχείρισης κυκλοφορίας ΣμηΕΑ", "Το διάστημα", "Κενή περιοχή"], c: 1, exp: "Το U-Space είναι ένα σύστημα υπηρεσιών για την ασφαλή ενσωμάτωση των drones." },
-            { id: 19, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Επιτρέπεται η πτήση σε ομίχλη;", a: ["Ναι, αν έχουμε φώτα", "Όχι, γιατί χάνεται το VLOS", "Μόνο με GPS", "Μόνο χαμηλά"], c: 1, exp: "Χωρίς καθαρή ορατότητα δεν υφίσταται VLOS." },
-            { id: 20, cat: "Β", topic: "Εναέρια Κυκλοφορία", q: "Ποιος έχει προτεραιότητα στον αέρα;", a: ["Το Drone", "Το ελικόπτερο/αεροπλάνο", "Κανένας", "Ο πιο γρήγορος"], c: 1, exp: "Τα επανδρωμένα αεροσκάφη έχουν πάντα προτεραιότητα έναντι των ΣμηΕΑ." },
-            { id: 21, cat: "Γ", topic: "Κανονισμοί", q: "Πού πρέπει να αναγράφεται ο αριθμός εγγραφής εκμεταλλευόμενου;", a: ["Στο τηλεχειριστήριο", "Στο σώμα του ΣμηΕΑ", "Στην εφαρμογή", "Στο κουτί"], c: 1, exp: "Είναι υποχρεωτική η σήμανση του drone με τον κωδικό εκμεταλλευόμενου." },
-            { id: 22, cat: "Γ", topic: "Κανονισμοί", q: "Ποια είναι η ελάχιστη ηλικία για τηλεχειριστή ΣμηΕΑ στην Ελλάδα;", a: ["12 έτη", "14 έτη", "16 έτη", "18 έτη"], c: 2, exp: "Στην Ελλάδα η ελάχιστη ηλικία έχει οριστεί στα 16 έτη." },
-            { id: 23, cat: "Γ", topic: "Κανονισμοί", q: "Πόση είναι η διάρκεια ισχύος του πιστοποιητικού τηλεχειριστή A1/A3;", a: ["2 έτη", "5 έτη", "10 έτη", "Ισόβιο"], c: 1, exp: "Τα πιστοποιητικά τηλεχειριστή έχουν διάρκεια 5 ετών." },
-            { id: 24, cat: "Γ", topic: "Κανονισμοί", q: "Ποιος είναι υπεύθυνος για την ασφάλεια της πτήσης;", a: ["Ο κατασκευαστής", "Ο τηλεχειριστής", "Η ΥΠΑ", "Ο ιδιοκτήτης"], c: 1, exp: "Ο τηλεχειριστής είναι ο μόνος υπεύθυνος για την ασφαλή διεξαγωγή της πτήσης." },
-            { id: 25, cat: "Γ", topic: "Κανονισμοί", q: "Τι σημαίνει η σήμανση CE στο Drone;", a: ["Camera Enabled", "Συμμόρφωση με ευρωπαϊκά πρότυπα", "China Export", "Control Edition"], c: 1, exp: "Η σήμανση CE δηλώνει ότι το προϊόν πληροί τις ευρωπαϊκές απαιτήσεις ασφαλείας." },
-            { id: 26, cat: "Γ", topic: "Κανονισμοί", q: "Πρέπει να έχουμε ασφάλεια για το Drone;", a: ["Όχι", "Ναι, είναι υποχρεωτική στην Ελλάδα", "Μόνο για επαγγελματίες", "Μόνο για μεγάλα drones"], c: 1, exp: "Η ασφάλιση αστικής ευθύνης είναι υποχρεωτική για όλα τα drones στην Ελλάδα." },
-            { id: 27, cat: "Γ", topic: "Κανονισμοί", q: "Τι είναι η 'Ειδική Κατηγορία' (Specific);", a: ["Για παιχνίδια", "Για πτήσεις με αυξημένο κίνδυνο", "Για εσωτερικούς χώρους", "Για πτήσεις στη θάλασσα"], c: 1, exp: "Περιλαμβάνει πτήσεις που υπερβαίνουν τους περιορισμούς της Ανοιχτής Κατηγορίας." },
-            { id: 28, cat: "Γ", topic: "Κανονισμοί", q: "Τι είναι το 'EASA';", a: ["Ελληνική Υπηρεσία", "Ευρωπαϊκός Οργανισμός Ασφάλειας της Αεροποίας", "Εταιρεία Drones", "Είδος μπαταρίας"], c: 1, exp: "Είναι ο οργανισμός που διαμορφώνει τους κανόνες ασφαλείας στην ΕΕ." },
-            { id: 29, cat: "Γ", topic: "Κανονισμοί", q: "Πότε απαιτείται Remote ID;", a: ["Ποτέ", "Σχεδόν σε όλα τα νέα drones με σήμανση κατηγορίας", "Μόνο στην Α3", "Μόνο τη νύχτα"], c: 1, exp: "Το Remote ID επιτρέπει την ταυτοποίηση του drone από τις αρχές." },
-            { id: 30, cat: "Γ", topic: "Κανονισμοί", q: "Επιτρέπεται η μεταφορά επικίνδυνων εμπορευμάτων στην Ανοιχτή Κατηγορία;", a: ["Ναι", "Όχι", "Μόνο αν είναι μικρά", "Μόνο με άδεια"], c: 1, exp: "Η μεταφορά επικίνδυνων υλικών απαγορεύεται στην Ανοιχτή Κατηγορία." },
-            { id: 31, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Τι είναι η 'οπτική σήραγγα' (tunnel vision);", a: ["Βελτιωμένη όραση", "Εστίαση σε ένα μόνο σημείο λόγω άγχους", "Ειδική κάμερα", "Νυχτερινή όραση"], c: 1, exp: "Είναι ψυχολογική κατάσταση όπου χάνουμε την περιφερειακή μας όραση υπό πίεση." },
-            { id: 32, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Πώς επηρεάζει το αλκοόλ τον τηλεχειριστή;", a: ["Βελτιώνει τα αντανακλαστικά", "Μειώνει το χρόνο αντίδρασης και την κρίση", "Τίποτα", "Βελτιώνει την όραση"], c: 1, exp: "Το αλκοόλ υποβαθμίζει όλες τις κρίσιμες ικανότητες του πιλότου." },
-            { id: 33, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Τι είναι η κόπωση κατά την πτήση;", a: ["Εξάντληση μπαταριών", "Μειωμένη ικανότητα προσοχής", "Φθορά μοτέρ", "Ζέστη"], c: 1, exp: "Η κόπωση μειώνει την ικανότητα του πιλότου να αντιδρά σε κινδύνους." },
-            { id: 34, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Γιατί η αυτοπεποίθηση μπορεί να είναι επικίνδυνη;", a: ["Μας κάνει καλύτερους", "Οδηγεί σε παράβλεψη κινδύνων", "Δεν είναι επικίνδυνη", "Βοηθάει"], c: 1, exp: "Η υπερεκτίμηση των ικανοτήτων μας οδηγεί σε παραβίαση των κανόνων ασφαλείας." },
-            { id: 35, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Ποια αίσθηση είναι η πιο σημαντική για το VLOS;", a: ["Ακοή", "Όραση", "Αφή", "Όσφρηση"], c: 1, exp: "Η όραση είναι το βασικό εργαλείο για την ασφαλή πτήση ενός drone." },
-            { id: 36, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Τι προκαλεί η ηλιοφάνεια στον πιλότο;", a: ["Χαρά", "Θάμβωση και δυσκολία εντοπισμού", "Καλύτερη όραση", "Τίποτα"], c: 1, exp: "Η έντονη θάμβωση μπορεί να μας κάνει να χάσουμε την οπτική επαφή." },
-            { id: 37, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Τι είναι η 'ετοιμότητα πτήσης' (Fit to fly);", a: ["Αν το drone είναι έτοιμο", "Αν ο πιλότος είναι υγιής και σε καλή κατάσταση", "Αν ο καιρός είναι καλός", "Αν η μπαταρία είναι γεμάτη"], c: 1, exp: "Ο τηλεχειριστής πρέπει να είναι σωματικά και ψυχικά ικανός πριν πετάξει." },
-            { id: 38, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Πώς επηρεάζει το φάρμακο για το κρύωμα;", a: ["Δεν επηρεάζει", "Μπορεί να προκαλέσει υπνηλία", "Βοηθάει", "Κάνει το drone πιο σταθερό"], c: 1, exp: "Πολλά κοινά φάρμακα έχουν παρενέργειες που επηρεάζουν την οδήγηση και την πτήση." },
-            { id: 39, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Τι είναι η 'απώλεια προσανατολισμού';", a: ["Απώλεια GPS", "Δυσκολία να καταλάβουμε την κατεύθυνση του drone", "Χάσιμο δρόμου", "Πτώση"], c: 1, exp: "Συμβαίνει όταν δεν μπορούμε να ξεχωρίσουμε την εμπρός από την πίσω πλευρά του drone." },
-            { id: 40, cat: "Δ", topic: "Ανθρώπινος Παράγοντας", q: "Ποια είναι η επίδραση του στρες;", a: ["Καλύτερη συγκέντρωση", "Λάθος αποφάσεις και πανικός", "Τίποτα", "Ταχύτερες πτήσεις"], c: 1, exp: "Το υπερβολικό στρες μπλοκάρει τη λογική σκέψη." },
-            { id: 41, cat: "Ε", topic: "Διαδικασίες", q: "Ποιο είναι το πρώτο βήμα πριν από κάθε πτήση;", a: ["Φόρτιση", "Έλεγχος περιβάλλοντος και αξιολόγηση κινδύνου", "Αλλαγή ελίκων", "Καθαρισμός"], c: 1, exp: "Πρέπει πάντα να ελέγχουμε το χώρο για εμπόδια και κόσμο." },
-            { id: 42, cat: "Ε", topic: "Διαδικασίες", q: "Τι πρέπει να κάνετε αν ένα αεροσκάφος πλησιάσει;", a: ["Πετάτε ψηλότερα", "Προσγειώνεστε αμέσως ή μένετε χαμηλά", "Συνεχίζετε", "Βίντεο"], c: 1, exp: "Πρέπει να εκκενώσουμε τον εναέριο χώρο για το επανδρωμένο αεροσκάφος." },
-            { id: 43, cat: "Ε", topic: "Διαδικασίες", q: "Τι είναι το Check-list;", a: ["Λίστα αγορών", "Λίστα ελέγχων ασφαλείας", "Κατάλογος", "Βιβλίο"], c: 1, exp: "Μας βοηθά να μην παραλείψουμε κρίσιμους ελέγχους (π.χ. έλικες, μπαταρία)." },
-            { id: 44, cat: "Ε", topic: "Διαδικασίες", q: "Τι κάνουμε αν χάσουμε την οπτική επαφή;", a: ["Τυχαία κουμπιά", "Ενεργοποιούμε RTH ή χρησιμοποιούμε την κάμερα για εντοπισμό", "Φεύγουμε", "Περιμένουμε"], c: 1, exp: "Η ψυχραιμία και η χρήση των συστημάτων ασφαλείας είναι απαραίτητη." },
-            { id: 45, cat: "Ε", topic: "Διαδικασίες", q: "Τι είναι το Logbook;", a: ["Φωτογραφίες", "Ημερολόγιο πτήσεων και συντήρησης", "Οδηγίες", "Επαφές"], c: 1, exp: "Εκεί καταγράφονται οι ώρες πτήσης και οι εργασίες συντήρησης." },
-            { id: 46, cat: "Ε", topic: "Διαδικασίες", q: "Πόντε κάνουμε καλιμπράρισμα πυξίδας;", a: ["Κάθε μπαταρία", "Όταν το ζητάει η εφαρμογή ή αλλάζουμε περιοχή", "Ποτέ", "Όταν βρέχει"], c: 1, exp: "Η πυξίδα είναι ευαίσθητη σε μαγνητικές παρεμβολές." },
-            { id: 47, cat: "Ε", topic: "Διαδικασίες", q: "Τι ελέγχουμε στις έλικες;", a: ["Το χρώμα", "Ρωγμές, φθορές και σωστή ασφάλιση", "Το βάρος", "Την ημερομηνία"], c: 1, exp: "Μια κακή έλικα μπορεί να προκαλέσει πτώση του drone." },
-            { id: 48, cat: "Ε", topic: "Διαδικασίες", q: "Πώς αποθηκεύουμε τις μπαταρίες LiPo;", a: ["Γεμάτες", "Σε τάση αποθήκευσης (Storage charge)", "Άδειες", "Στο ψυγείο"], c: 1, exp: "Η αποθήκευση σε πλήρη φόρτιση ή αποφόρτιση καταστρέφει τη χημεία της μπαταρίας." },
-            { id: 49, cat: "Ε", topic: "Διαδικασίες", q: "Τι είναι το 'Emergency Landing';", a: ["Ωραία προσγείωση", "Αναγκαστική προσγείωση σε περίπτωση βλάβης", "Προσγείωση στο χέρι", "Απογείωση"], c: 1, exp: "Γίνεται όταν η πτήση δεν μπορεί να συνεχιστεί με ασφάλεια." },
-            { id: 50, cat: "Ε", topic: "Διαδικασίες", q: "Πώς ενημερωνόμαστε για απαγορευμένες περιοχές;", a: ["Από φίλους", "Από χάρτες της ΥΠΑ (Dagrim) ή επίσημες εφαρμογές", "Δεν υπάρχουν", "Από την τηλεόραση"], c: 1, exp: "Η γνώμη των τρίτων δεν υποκαθιστά τους επίσημους χάρτες." },
-            { id: 51, cat: "Ι", topic: "Μετεωρολογία", q: "Τι προκαλεί ο παγετός στις έλικες ενός Drone;", a: ["Αύξηση άντωσης", "Μείωση απόδοσης και αύξηση βάρους", "Ψύξη", "Τίποτα"], c: 1, exp: "Ο πάγος αλλάζει την αεροδυναμική των ελίκων." },
-            { id: 52, cat: "Ι", topic: "Μετεωρολογία", q: "Τι είναι η 'ριπή ανέμου';", a: ["Σταθερός άνεμος", "Ξαφνική και σύντομη αύξηση ταχύτητας", "Ανοδικό ρεύμα", "Κυκλικός"], c: 1, exp: "Οι ριπές μπορούν να ανατρέψουν ένα drone." },
-            { id: 53, cat: "Ι", topic: "Μετεωρολογία", q: "Πώς επηρεάζει η υψηλή θερμοκρασία την μπαταρία;", a: ["Βελτιώνει", "Υπερθέρμανση και απότομη πτώση τάσης", "Τίποτα", "Φορτίζει"], c: 1, exp: "Η ζέστη αυξάνει την εσωτερική αντίσταση." },
-            { id: 54, cat: "Ι", topic: "Μετεωρολογία", q: "Πού βρίσκουμε πληροφορίες για τον άνεμο;", a: ["Facebook", "Εφαρμογές καιρού (π.χ. Windy, UAV Forecast)", "Σύννεφα", "Περαστικούς"], c: 1, exp: "Απαιτούνται εξειδικευμένα εργαλεία για την πρόγνωση ανέμου σε ύψος." },
-            { id: 55, cat: "Ι", topic: "Μετεωρολογία", q: "Τι είναι η πυκνότητα αέρα;", a: ["Χρώμα", "Μάζα αέρα ανά μονάδα όγκου", "Ταχύτητα", "Υγρασία"], c: 1, exp: "Ο αραιός αέρας (π.χ. σε βουνό) προσφέρει λιγότερη άντωση." },
-            { id: 56, cat: "Ι", topic: "Μετεωρολογία", q: "Τι είναι το 'Bird Strike';", a: ["Παιχνίδι", "Σύγκρουση με πουλί", "Είδος drone", "Πτώση"], c: 1, exp: "Τα πουλιά μπορούν να προκαλέσουν πτώση του drone." },
-            { id: 57, cat: "Ι", topic: "Μετεωρολογία", q: "Πώς επηρεάζει η βροχή το drone;", a: ["Το καθαρίζει", "Προκαλεί βραχυκύκλωμα και οξείδωση", "Πετάει καλύτερα", "Τίποτα"], c: 1, exp: "Τα περισσότερα drones δεν έχουν αδιαβροχοποίηση." },
-            { id: 58, cat: "Ι", topic: "Μετεωρολογία", q: "Τι είναι τα 'θερμικά ρεύματα';", a: ["Ζεστός αέρας που ανεβαίνει", "Κρύος αέρας", "Άνεμος στη θάλασσα", "Ηλεκτρικό ρεύμα"], c: 0, exp: "Δημιουργούν αναταράξεις και απρόβλεπτη άνοδο." },
-            { id: 59, cat: "Ι", topic: "Μετεωρολογία", q: "Πώς επηρεάζει το μεγάλο υψόμετρο;", a: ["Πετάει πιο εύκολα", "Λιγότερη άντωση λόγω αραιού αέρα", "Καλύτερη μπαταρία", "Τίποτα"], c: 1, exp: "Το drone πρέπει να δουλεύει πιο έντονα για να μείνει στον αέρα." },
-            { id: 60, cat: "Ι", topic: "Μετεωρολογία", q: "Επιτρέπεται η πτήση σε καταιγίδα;", a: ["Ναι", "Όχι, είναι εξαιρετικά επικίνδυνο", "Μόνο με αλεξικέραυνο", "Μόνο για λίγο"], c: 1, exp: "Οι κεραυνοί και οι άνεμοι καταιγίδας είναι καταστροφικοί." },
-            { id: 61, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Ποια δύναμη δείχνει το βέλος που δείχνει προς τα κάτω στην εικόνα;", a: ["Άντωση", "Βάρος", "Ώθηση", "Οπισθέλκουσα"], c: 1, exp: "Το βάρος (Gravity) έλκει πάντα το σκάφος προς τα κάτω." },
-            { id: 62, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Στο παρακάτω σχήμα, ποιο γράμμα αντιστοιχεί στον άξονα 'Pitch' (πρόνευση);", a: ["X", "Y", "Z", "W"], c: 0, exp: "Το Pitch είναι η κλίση του drone προς τα εμπρός ή πίσω." },
-            { id: 63, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Πού βρίσκεται το Κέντρο Βάρους (CG) στο παρακάτω σχήμα;", a: ["Στη μύτη", "Στο γεωμετρικό κέντρο (συνήθως)", "Στις έλικες", "Στην μπαταρία"], c: 1, exp: "Η ισορροπία είναι κρίσιμη για τη σταθερότητα." },
-            { id: 64, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Τι δείχνει η ένδειξη 'Telemetry' στην οθόνη;", a: ["Βίντεο", "Δεδομένα πτήσης (ύψος, ταχύτητα κλπ)", "Την ώρα", "Το όνομα"], c: 1, exp: "Η τηλεμετρία μας δίνει την κατάσταση του σκάφους σε πραγματικό χρόνο." },
-            { id: 65, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Τι σημαίνει το κόκκινο χρώμα στο χάρτη (No-Fly Zone);", a: ["Πετάμε ελεύθερα", "Απαγορεύεται η πτήση", "Προσοχή", "Μόνο τη νύχτα"], c: 1, exp: "Οι κόκκινες ζώνες είναι μόνιμα ή προσωρινά απαγορευμένες." },
-            { id: 66, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Ποιο εξάρτημα είναι το ESC;", a: ["Το μοτέρ", "Ο ελεγκτής ταχύτητας μοτέρ", "Η μπαταρία", "Η κάμερα"], c: 1, exp: "Το Electronic Speed Controller ρυθμίζει τις στροφές των μοτέρ." },
-            { id: 67, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Τι είναι το Gimbal;", a: ["Η μπαταρία", "Σύστημα σταθεροποίησης κάμερας", "Η έλικα", "Το φως"], c: 1, exp: "Το gimbal κρατά την κάμερα οριζόντια παρά τις κινήσεις του drone." },
-            { id: 68, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Ποια είναι η λειτουργία του IMU;", a: ["Λήψη βίντεο", "Μέτρηση κλίσης και επιτάχυνσης", "Ασφάλεια", "GPS"], c: 1, exp: "Η Inertial Measurement Unit είναι ο 'λαβύρινθος' του drone." },
-            { id: 69, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Τι σημαίνει η ένδειξη RSSI;", a: ["Ταχύτητα", "Ισχύς σήματος τηλεκατεύθυνσης", "Ύψος", "Θερμοκρασία"], c: 1, exp: "Το Received Signal Strength Indicator μας λέει αν χάνουμε τη σύνδεση." },
-            { id: 70, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Τι είναι ο αισθητήρας 'ToF';", a: ["Κάμερα", "Αισθητήρας απόστασης (Time of Flight)", "Πυξίδα", "Μικρόφωνο"], c: 1, exp: "Χρησιμοποιείται για την αποφυγή εμποδίων και την προσγείωση." },
-            { id: 71, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Πώς αναγνωρίζουμε μια LiPo 3S;", a: ["Από το μέγεθος", "Από την τάση (11.1V / 3 κελιά)", "Από το βάρος", "Από το καλώδιο"], c: 1, exp: "Κάθε κελί LiPo έχει ονομαστική τάση 3.7V." },
-            { id: 72, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Ποιο είναι το 'Yaw';", a: ["Κίνηση πάνω-κάτω", "Περιστροφή γύρω από τον κατακόρυφο άξονα", "Κλίση δεξιά-αριστερά", "Ταχύτητα"], c: 1, exp: "Το Yaw αλλάζει την κατεύθυνση που 'κοιτάζει' το drone." },
-            { id: 73, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Τι είναι το 'Stall';", a: ["Γρήγορη πτήση", "Απώλεια στήριξης", "Προσγείωση", "Εκκίνηση"], c: 1, exp: "Συμβαίνει όταν η γωνία προσβολής είναι πολύ μεγάλη." },
-            { id: 74, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Τι κάνει ο 'Flight Controller';", a: ["Τραβάει φωτό", "Επεξεργάζεται δεδομένα και ελέγχει την πτήση", "Φορτίζει", "Φωτίζει"], c: 1, exp: "Είναι ο εγκέφαλος του ΣμηΕΑ." },
-            { id: 75, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Τι είναι το 'Jello effect';", a: ["Καθαρή εικόνα", "Τρεμούλιασμα στο βίντεο λόγω κραδασμών", "Χρώματα", "Ήχος"], c: 1, exp: "Προκαλείται από μη ισορροπημένες έλικες ή μοτέρ." },
-            { id: 76, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Τι είναι η 'Οπισθέλκουσα' (Drag);", a: ["Άνοδος", "Η αντίσταση του αέρα στην κίνηση", "Βάρος", "Ώθηση"], c: 1, exp: "Η δύναμη που αντιστέκεται στην κίνηση προς τα εμπρός." },
-            { id: 77, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Ποιο είναι το 'Roll';", a: ["Περιστροφή", "Κλίση προς τα πλάγια (δεξιά/αριστερά)", "Μπρος/Πίσω", "Πάνω/Κάτω"], c: 1, exp: "Το Roll επιτρέπει στο drone να κινείται πλαγίως." },
-            { id: 78, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Ποια είναι η χρήση του βαρομέτρου;", a: ["Μέτρηση πίεσης για εύρεση ύψους", "Μέτρηση ταχύτητας", "Μέτρηση μπαταρίας", "Πυξίδα"], c: 0, exp: "Το βαρόμετρο βοηθά στη σταθεροποίηση του ύψους (Altitude Hold)." },
-            { id: 79, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Τι σημαίνει 'KV' στα μοτέρ;", a: ["Kilo-Volts", "Στροφές ανά Volt", "Βάρος", "Ισχύς"], c: 1, exp: "Δείχνει πόσο γρήγορα περιστρέφεται το μοτέρ χωρίς φορτίο." },
-            { id: 80, cat: "Ζ", topic: "Τεχνικές Γνώσεις", q: "Τι είναι το 'Fail-safe';", a: ["Λάθος πτήση", "Αυτόματη διαδικασία ασφαλείας σε περίπτωση ανάγκης", "Πτώση", "Παιχνίδι"], c: 1, exp: "Εξασφαλίζει ότι το drone θα αντιδράσει σωστά αν χαθεί το σήμα." }
+    <script>
         // Η ΠΛΗΡΗΣ ΒΑΣΗ ΤΩΝ 190 ΕΡΩΤΗΣΕΩΝ
         const allQuestions = [
             // Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ (20 ερωτήσεις)
@@ -651,22 +451,8 @@
             {"id":"K13","category":"Κ) ΠΡΟΣΘΕΤΕΣ ΓΝΩΣΕΙΣ Α2","question":"Ποιο από τα παρακάτω είναι «ανθρώπινος παράγοντας» που επηρεάζει την ασφάλεια;","options":["α) Ο άνεμος","β) Η λήψη βιαστικών αποφάσεων υπό πίεση χρόνου","γ) Η βλάβη του μοτέρ","δ) Το χαμηλό GPS"],"answer":"β"},
             {"id":"K14","category":"Κ) ΠΡΟΣΘΕΤΕΣ ΓΝΩΣΕΙΣ Α2","question":"Η εκτίμηση κινδύνου πρέπει να περιλαμβάνει:","options":["α) Εμπόδια, άνεμο, τόπο απογείωσης και κλάση CE του drone","β) Μόνο το βάρος","γ) Μόνο την ώρα","δ) Την τιμή του συμβολαίου"],"answer":"α"},
             {"id":"K15","category":"Κ) ΠΡΟΣΘΕΤΕΣ ΓΝΩΣΕΙΣ Α2","question":"Πτήσεις ΣμηΕΑ κοντά σε κινούμενα οχήματα:","options":["α) Μπορεί να είναι δύσκολη λόγω της αναταραχής και απαιτεί μεγάλη προσοχή","β) Είναι απαραίτητες για αγώνες","γ) Επιτρέπεται ελεύθερα","δ) Απαγορεύεται μόνο αν τα οχήματα είναι ηλεκτρικά"],"answer":"α"}
-];
+        ];
 
-        let quizState = {
-            mode: null,
-            questions: [],
-            currentIdx: 0,
-            answers: {},
-            flags: new Set(),
-            timer: null,
-            timeLeft: 45 * 60,
-            category: null
-        };
-
-        function goHome() {
-            location.reload();
-        }
         // QUIZ LOGIC
         let currentQuestions = [];
         let currentIndex = 0;
@@ -675,42 +461,12 @@
         let timer = null;
         let timeLeft = 2700; // 45 mins for exam
 
-function showStudyOptions() {
-document.getElementById('menu-screen').classList.add('hidden');
-            document.getElementById('study-settings').classList.add('hidden');
-            document.getElementById('results-screen').classList.add('hidden');
-document.getElementById('study-options').classList.remove('hidden');
-
+        function showStudyOptions() {
+            document.getElementById('menu-screen').classList.add('hidden');
+            document.getElementById('study-options').classList.remove('hidden');
+            
             const categories = [...new Set(allQuestions.map(q => q.category))];
-const list = document.getElementById('category-list');
-            list.innerHTML = `
-                <div onclick="selectCategory('RANDOM')" class="category-item flex justify-between items-center bg-sky-500/10 border-b-2 border-sky-500/20">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center text-white font-bold">ALL</div>
-                        <div>
-                            <span class="font-black block text-sky-400 uppercase">Τυχαίες Ερωτήσεις</span>
-                            <span class="text-xs text-slate-400 italic">Όλες οι ενότητες σε τυχαία σειρά</span>
-                        </div>
-                    </div>
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
-                </div>
-            `;
-
-            const cats = [...new Set(db.map(q => q.cat))];
-            cats.forEach(c => {
-                const qInCat = db.filter(item => item.cat === c);
-                const item = document.createElement('div');
-                item.className = "category-item flex justify-between items-center";
-                item.onclick = () => selectCategory(c);
-                item.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-sky-400 font-bold border border-white/10">${c}</div>
-                        <div>
-                            <span class="font-bold block text-white uppercase">${qInCat[0].topic}</span>
-                            <span class="text-xs text-slate-500">${qInCat.length} Ερωτήσεις</span>
-                        </div>
-                    </div>
-                    <svg class="text-slate-600" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
+            const list = document.getElementById('category-list');
             
             categories.forEach(cat => {
                 const count = allQuestions.filter(q => q.category === cat).length;
@@ -719,24 +475,12 @@ const list = document.getElementById('category-list');
                 btn.innerHTML = `
                     <div class="font-bold text-white uppercase italic">${cat}</div>
                     <div class="text-[10px] text-sky-400 font-bold tracking-widest">${count} ΕΡΩΤΗΣΕΙΣ</div>
-               `;
-                list.appendChild(item);
+                `;
                 btn.onclick = () => startStudy(cat);
                 list.appendChild(btn);
-});
-}
+            });
+        }
 
-        function selectCategory(cat) {
-            quizState.category = cat;
-            document.getElementById('study-options').classList.add('hidden');
-            document.getElementById('study-settings').classList.remove('hidden');
-            const availableCount = cat === 'RANDOM' ? db.length : db.filter(q => q.cat === cat).length;
-            const range = document.getElementById('q-count-range');
-            range.max = availableCount;
-            range.value = Math.min(10, availableCount);
-            updateCountDisplay(range.value);
-            document.getElementById('settings-subtitle').innerText = `Κατηγορία: ${cat === 'RANDOM' ? 'Όλες' : db.find(q => q.cat === cat).topic}`;
-            document.getElementById('max-label').innerText = `MAX: ${availableCount}`;
         function startStudy(category) {
             isStudyMode = true;
             if(category === 'ALL') {
@@ -745,25 +489,16 @@ const list = document.getElementById('category-list');
                 currentQuestions = allQuestions.filter(q => q.category === category);
             }
             initQuiz();
-}
+        }
 
-        function updateCountDisplay(val) {
-            document.getElementById('count-display').innerText = val;
         function startExam() {
             isStudyMode = false;
             // Επιλογή 40 τυχαίων ερωτήσεων
             currentQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 40);
             initQuiz();
             startTimer();
-}
+        }
 
-        function confirmStudyStart() {
-            const count = parseInt(document.getElementById('q-count-range').value);
-            let pool = quizState.category === 'RANDOM' ? [...db] : db.filter(q => q.cat === quizState.category);
-            pool.sort(() => Math.random() - 0.5);
-            quizState.questions = pool.slice(0, count);
-            quizState.mode = 'STUDY';
-            startQuiz();
         function initQuiz() {
             currentIndex = 0;
             answers = new Array(currentQuestions.length).fill(null);
@@ -772,13 +507,8 @@ const list = document.getElementById('category-list');
             document.getElementById('quiz-screen').classList.remove('hidden');
             renderQuestion();
             renderDots();
-}
-
-        function startExamMode() {
-            quizState.mode = 'EXAM';
-            quizState.questions = [...db].sort(() => Math.random() - 0.5).slice(0, 40);
-            startQuiz();
         }
+
         function renderQuestion() {
             const q = currentQuestions[currentIndex];
             document.getElementById('q-header').innerText = q.category + " | " + q.id;
@@ -791,18 +521,6 @@ const list = document.getElementById('category-list');
             const exp = document.getElementById('explanation');
             exp.classList.add('hidden');
 
-        function startQuiz() {
-            document.getElementById('menu-screen').classList.add('hidden');
-            document.getElementById('study-settings').classList.add('hidden');
-            document.getElementById('quiz-container').classList.remove('hidden');
-            if(quizState.mode === 'EXAM') {
-                document.getElementById('active-timer').classList.remove('hidden');
-                document.getElementById('mode-pill').innerText = "EXAM MODE";
-                document.getElementById('mode-pill').className = "px-3 py-1 rounded text-[10px] font-black uppercase tracking-tighter bg-purple-500/20 text-purple-400";
-                startTimer();
-            } else {
-                document.getElementById('mode-pill').innerText = "STUDY MODE";
-                document.getElementById('mode-pill').className = "px-3 py-1 rounded text-[10px] font-black uppercase tracking-tighter bg-sky-500/20 text-sky-400";
             q.options.forEach(opt => {
                 const char = opt.charAt(0);
                 const btn = document.createElement('button');
@@ -825,30 +543,14 @@ const list = document.getElementById('category-list');
             if(isStudyMode && answers[currentIndex]) {
                 exp.classList.remove('hidden');
                 document.getElementById('exp-text').innerText = q.options.find(o => o.startsWith(q.answer));
-}
-            renderDots();
-            showQuestion(0);
+            }
 
             document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / currentQuestions.length) * 100}%`;
             document.getElementById('prev-btn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
             
             updateDots();
-}
+        }
 
-        function startTimer() {
-            quizState.timeLeft = 45 * 60;
-            quizState.timer = setInterval(() => {
-                quizState.timeLeft--;
-                const m = Math.floor(quizState.timeLeft / 60);
-                const s = quizState.timeLeft % 60;
-                const display = document.getElementById('timer-display');
-                display.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-                if(quizState.timeLeft < 300) display.classList.add('warning');
-                if(quizState.timeLeft <= 0) {
-                    clearInterval(quizState.timer);
-                    finalizeSubmission();
-                }
-            }, 1000);
         function handleSelect(char) {
             answers[currentIndex] = char;
             renderQuestion();
@@ -857,118 +559,47 @@ const list = document.getElementById('category-list');
             if(!isStudyMode && currentIndex < currentQuestions.length - 1) {
                 setTimeout(nextQ, 300);
             }
-}
+        }
 
-function renderDots() {
-const grid = document.getElementById('dot-grid');
-grid.innerHTML = '';
-            quizState.questions.forEach((_, i) => {
+        function renderDots() {
+            const grid = document.getElementById('dot-grid');
+            grid.innerHTML = '';
             currentQuestions.forEach((_, i) => {
-const dot = document.createElement('div');
-                dot.className = 'dot';
-                dot.id = `dot-${i}`;
+                const dot = document.createElement('div');
                 dot.className = `dot ${i === currentIndex ? 'active' : ''} ${answers[i] ? 'answered' : ''}`;
                 
                 if(isStudyMode && answers[i]) {
                     dot.classList.add(answers[i] === currentQuestions[i].answer ? 'correct-dot' : 'wrong-dot');
                 }
 
-dot.innerText = i + 1;
-                dot.onclick = () => showQuestion(i);
+                dot.innerText = i + 1;
                 dot.onclick = () => { currentIndex = i; renderQuestion(); };
-grid.appendChild(dot);
-});
-            updateDots();
-}
-
-function updateDots() {
-            quizState.questions.forEach((_, i) => {
-                const dot = document.getElementById(`dot-${i}`);
-                if (!dot) return;
-                dot.classList.remove('active', 'answered', 'correct', 'wrong', 'flagged');
-                if(i === quizState.currentIdx) dot.classList.add('active');
-                if(quizState.answers[i] !== undefined) dot.classList.add('answered');
-                if(quizState.flags.has(i)) dot.classList.add('flagged');
-                if(quizState.mode === 'STUDY' && quizState.answers[i] !== undefined) {
-                    const isCorrect = quizState.answers[i] === quizState.questions[i].c;
-                    dot.classList.add(isCorrect ? 'correct' : 'wrong');
-                }
+                grid.appendChild(dot);
             });
         }
 
-        function showQuestion(idx) {
-            quizState.currentIdx = idx;
-            const q = quizState.questions[idx];
-            document.getElementById('q-progress').innerText = `Ερώτηση ${idx + 1} / ${quizState.questions.length}`;
-            document.getElementById('q-header').innerText = q.topic;
-            document.getElementById('q-text').innerText = q.q;
-            const optionsBox = document.getElementById('options-box');
-            optionsBox.innerHTML = '';
-            q.a.forEach((opt, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                if(quizState.answers[idx] === i) btn.classList.add('selected');
-                if(quizState.mode === 'STUDY' && quizState.answers[idx] !== undefined) {
-                    btn.disabled = true;
-                    if(i === q.c) btn.classList.add('correct');
-                    else if(i === quizState.answers[idx]) btn.classList.add('wrong');
-                }
-                btn.onclick = () => handleAnswer(i);
-                btn.innerHTML = `<div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold border border-white/10">${String.fromCharCode(65 + i)}</div><span class="flex-1">${opt}</span>`;
-                optionsBox.appendChild(btn);
+        function updateDots() {
             const dots = document.querySelectorAll('.dot');
             dots.forEach((d, i) => {
                 d.classList.remove('active');
                 if(i === currentIndex) d.classList.add('active');
-});
-            const expBox = document.getElementById('explanation-box');
-            if(quizState.mode === 'STUDY' && quizState.answers[idx] !== undefined) {
-                document.getElementById('explanation-text').innerText = q.exp;
-                expBox.classList.remove('hidden');
-            } else {
-                expBox.classList.add('hidden');
-            }
-            updateDots();
+            });
         }
 
-        function handleAnswer(choiceIdx) {
-            quizState.answers[quizState.currentIdx] = choiceIdx;
-            if(quizState.mode === 'STUDY') {
-                showQuestion(quizState.currentIdx);
-                if(choiceIdx === quizState.questions[quizState.currentIdx].c) {
-                    setTimeout(() => {
-                        if(quizState.currentIdx < quizState.questions.length - 1) {
-                            nextQ();
-                        }
-                    }, 1500);
-                }
-            } else {
-                showQuestion(quizState.currentIdx);
-            }
-}
-
-function nextQ() {
-            if(quizState.currentIdx < quizState.questions.length - 1) {
-                showQuestion(quizState.currentIdx + 1);
+        function nextQ() {
             if(currentIndex < currentQuestions.length - 1) {
                 currentIndex++;
                 renderQuestion();
-}
-}
+            }
+        }
 
-function prevQ() {
-            if(quizState.currentIdx > 0) {
-                showQuestion(quizState.currentIdx - 1);
+        function prevQ() {
             if(currentIndex > 0) {
                 currentIndex--;
                 renderQuestion();
-}
-}
+            }
+        }
 
-        function toggleFlag() {
-            if(quizState.flags.has(quizState.currentIdx)) quizState.flags.delete(quizState.currentIdx);
-            else quizState.flags.add(quizState.currentIdx);
-            updateDots();
         function startTimer() {
             document.getElementById('active-timer').classList.remove('hidden');
             timer = setInterval(() => {
@@ -978,64 +609,45 @@ function prevQ() {
                 document.getElementById('active-timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
                 if(timeLeft <= 0) submitQuiz();
             }, 1000);
-}
+        }
 
-        // Submission Logic
-        function requestSubmission() {
-            document.getElementById('confirm-modal').style.display = 'flex';
         function showConfirm() {
             document.getElementById('confirm-modal').classList.remove('hidden');
-}
+        }
 
-        function closeModal() {
-            document.getElementById('confirm-modal').style.display = 'none';
         function hideConfirm() {
             document.getElementById('confirm-modal').classList.add('hidden');
-}
+        }
 
-        function finalizeSubmission() {
-            closeModal();
-            if(quizState.timer) clearInterval(quizState.timer);
-            
         function submitQuiz() {
             if(timer) clearInterval(timer);
             hideConfirm();
             document.getElementById('quiz-screen').classList.add('hidden');
-document.getElementById('active-timer').classList.add('hidden');
-            document.getElementById('quiz-container').classList.add('hidden');
-document.getElementById('results-screen').classList.remove('hidden');
+            document.getElementById('active-timer').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
 
-let correct = 0;
-            quizState.questions.forEach((q, i) => {
-                if(quizState.answers[i] === q.c) correct++;
+            let correct = 0;
             answers.forEach((ans, i) => {
                 if(ans === currentQuestions[i].answer) correct++;
-});
+            });
 
-            const score = Math.round((correct / quizState.questions.length) * 100);
-            const scoreEl = document.getElementById('result-score');
             const score = Math.round((correct / currentQuestions.length) * 100);
             const scoreEl = document.getElementById('res-score');
-scoreEl.innerText = score + '%';
-
-if(score >= 75) {
-                document.getElementById('result-icon').innerText = "🏆";
-                document.getElementById('result-title').innerText = "ΕΠΙΤΥΧΙΑ!";
-                scoreEl.className = "text-8xl font-black text-emerald-400";
+            scoreEl.innerText = score + '%';
+            
+            if(score >= 75) {
                 document.getElementById('res-icon').innerText = "🏆";
                 document.getElementById('res-title').innerText = "ΕΠΙΤΥΧΙΑ!";
                 scoreEl.className = "text-8xl font-black mb-2 text-emerald-400";
-} else {
-                document.getElementById('result-icon').innerText = "📉";
-                document.getElementById('result-title').innerText = "ΠΡΟΣΠΑΘΗΣΤΕ ΞΑΝΑ";
-                scoreEl.className = "text-8xl font-black text-rose-400";
+            } else {
                 document.getElementById('res-icon').innerText = "📉";
                 document.getElementById('res-title').innerText = "ΑΠΟΤΥΧΙΑ";
                 scoreEl.className = "text-8xl font-black mb-2 text-rose-400";
-}
+            }
+    <script src="app.js?v=1.7"></script>
 
-            document.getElementById('result-stats').innerText = `${correct} Σωστές / ${quizState.questions.length} Συνολικές`;
             document.getElementById('res-stats').innerText = `${correct} ΣΩΣΤΕΣ / ${currentQuestions.length} ΕΡΩΤΗΣΕΙΣ`;
-}
-</script>
+        }
+    </script>
 </body>
+</html>
