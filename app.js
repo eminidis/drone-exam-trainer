@@ -1,8 +1,6 @@
 let timer = null;
 let timeLeft = 2700; // 45 λεπτά
 
-const githubURL = "https://raw.githubusercontent.com/eminidis/drone-exam-trainer/refs/heads/main/questions.json";
-// Σύνδεση με το νέο αρχείο που ανέβασες
 const githubURL = "https://raw.githubusercontent.com/eminidis/drone-exam-trainer/refs/heads/main/31filesQuestions.json";
 
 async function loadAllQuestions() {
