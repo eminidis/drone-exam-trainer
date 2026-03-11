@@ -12,18 +12,16 @@ const githubURL = "https://raw.githubusercontent.com/eminidis/drone-exam-trainer
 async function loadAllQuestions() {
     try {
         const response = await fetch(githubURL);
-        if (!response.ok) throw new Error("Σφάλμα σύνδεσης");
         const data = await response.json();
+        
+        // Προσαρμογή στους δικούς σου ελληνικούς όρους μέσα στο JSON
         allQuestions = data.ερωτήσεις || [];
         
-        console.log("Φορτώθηκαν: " + allQuestions.length);
-        
-        // Ενημέρωση τίτλου
         const titleSpan = document.querySelector('h2 span.text-blue-500');
         if (titleSpan) titleSpan.innerText = allQuestions.length + " ΕΡΩΤΗΣΕΩΝ";
         
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Σφάλμα φόρτωσης:", error);
     }
 }
 
@@ -34,7 +32,7 @@ window.startStudy = function() {
     const cat = document.getElementById('categorySelect').value;
     const amt = document.getElementById('amountSelect').value;
     
-    currentQuestions = (cat === 'all') ? [...allQuestions] : allQuestions.filter(q => q.category === cat);
+    currentQuestions = (cat === 'all') ? [...allQuestions] : allQuestions.filter(q => q.ΕΝΟΤΗΤΑ === cat);
     if (amt !== 'all') currentQuestions = currentQuestions.slice(0, parseInt(amt));
     
     isStudyMode = true;
@@ -63,21 +61,21 @@ function renderQuestion() {
     const q = currentQuestions[currentIndex];
     if (!q) return;
 
-    document.getElementById('q-header').innerText = q.ΕΝΟΤΗΤΑ || "ΓΕΝΙΚΗ ΕΝΟΤΗΤΑ";
+    document.getElementById('q-header').innerText = q.ΕΝΟΤΗΤΑ || "ΕΝΟΤΗΤΑ";
     document.getElementById('q-counter').innerText = `${currentIndex + 1} / ${currentQuestions.length}`;
     document.getElementById('q-text').innerText = q.ερώτηση;
     
     const container = document.getElementById('options-container');
-    container.innerHTML = ''; // Καθαρισμός παλιών επιλογών
+    container.innerHTML = '';
     
     const expText = document.getElementById('exp-text');
     expText.classList.add('hidden');
 
-    // Δημιουργία κουμπιών για κάθε επιλογή (α, β, γ, δ)
-    const επιλογές = q.επιλογές;
-    for (const key in επιλογές) {
+    // Διάβασμα των επιλογών α, β, γ, δ από το αντικείμενο "επιλογές"
+    const choices = q.επιλογές;
+    for (const key in choices) {
         const btn = document.createElement('button');
-        btn.className = 'option-btn flex items-center p-4 my-2 w-full glass-card rounded-xl transition-all';
+        btn.className = 'option-btn'; // Χρήση του δικού σου CSS class
         
         if (userAnswers[currentIndex] === key) btn.classList.add('selected');
         
@@ -86,14 +84,12 @@ function renderQuestion() {
             else if (key === userAnswers[currentIndex]) btn.classList.add('wrong-choice');
             btn.disabled = true;
             
-            expText.innerText = "Σωστή απάντηση: (" + q.σωστή_απάντηση + ") " + επιλογές[q.σωστή_απάντηση];
+            expText.innerText = "Σωστή απάντηση: " + choices[q.σωστή_απάντηση];
             expText.classList.remove('hidden');
         }
 
-        btn.innerHTML = `
-            <div class="w-10 h-10 rounded-lg bg-blue-600/20 flex items-center justify-center border border-blue-500/30 text-blue-400 font-bold uppercase mr-4 flex-shrink-0">${key}</div>
-            <div class="text-left text-sm md:text-base leading-relaxed">${επιλογές[key]}</div>
-        `;
+        btn.innerHTML = `<div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center border border-white/10 text-xs font-bold uppercase">${key}</div>
+                         <div class="flex-1 text-sm font-medium">${choices[key]}</div>`;
         
         btn.onclick = () => handleSelect(key);
         container.appendChild(btn);
@@ -109,7 +105,7 @@ function handleSelect(key) {
     renderQuestion();
     renderDots();
     if (!isStudyMode && currentIndex < currentQuestions.length - 1) {
-        setTimeout(nextQ, 400);
+        setTimeout(nextQ, 300);
     }
 }
 
