@@ -12,39 +12,37 @@ const githubURL = "https://raw.githubusercontent.com/eminidis/drone-exam-trainer
 async function loadAllQuestions() {
     try {
         const response = await fetch(githubURL);
-        if (!response.ok) throw new Error("Σφάλμα φόρτωσης");
+        if (!response.ok) throw new Error("Σφάλμα σύνδεσης");
         const data = await response.json();
-        
-        // Προσαρμογή στη νέα δομή του αρχείου σου
         allQuestions = data.ερωτήσεις || [];
         
-        console.log("Φορτώθηκαν επιτυχώς " + allQuestions.length + " ερωτήσεις.");
+        console.log("Φορτώθηκαν: " + allQuestions.length);
         
+        // Ενημέρωση τίτλου
         const titleSpan = document.querySelector('h2 span.text-blue-500');
         if (titleSpan) titleSpan.innerText = allQuestions.length + " ΕΡΩΤΗΣΕΩΝ";
         
     } catch (error) {
-        console.error("Σφάλμα:", error);
-        alert("Πρόβλημα στη φόρτωση. Βεβαιωθείτε ότι το αρχείο στο GitHub είναι σωστό.");
+        console.error("Error:", error);
     }
 }
 
 loadAllQuestions();
 
 window.startStudy = function() {
-    if (allQuestions.length === 0) return alert("Φορτώνω ακόμα...");
-    const category = document.getElementById('categorySelect').value;
-    const amount = document.getElementById('amountSelect').value;
+    if (allQuestions.length === 0) return;
+    const cat = document.getElementById('categorySelect').value;
+    const amt = document.getElementById('amountSelect').value;
     
-    currentQuestions = category === 'all' ? [...allQuestions] : allQuestions.filter(q => q.category === category);
-    if (amount !== 'all') currentQuestions = currentQuestions.slice(0, parseInt(amount));
+    currentQuestions = (cat === 'all') ? [...allQuestions] : allQuestions.filter(q => q.category === cat);
+    if (amt !== 'all') currentQuestions = currentQuestions.slice(0, parseInt(amt));
     
     isStudyMode = true;
     initQuiz();
 }
 
 window.startExam = function() {
-    if (allQuestions.length === 0) return alert("Φορτώνω ακόμα...");
+    if (allQuestions.length === 0) return;
     currentQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 40);
     isStudyMode = false;
     initQuiz();
@@ -65,22 +63,21 @@ function renderQuestion() {
     const q = currentQuestions[currentIndex];
     if (!q) return;
 
-    document.getElementById('q-header').innerText = "ΕΝΟΤΗΤΑ";
+    document.getElementById('q-header').innerText = q.ΕΝΟΤΗΤΑ || "ΓΕΝΙΚΗ ΕΝΟΤΗΤΑ";
     document.getElementById('q-counter').innerText = `${currentIndex + 1} / ${currentQuestions.length}`;
     document.getElementById('q-text').innerText = q.ερώτηση;
     
     const container = document.getElementById('options-container');
-    container.innerHTML = '';
+    container.innerHTML = ''; // Καθαρισμός παλιών επιλογών
     
     const expText = document.getElementById('exp-text');
     expText.classList.add('hidden');
 
-    // Διάβασμα των επιλογών α, β, γ, δ
-    const keys = Object.keys(q.επιλογές);
-    keys.forEach(key => {
-        const text = q.επιλογές[key];
+    // Δημιουργία κουμπιών για κάθε επιλογή (α, β, γ, δ)
+    const επιλογές = q.επιλογές;
+    for (const key in επιλογές) {
         const btn = document.createElement('button');
-        btn.className = 'option-btn';
+        btn.className = 'option-btn flex items-center p-4 my-2 w-full glass-card rounded-xl transition-all';
         
         if (userAnswers[currentIndex] === key) btn.classList.add('selected');
         
@@ -89,16 +86,18 @@ function renderQuestion() {
             else if (key === userAnswers[currentIndex]) btn.classList.add('wrong-choice');
             btn.disabled = true;
             
-            expText.innerText = "Σωστή απάντηση: " + q.επιλογές[q.σωστή_απάντηση];
+            expText.innerText = "Σωστή απάντηση: (" + q.σωστή_απάντηση + ") " + επιλογές[q.σωστή_απάντηση];
             expText.classList.remove('hidden');
         }
 
-        btn.innerHTML = `<div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center border border-white/10 text-xs font-bold uppercase">${key}</div>
-                         <div class="flex-1 text-sm font-medium">${text}</div>`;
+        btn.innerHTML = `
+            <div class="w-10 h-10 rounded-lg bg-blue-600/20 flex items-center justify-center border border-blue-500/30 text-blue-400 font-bold uppercase mr-4 flex-shrink-0">${key}</div>
+            <div class="text-left text-sm md:text-base leading-relaxed">${επιλογές[key]}</div>
+        `;
         
         btn.onclick = () => handleSelect(key);
         container.appendChild(btn);
-    });
+    }
 
     document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / currentQuestions.length) * 100}%`;
     document.getElementById('prev-btn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
@@ -110,7 +109,7 @@ function handleSelect(key) {
     renderQuestion();
     renderDots();
     if (!isStudyMode && currentIndex < currentQuestions.length - 1) {
-        setTimeout(nextQ, 300);
+        setTimeout(nextQ, 400);
     }
 }
 
@@ -130,12 +129,17 @@ window.prevQ = function() {
     }
 }
 
+window.toggleMark = function() {
+    marked[currentIndex] = !marked[currentIndex];
+    renderDots();
+}
+
 function renderDots() {
     const grid = document.getElementById('dot-grid');
     grid.innerHTML = '';
     currentQuestions.forEach((_, i) => {
         const dot = document.createElement('div');
-        dot.className = `dot ${i === currentIndex ? 'active' : ''} ${userAnswers[i] ? 'answered' : ''}`;
+        dot.className = `dot ${i === currentIndex ? 'active' : ''} ${userAnswers[i] ? 'answered' : ''} ${marked[i] ? 'marked' : ''}`;
         dot.innerText = i + 1;
         dot.onclick = () => { currentIndex = i; renderQuestion(); renderDots(); };
         grid.appendChild(dot);
