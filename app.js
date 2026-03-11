@@ -7,34 +7,32 @@ let isStudyMode = false;
 let timer = null;
 let timeLeft = 2700;
 
-// Προσθέτουμε ένα τυχαίο νούμερο στο τέλος για να ΜΗΝ κολλάει ο Chrome (Cache Buster)
 const githubURL = "https://raw.githubusercontent.com/eminidis/drone-exam-trainer/refs/heads/main/31filesQuestions.json?v=" + new Date().getTime();
 
 async function loadAllQuestions() {
     try {
-        console.log("Έναρξη φόρτωσης από:", githubURL);
         const response = await fetch(githubURL);
-        if (!response.ok) throw new Error("HTTP error! status: " + response.status);
-        
+        if (!response.ok) throw new Error("Σφάλμα φόρτωσης");
         const data = await response.json();
-        allQuestions = data.questions || data;
+        
+        // Προσαρμογή στη νέα δομή του αρχείου σου
+        allQuestions = data.ερωτήσεις || [];
         
         console.log("Φορτώθηκαν επιτυχώς " + allQuestions.length + " ερωτήσεις.");
         
-        // Ενημέρωση των κειμένων στην αρχική οθόνη
         const titleSpan = document.querySelector('h2 span.text-blue-500');
         if (titleSpan) titleSpan.innerText = allQuestions.length + " ΕΡΩΤΗΣΕΩΝ";
         
     } catch (error) {
-        console.error("ΚΡΙΣΙΜΟ ΣΦΑΛΜΑ:", error);
-        alert("Πρόβλημα στη φόρτωση των ερωτήσεων. Βεβαιωθείτε ότι το αρχείο 31filesQuestions.json είναι σωστό στο GitHub.");
+        console.error("Σφάλμα:", error);
+        alert("Πρόβλημα στη φόρτωση. Βεβαιωθείτε ότι το αρχείο στο GitHub είναι σωστό.");
     }
 }
 
 loadAllQuestions();
 
 window.startStudy = function() {
-    if (allQuestions.length === 0) return alert("Οι ερωτήσεις ακόμα φορτώνουν...");
+    if (allQuestions.length === 0) return alert("Φορτώνω ακόμα...");
     const category = document.getElementById('categorySelect').value;
     const amount = document.getElementById('amountSelect').value;
     
@@ -46,7 +44,7 @@ window.startStudy = function() {
 }
 
 window.startExam = function() {
-    if (allQuestions.length === 0) return alert("Οι ερωτήσεις ακόμα φορτώνουν...");
+    if (allQuestions.length === 0) return alert("Φορτώνω ακόμα...");
     currentQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 40);
     isStudyMode = false;
     initQuiz();
@@ -57,7 +55,6 @@ function initQuiz() {
     currentIndex = 0;
     userAnswers = new Array(currentQuestions.length).fill(null);
     marked = new Array(currentQuestions.length).fill(false);
-    
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('quiz-screen').classList.remove('hidden');
     renderQuestion();
@@ -68,9 +65,9 @@ function renderQuestion() {
     const q = currentQuestions[currentIndex];
     if (!q) return;
 
-    document.getElementById('q-header').innerText = q.category || "ΓΕΝΙΚΗ ΕΝΟΤΗΤΑ";
+    document.getElementById('q-header').innerText = "ΕΝΟΤΗΤΑ";
     document.getElementById('q-counter').innerText = `${currentIndex + 1} / ${currentQuestions.length}`;
-    document.getElementById('q-text').innerText = q.question;
+    document.getElementById('q-text').innerText = q.ερώτηση;
     
     const container = document.getElementById('options-container');
     container.innerHTML = '';
@@ -78,27 +75,28 @@ function renderQuestion() {
     const expText = document.getElementById('exp-text');
     expText.classList.add('hidden');
 
-    q.options.forEach(opt => {
-        const char = opt.trim().charAt(0).toUpperCase();
+    // Διάβασμα των επιλογών α, β, γ, δ
+    const keys = Object.keys(q.επιλογές);
+    keys.forEach(key => {
+        const text = q.επιλογές[key];
         const btn = document.createElement('button');
         btn.className = 'option-btn';
         
-        if (userAnswers[currentIndex] === char) btn.classList.add('selected');
+        if (userAnswers[currentIndex] === key) btn.classList.add('selected');
         
         if (isStudyMode && userAnswers[currentIndex]) {
-            const correctChar = q.answer.trim().toUpperCase();
-            if (char === correctChar) btn.classList.add('correct-choice');
-            else if (char === userAnswers[currentIndex]) btn.classList.add('wrong-choice');
+            if (key === q.σωστή_απάντηση) btn.classList.add('correct-choice');
+            else if (key === userAnswers[currentIndex]) btn.classList.add('wrong-choice');
             btn.disabled = true;
             
-            expText.innerText = "Σωστή απάντηση: " + q.options.find(o => o.trim().toUpperCase().startsWith(correctChar));
+            expText.innerText = "Σωστή απάντηση: " + q.επιλογές[q.σωστή_απάντηση];
             expText.classList.remove('hidden');
         }
 
-        btn.innerHTML = `<div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center border border-white/10 text-xs font-bold">${char}</div>
-                         <div class="flex-1 text-sm font-medium">${opt.substring(3)}</div>`;
+        btn.innerHTML = `<div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center border border-white/10 text-xs font-bold uppercase">${key}</div>
+                         <div class="flex-1 text-sm font-medium">${text}</div>`;
         
-        btn.onclick = () => handleSelect(char);
+        btn.onclick = () => handleSelect(key);
         container.appendChild(btn);
     });
 
@@ -106,9 +104,9 @@ function renderQuestion() {
     document.getElementById('prev-btn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
 }
 
-function handleSelect(char) {
+function handleSelect(key) {
     if (isStudyMode && userAnswers[currentIndex]) return;
-    userAnswers[currentIndex] = char;
+    userAnswers[currentIndex] = key;
     renderQuestion();
     renderDots();
     if (!isStudyMode && currentIndex < currentQuestions.length - 1) {
@@ -132,18 +130,12 @@ window.prevQ = function() {
     }
 }
 
-window.toggleMark = function() {
-    marked[currentIndex] = !marked[currentIndex];
-    renderDots();
-}
-
 function renderDots() {
     const grid = document.getElementById('dot-grid');
-    if (!grid) return;
     grid.innerHTML = '';
     currentQuestions.forEach((_, i) => {
         const dot = document.createElement('div');
-        dot.className = `dot ${i === currentIndex ? 'active' : ''} ${userAnswers[i] ? 'answered' : ''} ${marked[i] ? 'marked' : ''}`;
+        dot.className = `dot ${i === currentIndex ? 'active' : ''} ${userAnswers[i] ? 'answered' : ''}`;
         dot.innerText = i + 1;
         dot.onclick = () => { currentIndex = i; renderQuestion(); renderDots(); };
         grid.appendChild(dot);
@@ -176,7 +168,7 @@ window.submitQuiz = function() {
 
     let correct = 0;
     userAnswers.forEach((ans, i) => {
-        if (ans === currentQuestions[i].answer.trim().toUpperCase()) correct++;
+        if (ans === currentQuestions[i].σωστή_απάντηση) correct++;
     });
 
     const score = Math.round((correct / currentQuestions.length) * 100);
