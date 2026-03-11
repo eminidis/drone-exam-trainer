@@ -7,7 +7,7 @@ let isStudyMode = false;
 let timer = null;
 let timeLeft = 2700;
 
-// Σύνδεση με το αρχείο σου
+// Σύνδεση με το αρχείο σου στο GitHub
 const githubURL = "https://raw.githubusercontent.com/eminidis/drone-exam-trainer/refs/heads/main/31filesQuestions.json?v=" + new Date().getTime();
 
 async function loadAllQuestions() {
@@ -15,17 +15,17 @@ async function loadAllQuestions() {
         const response = await fetch(githubURL);
         const data = await response.json();
         
-        // Διάβασμα της λίστας "ερωτήσεις" από το JSON σου
+        // ΕΔΩ ΕΙΝΑΙ ΤΟ ΚΛΕΙΔΙ: Διαβάζει το "ερωτήσεις" από το JSON σου
         allQuestions = data.ερωτήσεις || [];
         
         console.log("Φορτώθηκαν: " + allQuestions.length + " ερωτήσεις.");
         
-        // Ενημέρωση του αριθμού στην αρχική οθόνη
+        // Ενημέρωση αριθμού στην αρχική οθόνη
         const titleSpan = document.querySelector('h2 span.text-blue-500');
         if (titleSpan) titleSpan.innerText = allQuestions.length + " ΕΡΩΤΗΣΕΩΝ";
         
     } catch (error) {
-        console.error("Σφάλμα φόρτωσης:", error);
+        console.error("Σφάλμα:", error);
     }
 }
 
@@ -36,7 +36,6 @@ window.startStudy = function() {
     const cat = document.getElementById('categorySelect').value;
     const amt = document.getElementById('amountSelect').value;
     
-    // Φιλτράρισμα με βάση την ΕΝΟΤΗΤΑ
     currentQuestions = (cat === 'all') ? [...allQuestions] : allQuestions.filter(q => q.ΕΝΟΤΗΤΑ === cat);
     if (amt !== 'all') currentQuestions = currentQuestions.slice(0, parseInt(amt));
     
@@ -76,7 +75,7 @@ function renderQuestion() {
     const expText = document.getElementById('exp-text');
     expText.classList.add('hidden');
 
-    // Εδώ είναι η διόρθωση: Διαβάζουμε το αντικείμενο "επιλογές"
+    // Διάβασμα των επιλογών α, β, γ, δ από το δικό σου JSON
     const choices = q.επιλογές;
     for (const key in choices) {
         const btn = document.createElement('button');
@@ -94,7 +93,7 @@ function renderQuestion() {
         }
 
         btn.innerHTML = `<div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center border border-white/10 text-xs font-bold uppercase">${key}</div>
-                         <div class="flex-1 text-sm font-medium">${choices[key]}</div>`;
+                         <div class="flex-1 text-sm font-medium text-left ml-4">${choices[key]}</div>`;
         
         btn.onclick = () => handleSelect(key);
         container.appendChild(btn);
@@ -130,12 +129,17 @@ window.prevQ = function() {
     }
 }
 
+window.toggleMark = function() {
+    marked[currentIndex] = !marked[currentIndex];
+    renderDots();
+}
+
 function renderDots() {
     const grid = document.getElementById('dot-grid');
     grid.innerHTML = '';
     currentQuestions.forEach((_, i) => {
         const dot = document.createElement('div');
-        dot.className = `dot ${i === currentIndex ? 'active' : ''} ${userAnswers[i] ? 'answered' : ''}`;
+        dot.className = `dot ${i === currentIndex ? 'active' : ''} ${userAnswers[i] ? 'answered' : ''} ${marked[i] ? 'marked' : ''}`;
         dot.innerText = i + 1;
         dot.onclick = () => { currentIndex = i; renderQuestion(); renderDots(); };
         grid.appendChild(dot);
