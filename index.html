@@ -1,4 +1,3 @@
-const htmlStructure = `
 <!DOCTYPE html>
 <html lang="el">
 <head>
@@ -7,117 +6,73 @@ const htmlStructure = `
     <title>UAS Pilot Training System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        .section { transition: all 0.5s ease; }
         .hidden { display: none; }
-        .grid-item { 
-            width: 35px; height: 35px; 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 11px; border-radius: 6px; 
-            cursor: pointer; border: 1px solid #475569; 
-            transition: all 0.2s;
-        }
-        .correct { background-color: #10b981 !important; color: white; border-color: #059669; }
-        .wrong { background-color: #ef4444 !important; color: white; border-color: #dc2626; }
-        .current { border: 2px solid #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
-        .option-btn { 
-            width: 100%; text-align: left; padding: 1rem; border-radius: 0.75rem; 
-            background: #334155; border: 1px solid #475569; transition: 0.2s;
-        }
-        .option-btn:hover:not(:disabled) { background: #475569; }
-        .option-correct { background-color: #065f46 !important; border-color: #10b981 !important; }
-        .option-wrong { background-color: #7f1d1d !important; border-color: #ef4444 !important; }
+        .option-btn { width: 100%; text-align: left; padding: 1rem; border-radius: 0.75rem; background: #1e293b; border: 1px solid #334155; transition: all 0.2s; margin-bottom: 0.5rem; cursor: pointer; font-size: 0.875rem; }
+        .option-btn:hover { background: #334155; border-color: #475569; }
+        .option-correct { background: #059669 !important; border-color: #10b981 !important; color: white; font-weight: bold; }
+        .option-wrong { background: #dc2626 !important; border-color: #ef4444 !important; color: white; font-weight: bold; }
+        .grid-item { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 10px; font-weight: bold; cursor: pointer; background: #334155; color: #94a3b8; }
+        .grid-item.current { ring: 2px solid #22d3ee; background: #0891b2; color: white; }
+        .grid-item.correct { background: #059669; color: white; }
+        .grid-item.wrong { background: #dc2626; color: white; }
     </style>
 </head>
-<body class="bg-slate-900 text-white min-h-screen">
-    <div id="app" class="max-w-7xl mx-auto p-4">
-        
-        <div id="home" class="section text-center py-24">
-            <h1 class="text-6xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 uppercase tracking-tighter">UAS Training Pro</h1>
-            <p class="text-slate-400 mb-12 text-xl font-light">Σύστημα Προετοιμασίας Πιστοποίησης Χειριστών Drone</p>
-            <div class="flex flex-col md:flex-row gap-8 justify-center">
-                <button onclick="showSection('study-config')" class="bg-blue-600 hover:bg-blue-700 px-12 py-6 rounded-2xl text-2xl font-black transition-all shadow-xl shadow-blue-900/40">STUDY MODE</button>
-                <button onclick="startExam()" class="bg-rose-600 hover:bg-rose-700 px-12 py-6 rounded-2xl text-2xl font-black transition-all shadow-xl shadow-rose-900/40">EXAM MODE</button>
-            </div>
+<body class="bg-slate-900">
+
+<div id="main-content"></div>
+
+<script>
+const htmlStructure = `
+<div id="app" class="min-h-screen text-white p-4 font-sans">
+    <div id="home" class="section max-w-2xl mx-auto text-center py-20">
+        <h1 class="text-5xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 uppercase tracking-tighter text-white">UAS TRAINING PRO</h1>
+        <p class="text-slate-400 mb-12 uppercase tracking-[0.3em] text-[10px]">Σύστημα Προετοιμασίας Πιστοποίησης Χειριστών Drone</p>
+        <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 mb-8">
+            <label class="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest text-left font-bold">Κατηγορία</label>
+            <select id="category-select" class="w-full bg-slate-900 border border-slate-700 p-4 rounded-xl mb-6 focus:ring-2 focus:ring-cyan-500 outline-none text-sm font-bold appearance-none cursor-pointer text-white">
+                <option value="ALL">ΟΛΕΣ ΟΙ ΚΑΤΗΓΟΡΙΕΣ</option>
+                <option value="ΚΑΝΟΝΙΣΜΟΙ">ΚΑΝΟΝΙΣΜΟΙ (REGULATIONS)</option>
+                <option value="ΑΣΦΑΛΕΙΑ">ΑΣΦΑΛΕΙΑ (SAFETY)</option>
+                <option value="ΠΕΡΙΒΑΛΛΟΝ">ΠΕΡΙΒΑΛΛΟΝ (METEOROLOGY)</option>
+            </select>
+            <label class="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest text-left font-bold">Αριθμός Ερωτήσεων</label>
+            <input type="number" id="question-count" value="20" class="w-full bg-slate-900 border border-slate-700 p-4 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none text-sm font-bold text-white">
         </div>
-
-        <div id="study-config" class="section hidden max-w-2xl mx-auto">
-            <div class="bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-2xl">
-                <h2 class="text-3xl font-bold mb-8 text-blue-400 text-center uppercase tracking-tighter">Ρυθμίσεις Μελέτης</h2>
-                <div class="space-y-6">
-                    <div>
-                        <label class="block mb-3 text-slate-400 font-bold uppercase text-xs tracking-widest">Επιλογή Ενότητας / Μάθημα</label>
-                        <select id="category-select" class="w-full bg-slate-700 p-4 rounded-xl border border-slate-600 focus:ring-2 focus:ring-blue-500 outline-none text-white">
-                            <option value="ALL">RANDOM TEST (Όλες οι Ενότητες)</option>
-                            <option value="ΚΑΝΟΝΙΣΜΟΙ">ΚΑΝΟΝΙΣΜΟΙ ΑΕΡΟΠΟΡΙΑΣ</option>
-                            <option value="ΑΣΦΑΛΕΙΑ">ΑΣΦΑΛΕΙΑ & ΠΕΡΙΟΡΙΣΜΟΙ</option>
-                            <option value="ΠΕΡΙΒΑΛΛΟΝ">ΠΕΡΙΒΑΛΛΟΝ & ΜΕΤΕΩΡΟΛΟΓΙΑ</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block mb-3 text-slate-400 font-bold uppercase text-xs tracking-widest">Αριθμός Ερωτήσεων</label>
-                        <input type="number" id="question-count" value="40" min="1" max="310" class="w-full bg-slate-700 p-4 rounded-xl border border-slate-600 focus:ring-2 focus:ring-blue-500 outline-none text-white">
-                    </div>
-                    <div class="pt-6 space-y-4">
-                        <button onclick="startStudy()" class="w-full bg-emerald-600 hover:bg-emerald-700 py-5 rounded-2xl font-black text-xl transition shadow-lg shadow-emerald-900/20 uppercase">Εναρξη Εξασκησης</button>
-                        <button onclick="showSection('home')" class="w-full bg-slate-700 hover:bg-slate-600 py-3 rounded-xl font-bold transition text-slate-300 uppercase text-sm">Ακυρωση</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="quiz" class="section hidden">
-            <div class="flex flex-col lg:flex-row gap-6">
-                <div class="flex-1 bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-2xl relative min-h-[650px] flex flex-col">
-                    <div id="timer" class="absolute top-8 right-8 text-3xl font-mono text-yellow-500 font-black tracking-tighter"></div>
-                    
-                    <div class="mb-6 flex items-center gap-4">
-                        <span id="q-cat" class="px-4 py-1.5 bg-blue-600/20 text-blue-400 text-[10px] font-black rounded-lg border border-blue-500/30 uppercase tracking-[0.2em]"></span>
-                        <span id="q-progress-text" class="text-slate-500 text-xs font-bold uppercase"></span>
-                    </div>
-
-                    <div id="q-text" class="text-3xl font-bold mb-10 leading-tight tracking-tight text-slate-100"></div>
-                    
-                    <div id="q-options" class="space-y-4 flex-1"></div>
-                    
-                    <div id="q-explanation" class="mt-8 p-6 bg-slate-900/80 border-l-4 border-amber-500 rounded-r-2xl hidden">
-                        <h4 class="font-black text-amber-500 uppercase text-xs tracking-widest mb-2">Σημείωση / Επεξήγηση</h4>
-                        <p id="explanation-text" class="text-slate-300 leading-relaxed font-medium"></p>
-                    </div>
-
-                    <div class="flex flex-wrap justify-between mt-12 gap-4 border-t border-slate-700/50 pt-8">
-                        <button onclick="prevQuestion()" class="bg-slate-700 hover:bg-slate-600 px-10 py-4 rounded-xl font-black text-sm transition uppercase tracking-widest">Πισω</button>
-                        <button onclick="nextQuestion()" class="bg-slate-700 hover:bg-slate-600 px-10 py-4 rounded-xl font-black text-sm transition uppercase tracking-widest">Επομενη</button>
-                    </div>
-                </div>
-
-                <div class="w-full lg:w-80 bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-xl self-start sticky top-4">
-                    <h3 class="font-black text-xs mb-8 border-b border-slate-700 pb-4 text-slate-500 tracking-widest uppercase text-center">Πινακας Απαντησεων</h3>
-                    <div id="progress-grid" class="grid grid-cols-5 gap-3 max-h-[400px] overflow-y-auto pr-2"></div>
-                    <div class="mt-10 pt-8 border-t border-slate-700/50 space-y-6">
-                        <div class="text-center">
-                            <span class="text-slate-500 uppercase font-black tracking-[0.3em] text-[9px] block mb-1">Σκορ</span>
-                            <span id="live-score" class="text-blue-400 font-mono font-black text-3xl tracking-tighter">0%</span>
-                        </div>
-                        <button onclick="finishQuiz()" class="w-full bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white border border-red-600/30 py-4 rounded-2xl font-black transition uppercase tracking-widest text-[10px]">Τερματισμος</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="results" class="section hidden max-w-2xl mx-auto text-center py-16">
-            <div class="bg-slate-800 p-12 rounded-[3rem] border border-slate-700 shadow-2xl relative overflow-hidden">
-                <h2 class="text-4xl font-black mb-2 uppercase tracking-tighter">Τελικο Αποτελεσμα</h2>
-                <div id="result-badge" class="inline-block px-8 py-2 rounded-full text-xs font-black mb-10 uppercase tracking-[0.2em]"></div>
-                
-                <div id="result-score" class="text-[10rem] font-black text-blue-400 mb-4 font-mono tracking-tighter leading-none"></div>
-                <p id="result-stats" class="text-slate-400 text-xl mb-12 font-medium"></p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <button onclick="showSection('home')" class="bg-blue-600 hover:bg-blue-700 py-5 rounded-2xl font-black text-lg transition uppercase">Αρχικη</button>
-                    <button onclick="location.reload()" class="bg-slate-700 hover:bg-slate-600 py-5 rounded-2xl font-black text-lg transition uppercase">Νεο Τεστ</button>
-                </div>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 uppercase tracking-widest text-[11px] font-black text-white">
+            <button onclick="startStudy()" class="bg-blue-600 hover:bg-blue-500 p-6 rounded-2xl transition-all shadow-lg">STUDY MODE</button>
+            <button onclick="startExam()" class="bg-rose-600 hover:bg-rose-500 p-6 rounded-2xl transition-all shadow-lg">EXAM MODE</button>
         </div>
     </div>
+    <div id="quiz" class="section hidden max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-6 bg-slate-800/80 p-4 rounded-2xl border border-slate-700 backdrop-blur">
+            <div id="timer" class="text-xl font-mono font-black text-cyan-400">00:00</div>
+            <div id="live-score" class="text-xl font-black text-rose-500">0%</div>
+            <div id="q-progress-text" class="text-[10px] uppercase tracking-widest text-slate-500 font-bold italic">Ερώτηση 1/20</div>
+        </div>
+        <div id="progress-grid" class="flex flex-wrap gap-1.5 mb-8 justify-center"></div>
+        <div class="bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-2xl relative overflow-hidden">
+            <span id="q-cat" class="absolute top-0 right-0 px-4 py-1 bg-cyan-500 text-slate-900 text-[9px] font-black uppercase tracking-tighter rounded-bl-xl">CATEGORY</span>
+            <h2 id="q-text" class="text-xl font-bold mb-8 leading-tight mt-4 text-white">Φόρτωση...</h2>
+            <div id="q-options" class="grid grid-cols-1 gap-2"></div>
+            <div id="q-explanation" class="hidden mt-8 p-5 bg-cyan-950/30 border-l-4 border-cyan-500 rounded-xl">
+                <p class="text-[10px] font-black text-cyan-500 uppercase mb-2 tracking-widest">💡 Επεξήγηση:</p>
+                <p id="explanation-text" class="text-slate-400 text-xs leading-relaxed italic"></p>
+            </div>
+        </div>
+        <div class="flex justify-between mt-6 gap-4 font-black text-[10px] uppercase tracking-widest">
+            <button onclick="prevQuestion()" class="flex-1 py-4 bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition-all text-slate-400">Πίσω</button>
+            <button onclick="nextQuestion()" class="flex-1 py-4 bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition-all text-slate-400 font-bold">Επόμενη</button>
+        </div>
+    </div>
+    <div id="results" class="section hidden max-w-2xl mx-auto text-center py-20">
+        <div id="result-badge" class="mb-4 text-white">SCORE</div>
+        <h2 id="result-score" class="text-9xl font-black mb-6 tracking-tighter text-white">0%</h2>
+        <p id="result-stats" class="text-slate-500 mb-12 uppercase tracking-[0.3em] font-bold text-xs italic text-white">Αναλυτικά Στατιστικά</p>
+        <button onclick="location.reload()" class="bg-white text-slate-900 px-12 py-5 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-cyan-400 transition-all shadow-2xl">ΕΠΑΝΕΚΚΙΝΗΣΗ</button>
+    </div>
+</div>
+`;
 `;const allQuestions = [
     {"id":1,"c":"ΚΑΝΟΝΙΣΜΟΙ","q":"Ποιο είναι το μέγιστο επιτρεπόμενο ύψος πτήσης στην Open κατηγορία;","o":["50 μέτρα","120 μέτρα","200 μέτρα","100 μέτρα"],"a":1,"e":"Το μέγιστο ύψος είναι 120 μέτρα από το πλησιέστερο σημείο της επιφάνειας της γης."},
     {"id":2,"c":"ΑΣΦΑΛΕΙΑ","q":"Τι πρέπει να κάνει ο πιλότος αν εμφανιστεί επανδρωμένο αεροσκάφος;","o":["Να πετάξει πιο ψηλά","Να συνεχίσει την πτήση","Άμεση προσγείωση ή αποφυγή","Να βγάλει φωτογραφία"],"a":2,"e":"Τα επανδρωμένα αεροσκάφη έχουν πάντα προτεραιότητα."},
@@ -445,10 +400,8 @@ function startStudy() {
     const category = document.getElementById('category-select').value;
     const count = parseInt(document.getElementById('question-count').value);
     isStudyMode = true;
-    
     let filtered = category === 'ALL' ? [...allQuestions] : allQuestions.filter(q => q.c === category);
     currentQuestions = filtered.sort(() => 0.5 - Math.random()).slice(0, Math.min(count, filtered.length));
-    
     initQuiz();
 }
 
@@ -460,8 +413,7 @@ function startExam() {
 }
 
 function initQuiz() {
-    currentIndex = 0;
-    score = 0;
+    currentIndex = 0; score = 0;
     answersStatus = new Array(currentQuestions.length).fill(null);
     showSection('quiz');
     renderGrid();
@@ -474,15 +426,12 @@ function displayQuestion() {
     document.getElementById('q-cat').innerText = q.c;
     document.getElementById('q-text').innerText = q.q;
     document.getElementById('q-progress-text').innerText = `Ερώτηση ${currentIndex + 1} από ${currentQuestions.length}`;
-    
     const optionsContainer = document.getElementById('q-options');
     optionsContainer.innerHTML = '';
-    
     q.o.forEach((opt, index) => {
         const btn = document.createElement('button');
-        btn.className = 'option-btn';
+        btn.className = 'option-btn font-bold text-white';
         btn.innerText = opt;
-        
         if (answersStatus[currentIndex] !== null) {
             btn.disabled = true;
             if (index === q.a) btn.classList.add('option-correct');
@@ -492,52 +441,38 @@ function displayQuestion() {
         }
         optionsContainer.appendChild(btn);
     });
-
     const exp = document.getElementById('q-explanation');
     if (answersStatus[currentIndex] !== null && answersStatus[currentIndex] !== q.a) {
         document.getElementById('explanation-text').innerText = q.e;
         exp.classList.remove('hidden');
-    } else {
-        exp.classList.add('hidden');
-    }
-    
+    } else { exp.classList.add('hidden'); }
     updateGridUI();
 }
 
 function handleAnswer(selectedIndex, btn) {
     const q = currentQuestions[currentIndex];
-    const isCorrect = selectedIndex === q.a;
     answersStatus[currentIndex] = selectedIndex;
-    
-    if (isCorrect) {
+    if (selectedIndex === q.a) {
         btn.classList.add('option-correct');
         score++;
         updateLiveScore();
-        setTimeout(nextQuestion, 800);
+        setTimeout(nextQuestion, 600);
     } else {
         btn.classList.add('option-wrong');
         document.getElementById('explanation-text').innerText = q.e;
         document.getElementById('q-explanation').classList.remove('hidden');
     }
-    
     document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
     updateGridUI();
 }
 
 function nextQuestion() {
-    if (currentIndex < currentQuestions.length - 1) {
-        currentIndex++;
-        displayQuestion();
-    } else {
-        finishQuiz();
-    }
+    if (currentIndex < currentQuestions.length - 1) { currentIndex++; displayQuestion(); }
+    else { finishQuiz(); }
 }
 
 function prevQuestion() {
-    if (currentIndex > 0) {
-        currentIndex--;
-        displayQuestion();
-    }
+    if (currentIndex > 0) { currentIndex--; displayQuestion(); }
 }
 
 function renderGrid() {
@@ -571,17 +506,13 @@ function updateLiveScore() {
 
 function startTimer(seconds) {
     const timerElement = document.getElementById('timer');
-    clearInterval(timerInterval);
     let timeLeft = seconds;
-    
+    if(timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(() => {
         const mins = Math.floor(timeLeft / 60);
         const secs = timeLeft % 60;
         timerElement.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            finishQuiz();
-        }
+        if (timeLeft <= 0) { clearInterval(timerInterval); finishQuiz(); }
         timeLeft--;
     }, 1000);
 }
@@ -590,20 +521,19 @@ function finishQuiz() {
     clearInterval(timerInterval);
     showSection('results');
     const percent = Math.round((score / currentQuestions.length) * 100);
-    const resultScore = document.getElementById('result-score');
+    document.getElementById('result-score').innerText = `${percent}%`;
+    document.getElementById('result-stats').innerText = `ΣΩΣΤΕΣ: ${score} / ΣΥΝΟΛΟ: ${currentQuestions.length}`;
     const badge = document.getElementById('result-badge');
-    
-    resultScore.innerText = `${percent}%`;
-    document.getElementById('result-stats').innerText = `Σωστές απαντήσεις: ${score} από ${currentQuestions.length}`;
-    
     if (percent >= 75) {
         badge.innerText = "ΕΠΙΤΥΧΙΑ";
-        badge.className = "inline-block px-8 py-2 rounded-full text-xs font-black mb-10 uppercase tracking-[0.2em] bg-emerald-500 text-white";
+        badge.className = "inline-block px-8 py-2 rounded-full text-[10px] font-black mb-4 uppercase tracking-[0.2em] bg-emerald-500 text-white";
     } else {
         badge.innerText = "ΑΠΟΤΥΧΙΑ";
-        badge.className = "inline-block px-8 py-2 rounded-full text-xs font-black mb-10 uppercase tracking-[0.2em] bg-rose-500 text-white";
+        badge.className = "inline-block px-8 py-2 rounded-full text-[10px] font-black mb-4 uppercase tracking-[0.2em] bg-rose-500 text-white";
     }
 }
 
-document.body.innerHTML = htmlStructure;
 showSection('home');
+</script>
+</body>
+</html>
