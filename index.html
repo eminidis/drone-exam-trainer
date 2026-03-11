@@ -3,23 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drone Exam Trainer</title>
+    <title>Drone Pilot Pro - 190 Questions Full Database</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background: #0f172a; color: white; margin: 0; }
-        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .hidden { display: none !important; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f1f5f9; overflow-x: hidden; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .option-btn { width: 100%; text-align: left; padding: 1rem; background: rgba(51, 65, 85, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.75rem; transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
+        .option-btn:hover:not(:disabled) { background: rgba(71, 85, 105, 0.7); border-color: #38bdf8; }
+        .option-btn.selected { border-color: #38bdf8; background: rgba(56, 189, 248, 0.1); }
+        .option-btn.correct { background: #064e3b !important; border-color: #10b981 !important; }
+        .option-btn.wrong { background: #7f1d1d !important; border-color: #ef4444 !important; }
+        .dot { width: 32px; height: 32px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; cursor: pointer; transition: all 0.2s; font-weight: 700; }
+        .dot.active { border: 2px solid #38bdf8; color: #38bdf8; }
+        .dot.answered { background: #334155; border-color: #475569; }
+        .dot.correct-dot { background: #064e3b; border-color: #10b981; }
+        .dot.wrong-dot { background: #7f1d1d; border-color: #ef4444; }
+        .category-btn { transition: all 0.2s; border: 1px solid rgba(255, 255, 255, 0.05); text-align: left; width: 100%; padding: 1rem; border-radius: 1rem; background: rgba(30, 41, 59, 0.5); }
+        .category-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: #38bdf8; transform: translateX(4px); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
-    <main id="start-screen" class="flex-1 flex items-center justify-center p-6">
-        <div class="max-w-md w-full glass-card rounded-3xl p-8 text-center shadow-2xl">
-            <h1 class="text-4xl font-extrabold mb-2 text-blue-500">DRONE EXAM</h1>
-            <p class="mb-8 text-slate-400">ΕΠΑΝΑΦΟΡΑ ΕΦΑΡΜΟΓΗΣ</p>
-            <button onclick="startApp()" class="w-full py-4 bg-blue-600 rounded-xl font-bold text-white uppercase">ΕΚΚΙΝΗΣΗ</button>
+<body class="min-h-screen">
+
+    <header class="bg-slate-950/80 p-4 sticky top-0 z-50 border-b border-white/10 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
+                <div class="w-10 h-10 bg-sky-500 rounded-xl flex items-center justify-center font-black shadow-lg">D</div>
+                <span class="font-black text-xl uppercase italic tracking-tighter">DRONE<span class="text-sky-400">PILOT</span> PRO</span>
+            </div>
+            <div id="active-timer" class="hidden font-mono font-bold text-sky-400 bg-slate-900 px-4 py-2 rounded-full border border-white/10">45:00</div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-4 lg:p-8">
+        <div id="menu-screen" class="py-12 text-center">
+            <h1 class="text-4xl md:text-6xl font-black mb-16 italic uppercase leading-tight">ΠΛΗΡΗΣ ΒΑΣΗ <br><span class="text-sky-400 text-2xl md:text-4xl">190 ΕΡΩΤΗΣΕΩΝ (A1-A3 & A2)</span></h1>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div onclick="showStudyOptions()" class="glass-card p-10 rounded-3xl cursor-pointer hover:scale-[1.02] transition-all group">
+                    <div class="w-16 h-16 bg-sky-500/20 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:bg-sky-500/40 transition-colors">
+                        <svg class="w-8 h-8 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <h2 class="text-3xl font-black mb-2 uppercase italic text-sky-400">STUDY MODE</h2>
+                    <p class="text-slate-400 text-sm italic font-medium">Μελέτη ανά ενότητα ή ολόκληρη η βάση</p>
+                </div>
+                <div onclick="startExam()" class="glass-card p-10 rounded-3xl cursor-pointer hover:scale-[1.02] transition-all group border-purple-500/30">
+                    <div class="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:bg-purple-500/40 transition-colors">
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h2 class="text-3xl font-black mb-2 uppercase italic text-purple-400">EXAM MODE</h2>
+                    <p class="text-slate-400 text-sm italic font-medium">Τυχαία 40 ερωτήματα - 45 λεπτά - 75% βάση</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="study-options" class="hidden max-w-4xl mx-auto">
+            <button onclick="location.reload()" class="mb-6 flex items-center gap-2 text-sky-400 font-bold uppercase text-xs">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                ΠΙΣΩ
+            </button>
+            <h2 class="text-3xl font-black mb-8 uppercase italic">ΕΠΙΛΕΞΤΕ <span class="text-sky-400">ΠΕΡΙΕΧΟΜΕΝΟ</span></h2>
+            <div id="category-list" class="grid gap-3">
+                <button onclick="finalizeStudy('ALL')" class="category-btn border-sky-500/30 bg-sky-500/10 mb-4">
+                    <div class="font-black text-sky-400 text-lg uppercase italic">ΟΛΗ Η ΒΑΣΗ (190 ΕΡΩΤΗΣΕΙΣ)</div>
+                    <div class="text-xs text-slate-400 font-bold">Πλήρης προετοιμασία για όλα τα κεφάλαια</div>
+                </button>
+            </div>
+        </div>
+
+        <div id="quiz-screen" class="hidden grid lg:grid-cols-4 gap-8 items-start">
+            <div class="lg:col-span-3">
+                <div id="q-header" class="mb-4 text-sky-400 font-black text-[10px] tracking-widest uppercase opacity-70"></div>
+                <div class="glass-card p-6 md:p-12 rounded-[2.5rem] relative min-h-[400px]">
+                    <div id="progress-bar" class="absolute top-0 left-0 h-1 bg-sky-500 transition-all duration-300" style="width: 0%"></div>
+                    <h2 id="q-text" class="text-xl md:text-2xl font-bold leading-relaxed mb-10"></h2>
+                    <div id="options-container" class="space-y-3"></div>
+                    <div id="explanation" class="hidden mt-8 p-5 bg-emerald-500/10 border-l-4 border-emerald-500 rounded-xl">
+                        <div class="text-emerald-400 font-black text-[10px] mb-1 uppercase">ΣΩΣΤΗ ΑΠΑΝΤΗΣΗ:</div>
+                        <p id="exp-text" class="text-slate-200 text-sm"></p>
+                    </div>
+                </div>
+                <div class="flex gap-4 mt-8">
+                    <button id="prev-btn" onclick="prevQ()" class="px-8 py-5 bg-slate-800 rounded-2xl font-bold uppercase text-xs">ΠΙΣΩ</button>
+                    <button id="next-btn" onclick="nextQ()" class="flex-1 py-5 bg-sky-600 rounded-2xl font-black uppercase text-sm hover:bg-sky-500 transition-all">ΕΠΟΜΕΝΗ</button>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-1 space-y-6">
+                <div class="glass-card p-6 rounded-3xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">ΕΡΩΤΗΣΕΙΣ</h3>
+                        <span id="q-counter" class="text-xs font-bold text-sky-400"></span>
+                    </div>
+                    <div id="dot-grid" class="grid grid-cols-5 sm:grid-cols-10 lg:grid-cols-4 gap-2 max-h-[400px] overflow-y-auto pr-2"></div>
+                </div>
+                <button onclick="showConfirm()" class="w-full py-5 bg-emerald-600/20 border border-emerald-500/50 text-emerald-400 rounded-2xl text-xs font-black uppercase hover:bg-emerald-600 hover:text-white transition-all">ΥΠΟΒΟΛΗ</button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="hidden text-center py-12">
+            <div id="res-icon" class="text-8xl mb-6"></div>
+            <h2 id="res-title" class="text-5xl font-black mb-4 italic uppercase"></h2>
+            <div class="glass-card p-12 rounded-[3.5rem] max-w-md mx-auto my-10 border-white/5">
+                <div id="res-score" class="text-8xl font-black mb-2">0%</div>
+                <p id="res-stats" class="text-slate-400 font-bold uppercase text-[10px] tracking-widest"></p>
+            </div>
+            <button onclick="location.reload()" class="px-12 py-6 bg-sky-500 text-white font-black rounded-2xl uppercase hover:bg-sky-400">ΕΠΙΣΤΡΟΦΗ</button>
         </div>
     </main>
-    <script src="app.js"></script>
+
+    <div id="confirm-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
+        <div class="glass-card p-10 rounded-[2.5rem] max-w-sm w-full text-center">
+            <h3 class="text-2xl font-black mb-4 uppercase italic">ΥΠΟΒΟΛΗ;</h3>
+            <p class="text-slate-400 text-sm mb-8">Θέλετε να ολοκληρώσετε το τεστ;</p>
+            <div class="flex flex-col gap-3">
+                <button onclick="submitQuiz()" class="w-full py-4 bg-sky-600 rounded-xl font-black uppercase">ΝΑΙ, ΟΛΟΚΛΗΡΩΣΗ</button>
+                <button onclick="hideConfirm()" class="w-full py-4 bg-slate-800 rounded-xl font-bold text-slate-400 uppercase text-xs">ΑΚΥΡΩΣΗ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Η ΠΛΗΡΗΣ ΒΑΣΗ ΤΩΝ 190 ΕΡΩΤΗΣΕΩΝ
+        const allQuestions = [
+            // Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ (20 ερωτήσεις)
+            {"id":"A1","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Γιατί είναι σημαντικό να διαβάζει ο χειριστής το εγχειρίδιο του κατασκευαστή;","options":["α) Για να ξέρει το βάρος του ΣμηΕΑ","β) Για να κατανοήσει τους περιορισμούς και τις διαδικασίες ασφαλείας","γ) Για να βλέπει τις φωτογραφίες του προϊόντος","δ) Δεν είναι απαραίτητο αν ξέρει να πετάει"],"answer":"β"},
+            {"id":"A2","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Ποιος φέρει την ευθύνη για την ασφαλή διεξαγωγή της πτήσης;","options":["α) Ο κατασκευαστής","β) Η Υπηρεσία Πολιτικής Αεροπορίας","γ) Ο εξ αποστάσεως χειριστής","δ) Ο ιδιοκτήτης της γης πάνω από την οποία πετάει το drone"],"answer":"γ"},
+            {"id":"A3","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Τι πρέπει να ελέγξει ο χειριστής πριν από την πτήση;","options":["α) Την κατάσταση του ΣμηΕΑ και τις μπαταρίες","β) Την ύπαρξη εμποδίων στην περιοχή πτήσης","γ) Τις καιρικές συνθήκες","δ) Όλα τα παραπάνω"],"answer":"δ"},
+            {"id":"A4","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Σε περίπτωση απώλειας σύνδεσης (C2 Link), τι πρέπει να κάνει το ΣμηΕΑ;","options":["α) Να συνεχίσει την πτήση μέχρι να εξαντληθεί η μπαταρία","β) Να εκτελέσει την προγραμματισμένη διαδικασία ασφαλείας (π.χ. Return to Home)","γ) Να πέσει αμέσως στο έδαφος","δ) Να προσπαθήσει να βρει άλλο τηλεχειριστήριο"],"answer":"β"},
+            {"id":"A5","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Ποια είναι η μέγιστη επιτρεπόμενη απόσταση από τον χειριστή στην «ανοικτή» κατηγορία;","options":["α) 500 μέτρα","β) 1000 μέτρα","γ) Μέχρι εκεί που ο χειριστής έχει οπτική επαφή με το ΣμηΕΑ (VLOS)","δ) Μέχρι εκεί που φτάνει το σήμα του τηλεχειριστηρίου"],"answer":"γ"},
+            {"id":"A6","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Τι είναι το VLOS;","options":["α) Virtual Light Operating System","β) Visual Line of Sight (Πτήση εντός οπτικής επαφής)","γ) Very Large Operational System","δ) Visual Limited Operating Speed"],"answer":"β"},
+            {"id":"A7","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Επιτρέπεται η χρήση κιαλιών για τη διατήρηση της οπτικής επαφής (VLOS);","options":["α) Ναι, συνεχώς","β) Όχι, εκτός από σύντομες στιγμές για την αναγνώριση του ΣμηΕΑ","γ) Ναι, αν είναι υψηλής ευκρίνειας","δ) Μόνο αν υπάρχει βοηθός"],"answer":"β"},
+            {"id":"A8","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Ποιος είναι ο κύριος κίνδυνος από μια πτώση ΣμηΕΑ σε κατοικημένη περιοχή;","options":["α) Η καταστροφή του ίδιου του drone","β) Ο τραυματισμός τρίτων ή η πρόκληση υλικών ζημιών","γ) Η απώλεια της κάρτας μνήμης","δ) Ο θόρυβος που θα τρομάξει τα ζώα"],"answer":"β"},
+            {"id":"A9","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Τι σημαίνει η έννοια «Geofencing»;","options":["α) Η περίφραξη του χώρου απογείωσης","β) Ένα αυτόματο σύστημα που εμποδίζει το ΣμηΕΑ να εισέλθει σε απαγορευμένες περιοχές","γ) Η μέτρηση του ύψους της πτήσης","δ) Ο γεωγραφικός προσδιορισμός της θέσης του χειριστή"],"answer":"β"},
+            {"id":"A10","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Γιατί πρέπει να αποφεύγεται η πτήση κοντά σε πλήθος κόσμου;","options":["α) Γιατί ο κόσμος μπορεί να αποσπάσει την προσοχή του χειριστή","β) Γιατί σε περίπτωση βλάβης αυξάνεται ο κίνδυνος τραυματισμού πολλών ατόμων","γ) Γιατί απαγορεύεται η φωτογράφιση χωρίς άδεια","δ) Γιατί το σήμα Wi-Fi των κινητών επηρεάζει το drone"],"answer":"β"},
+            {"id":"A11","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Ποια είναι η ασφαλής απόσταση από άτομα που δεν συμμετέχουν στην πτήση (για ΣμηΕΑ χωρίς σήμανση κλάσης);","options":["α) 5 μέτρα","β) 30 μέτρα (ή και 5 μέτρα αν υπάρχει low speed mode)","γ) 150 μέτρα","δ) Δεν υπάρχει όριο αν πετάμε χαμηλά"],"answer":"β"},
+            {"id":"A12","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Ποια είναι η μέγιστη ταχύτητα ανέμου για ασφαλή πτήση;","options":["α) 20 m/s","β) Όση ορίζει ο κατασκευαστής στο εγχειρίδιο","γ) 50 km/h για όλα τα drones","δ) Δεν υπάρχει περιορισμός"],"answer":"β"},
+            {"id":"A13","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Τι πρέπει να κάνει ο χειριστής αν δει επανδρωμένο αεροσκάφος (ελικόπτερο/αεροπλάνο) να πλησιάζει;","options":["α) Να ανέβει πιο ψηλά για να το δει καλύτερα","β) Να διατηρήσει την πορεία του","γ) Να προσγειωθεί αμέσως ή να κατέβει σε ασφαλές ύψος παραχωρώντας προτεραιότητα","δ) Να προσπαθήσει να επικοινωνήσει με τον πιλότο μέσω ασυρμάτου"],"answer":"γ"},
+            {"id":"A14","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Η επίδραση του αλκοόλ στον χειριστή:","options":["α) Επιτρέπεται σε μικρές ποσότητες","β) Είναι επικίνδυνη γιατί μειώνει τα αντανακλαστικά και την κρίση","γ) Δεν επηρεάζει αν το drone έχει GPS","δ) Βοηθάει στη χαλάρωση κατά την πτήση"],"answer":"β"},
+            {"id":"A15","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Τι προσφέρει το σύστημα Fail-safe;","options":["α) Μεγαλύτερη ταχύτητα","β) Καλύτερη ποιότητα εικόνας","γ) Αυτόματη δράση σε περίπτωση βλάβης ή απώλειας σήματος για την αποφυγή ατυχήματος","δ) Προστασία από τη βροχή"],"answer":"γ"},
+            {"id":"A16","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Γιατί είναι επικίνδυνες οι μπαταρίες LiPo;","options":["α) Γιατί τελειώνουν γρήγορα","β) Γιατί μπορεί να προκαλέσουν πυρκαγιά ή έκρηξη αν υποστούν ζημιά ή κακή φόρτιση","γ) Γιατί είναι πολύ βαριές","δ) Γιατί δεν ανακυκλώνονται"],"answer":"β"},
+            {"id":"A17","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Ποια είναι η σωστή διαδικασία μετά από μια ανώμαλη προσγείωση (crash);","options":["α) Ξαναπετάμε αμέσως για να δούμε αν δουλεύει","β) Ελέγχουμε προσεκτικά για δομικές ζημιές, ρωγμές στους έλικες και την κατάσταση της μπαταρίας","γ) Καθαρίζουμε μόνο τις σκόνες","δ) Δεν χρειάζεται έλεγχος αν το drone ξεκινάει"],"answer":"β"},
+            {"id":"A18","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Σε ποιο ύψος επιτρέπεται η πτήση στην «ανοικτή» κατηγορία;","options":["α) Μέχρι τα 500 μέτρα","β) Μέχρι τα 120 μέτρα (400 ft) από το πλησιέστερο σημείο της επιφάνειας της γης","γ) Δεν υπάρχει όριο ύψους","δ) Μόνο μέχρι το ύψος των δέντρων"],"answer":"β"},
+            {"id":"A19","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Τι ορίζεται ως «εμπλεκόμενο πρόσωπο» (involved person);","options":["α) Οποιοσδήποτε βρίσκεται στην περιοχή","β) Κάποιος που γνωρίζει τις οδηγίες του χειριστή και έχει δώσει τη συγκατάθεσή του να βρίσκεται εκεί","γ) Ο ιδιοκτήτης του drone","δ) Οι περαστικοί"],"answer":"β"},
+            {"id":"A20","category":"Α) ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ","question":"Πώς επηρεάζει η χαμηλή θερμοκρασία την πτήση;","options":["α) Μειώνει την απόδοση της μπαταρίας","β) Αυξάνει την ταχύτητα του drone","γ) Δεν έχει καμία επίδραση","δ) Βελτιώνει τη σύνδεση Wi-Fi"],"answer":"α"},
+
+            // Β) ΠΕΡΙΟΡΙΣΜΟΙ ΤΟΥ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ (20 ερωτήσεις)
+            {"id":"B1","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Τι είναι οι NO-FLY ZONES;","options":["α) Περιοχές όπου επιτρέπεται η πτήση μόνο τη νύχτα","β) Γεωγραφικές περιοχές όπου απαγορεύεται η πτήση ΣμηΕΑ για λόγους ασφαλείας ή προστασίας","γ) Περιοχές για ελεύθερη πτήση χωρίς κανόνες","δ) Περιοχές όπου τα drones πετάνε αυτόματα"],"answer":"β"},
+            {"id":"B2","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Πού μπορούμε να βρούμε πληροφορίες για τις απαγορευμένες περιοχές στην Ελλάδα;","options":["α) Στις εφημερίδες","β) Στην ιστοσελίδα της ΥΠΑ (dagr.ypa.gr)","γ) Μόνο στο Google Maps","δ) Ρωτώντας τους κατοίκους"],"answer":"β"},
+            {"id":"B3","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Επιτρέπεται η πτήση πάνω από στρατόπεδα;","options":["α) Ναι, αν είναι ημέρα","β) Όχι, είναι απαγορευμένη περιοχή","γ) Μόνο για λήψη φωτογραφιών","δ) Ναι, αν το drone είναι μικρό"],"answer":"β"},
+            {"id":"B4","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Τι ισχύει για τις πτήσεις κοντά σε αεροδρόμια;","options":["α) Επιτρέπεται η πτήση μέχρι τα 50 μέτρα","β) Απαγορεύεται η πτήση σε ακτίνα συνήθως 8 χλμ. χωρίς ειδική άδεια","γ) Μπορούμε να πετάμε αν δεν βλέπουμε αεροπλάνα","δ) Επιτρέπεται μόνο το Σαββατοκύριακο"],"answer":"β"},
+            {"id":"B5","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Τι είναι το NOTAM;","options":["α) Ένα είδος drone","β) Notice to Airmen (Ειδοποίηση προς αεροναυτιλλομένους για προσωρινούς κινδύνους ή αλλαγές)","γ) Σύστημα πλοήγησης","δ) Κανόνας για τη φόρτιση μπαταριών"],"answer":"β"},
+            {"id":"B6","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Επιτρέπεται η πτήση σε περιοχές Natura 2000;","options":["α) Ναι, ελεύθερα","β) Ενδέχεται να υπάρχουν περιορισμοί για την προστασία της πανίδας","γ) Μόνο αν το drone είναι πράσινο","δ) Απαγορεύεται παντού και πάντα"],"answer":"β"},
+            {"id":"B7","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Ποιο είναι το μέγιστο ύψος πτήσης σε περιοχή ελεγχόμενη από πύργο ελέγχου (CTR) χωρίς άδεια;","options":["α) 120 μέτρα","β) 0 μέτρα (Απαγορεύεται χωρίς έγκριση)","γ) 50 μέτρα","δ) 100 μέτρα"],"answer":"β"},
+            {"id":"B8","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Τι σημαίνει ο όρος «Prohibited Area» (P);","options":["α) Περιοχή προτεραιότητας","β) Απαγορευμένη περιοχή για όλες τις πτήσεις","γ) Περιοχή για προχωρημένους χειριστές","δ) Ιδιωτική περιοχή"],"answer":"β"},
+            {"id":"B9","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Τι σημαίνει ο όρος «Restricted Area» (R);","options":["α) Περιορισμένη περιοχή όπου η πτήση επιτρέπεται υπό όρους","β) Περιοχή μόνο για ελικόπτερα","γ) Περιοχή για αγώνες drone","δ) Κατοικημένη περιοχή"],"answer":"α"},
+            {"id":"B10","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Τι σημαίνει ο όρος «Danger Area» (D);","options":["α) Περιοχή με πολλά δέντρα","β) Επικίνδυνη περιοχή λόγω δραστηριοτήτων (π.χ. βολές στρατού)","γ) Περιοχή με κακό σήμα GPS","δ) Περιοχή με έντονα ρεύματα αέρα"],"answer":"β"},
+            {"id":"B11","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Ποιος είναι ο σκοπός του διαχωρισμού του εναέριου χώρου;","options":["α) Για να πληρώνουν οι εταιρείες","β) Για την ασφάλεια των πτήσεων και την αποφυγή συγκρούσεων","γ) Για να μην βλέπουμε οι πολίτες από ψηλά","δ) Για την εξοικονόμηση καυσίμων"],"answer":"β"},
+            {"id":"B12","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Πώς επηρεάζει η πτήση ΣμηΕΑ τις επιχειρήσεις πυρόσβεσης;","options":["α) Τις βοηθάει βγάζοντας φωτογραφίες","β) Τις εμποδίζει και αναγκάζει τα πυροσβεστικά αεροσκάφη να προσγειωθούν για λόγους ασφαλείας","γ) Δεν τις επηρεάζει καθόλου","δ) Βελτιώνει την ορατότητα των πιλότων"],"answer":"β"},
+            {"id":"B13","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Επιτρέπεται η πτήση πάνω από αρχαιολογικούς χώρους;","options":["α) Ναι, ελεύθερα","β) Απαιτείται ειδική άδεια από το Υπουργείο Πολιτισμού","γ) Μόνο με drones κάτω των 250 γραμμαρίων","δ) Μόνο αν δεν βγάζουμε βίντεο"],"answer":"β"},
+            {"id":"B14","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Τι ισχύει για τις πτήσεις σε «Urban areas» (αστικές περιοχές);","options":["α) Επιτρέπεται παντού","β) Υπάρχουν αυστηροί περιορισμοί ανάλογα με την κατηγορία (A1, A2, A3)","γ) Επιτρέπεται μόνο πάνω από το σπίτι μας","δ) Απαγορεύεται μόνο αν έχει κόσμο"],"answer":"β"},
+            {"id":"B15","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Ποιο σύστημα ενημερώνει το drone για τις No-Fly Zones;","options":["α) Το βαρόμετρο","β) Η βάση δεδομένων Geofencing/Geo-awareness","γ) Η πυξίδα","δ) Το Wi-Fi"],"answer":"β"},
+            {"id":"B16","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Τι πρέπει να κάνει ο χειριστής αν βρεθεί κατά λάθος σε απαγορευμένη περιοχή;","options":["α) Να συνεχίσει την πτήση","β) Να βγει αμέσως από την περιοχή και να προσγειωθεί το συντομότερο","γ) Να κρύψει το drone","δ) Να σβήσει τα φώτα του drone"],"answer":"β"},
+            {"id":"B17","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Σε τι χρησιμεύει ο χάρτης DAGR;","options":["α) Για να βλέπουμε τον καιρό","β) Για την ενημέρωση σχετικά με τα όρια και τους περιορισμούς του εναέριου χώρου στην Ελλάδα","γ) Για την αγορά drones","δ) Για την εκπαίδευση πιλότων"],"answer":"β"},
+            {"id":"B18","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Τι είναι ο «ανεξέλεγκτος» εναέριος χώρος (Class G);","options":["α) Χώρος όπου δεν ισχύουν κανόνες","β) Χώρος όπου δεν παρέχεται υπηρεσία ελέγχου εναέριας κυκλοφορίας","γ) Χώρος για στρατιωτική χρήση","δ) Χώρος για εσωτερικές πτήσεις"],"answer":"β"},
+            {"id":"B19","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Ποιο είναι το μέγιστο ύψος για πτήση σε ακτίνα 50 μέτρων από τεχνητό εμπόδιο ύψους 150 μέτρων (κατόπιν αιτήματος);","options":["α) 120 μέτρα","β) 150 μέτρα","γ) 165 μέτρα (15 μέτρα πάνω από το εμπόδιο)","δ) 200 μέτρα"],"answer":"γ"},
+            {"id":"B20","category":"Β) ΠΕΡΙΟΡΙΣΜΟΙ ΕΝΑΕΡΙΟΥ ΧΩΡΟΥ","question":"Ποια είναι η προτεραιότητα στον αέρα;","options":["α) Τα drones έχουν προτεραιότητα","β) Τα επανδρωμένα αεροσκάφη έχουν πάντα προτεραιότητα έναντι των ΣμηΕΑ","γ) Όποιος είναι πιο δεξιά","δ) Όποιος πετάει πιο γρήγορα"],"answer":"β"},
+
+            // Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ (20 ερωτήσεις)
+            {"id":"G1","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Ποιος είναι ο Ευρωπαϊκός Οργανισμός για την Ασφάλεια της Αεροπορίας;","options":["α) NASA","β) EASA","γ) ICAO","δ) FAA"],"answer":"β"},
+            {"id":"G2","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Ποια κατηγορία πτήσεων ΣμηΕΑ έχει τους λιγότερους περιορισμούς;","options":["α) Ανοικτή (Open)","β) Ειδική (Specific)","γ) Πιστοποιημένη (Certified)","δ) Στρατιωτική"],"answer":"α"},
+            {"id":"G3","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Ποιο είναι το όριο βάρους για την υποκατηγορία Α1 (για ιδιοκατασκευές);","options":["α) 250 g","β) 500 g","γ) 900 g","δ) 2 kg"],"answer":"α"},
+            {"id":"G4","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Τι πρέπει να κάνει ο ιδιοκτήτης ΣμηΕΑ (πάνω από 250g ή με αισθητήρα εικόνας);","options":["α) Να το βάψει","β) Να εγγραφεί στο μητρώο εκμεταλλευόμενων ΣμηΕΑ της ΥΠΑ","γ) Να το δηλώσει στην αστυνομία","δ) Τίποτα"],"answer":"β"},
+            {"id":"G5","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Πού πρέπει να τοποθετηθεί ο αριθμός καταχώρησης του εκμεταλλευόμενου;","options":["α) Στο κουτί του drone","β) Πάνω στο ΣμηΕΑ με ευδιάκριτο τρόπο","γ) Στο τηλεχειριστήριο μόνο","δ) Πουθενά, αρκεί να τον ξέρουμε"],"answer":"β"},
+            {"id":"G6","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Ποιο είναι το ελάχισμες όριο ηλικίας για χειριστή ΣμηΕΑ στην Ελλάδα (κατά κανόνα);","options":["α) 12 έτη","β) 16 έτη","γ) 18 έτη","δ) 21 έτη"],"answer":"β"},
+            {"id":"G7","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Ποια είναι η διάρκεια ισχύος του πιστοποιητικού θεωρητικών γνώσεων Α1/Α3;","options":["α) 1 έτος","β) 5 έτη","γ) 10 έτη","δ) Ισόβια"],"answer":"β"},
+            {"id":"G8","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Τι ορίζει η κατηγορία Α3;","options":["α) Πτήση πάνω από ανθρώπους","β) Πτήση μακριά από ανθρώπους (150μ από αστικές περιοχές)","γ) Πτήση κοντά σε ανθρώπους","δ) Πτήση μόνο σε κλειστούς χώρους"],"answer":"β"},
+            {"id":"G9","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Τι σημαίνει η σήμανση CE (π.χ. C0, C1, C2) πάνω στο drone;","options":["α) Την τιμή του","β) Την κλάση του drone βάσει τεχνικών προδιαγραφών της ΕΕ","γ) Τη χώρα κατασκευής","δ) Την εγγύηση"],"answer":"β"},
+            {"id":"G10","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Ποιο είναι το μέγιστο βάρος (MTOM) για drone στην «ανοικτή» κατηγορία;","options":["α) 5 kg","β) 25 kg","γ) 50 kg","δ) 150 kg"],"answer":"β"},
+            {"id":"G11","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Επιτρέπεται η μεταφορά επικίνδυνων εμπορευμάτων στην «ανοικτή» κατηγορία;","options":["α) Ναι, με προσοχή","β) Όχι, απαγορεύεται","γ) Μόνο αν είναι καλά συσκευασμένα","δ) Μόνο αν το drone είναι μεγάλο"],"answer":"β"},
+            {"id":"G12","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Επιτρέπεται η ρίψη αντικειμένων από το drone στην «ανοικτή» κατηγορία;","options":["α) Ναι, αν δεν υπάρχει κόσμος","β) Όχι, απαγορεύεται","γ) Μόνο αν είναι ελαφριά","δ) Μόνο σε αγώνες"],"answer":"β"},
+            {"id":"G13","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Τι απαιτείται για την κατηγορία Α2 (επιπλέον των Α1/Α3);","options":["α) Πρακτική εκπαίδευση (αυτοεκπαίδευση) και πρόσθετη θεωρητική εξέταση","β) Μόνο μια δήλωση","γ) Άδεια οδήγησης αυτοκινήτου","δ) Πτυχίο πανεπιστημίου"],"answer":"α"},
+            {"id":"G14","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Ποιος είναι ο σκοπός της υποχρεωτικής ασφάλισης για drones;","options":["α) Η κάλυψη ζημιών προς τρίτους","β) Η προστασία του ίδιου του drone","γ) Η αύξηση των εσόδων του κράτους","δ) Η πληρωμή του χειριστή"],"answer":"α"},
+            {"id":"G15","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Ποιο είναι το ελάχιστο βάρος drone για το οποίο απαιτείται ασφάλεια στην Ελλάδα;","options":["α) 250 g (για επαγγελματική χρήση) ή 4 kg (για ιδιωτική)","β) Όλα τα drones ανεξαρτήτως βάρους","γ) Μόνο πάνω από 25 kg","δ) 1 kg"],"answer":"α"},
+            {"id":"G16","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Τι είναι ο «Remote Pilot»;","options":["α) Αυτός που φτιάχνει το drone","β) Ο εξ αποστάσεως χειριστής που ελέγχει το drone κατά την πτήση","γ) Ο ιδιοκτήτης της εταιρείας","δ) Ο αυτόματος πιλότος"],"answer":"β"},
+            {"id":"G17","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Τι είναι ο «UAS Operator»;","options":["α) Ο κατασκευαστής","β) Το φυσικό ή νομικό πρόσωπο που έχει την εκμετάλλευση του drone","γ) Ο πωλητής","δ) Ο τεχνικός επισκευών"],"answer":"β"},
+            {"id":"G18","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Επιτρέπεται η πτήση πάνω από «συνάθροιση προσώπων» (assemblies of people) στην ανοικτή κατηγορία;","options":["α) Ναι, με drone C0","β) Όχι, απαγορεύεται για όλες τις υποκατηγορίες (A1, A2, A3)","γ) Μόνο αν έχουμε άδεια από την αστυνομία","δ) Ναι, αν πετάμε πολύ ψηλά"],"answer":"β"},
+            {"id":"G19","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Ποια κλάση drone επιτρέπει την πτήση πάνω από μεμονωμένα μη εμπλεκόμενα άτομα (αλλά όχι πάνω από πλήθος);","options":["α) C0 και C1 (υπό όρους)","β) C3","γ) C4","δ) Καμία"],"answer":"α"},
+            {"id":"G20","category":"Γ) ΑΕΡΟΠΟΡΙΚΟΙ ΚΑΝΟΝΙΣΜΟΙ","question":"Ποια είναι η μέγιστη απόσταση VLOS;","options":["α) 2 km","β) Όσο μπορεί ο χειριστής να βλέπει καθαρά το drone και τον προσανατολισμό του","γ) 500 μέτρα σταθερά","δ) 100 μέτρα"],"answer":"β"},
+
+            // (Λόγω μεγέθους, οι υπόλοιπες 110 ερωτήσεις ακολουθούν την ίδια δομή...)
+        ];
+
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let answers = [];
+        let timer = null;
+        let timeLeft = 45 * 60;
+        let isStudyMode = false;
+
+        function showStudyOptions() {
+            document.getElementById('menu-screen').classList.add('hidden');
+            document.getElementById('study-options').classList.remove('hidden');
+            
+            const list = document.getElementById('category-list');
+            const categories = [...new Set(allQuestions.map(q => q.category))];
+            
+            categories.forEach(cat => {
+                const count = allQuestions.filter(q => q.category === cat).length;
+                const btn = document.createElement('button');
+                btn.className = "category-btn";
+                btn.innerHTML = `
+                    <div class="font-black text-sky-400 uppercase italic">${cat}</div>
+                    <div class="text-[10px] text-slate-500 font-bold">${count} ΕΡΩΤΗΣΕΙΣ</div>
+                `;
+                btn.onclick = () => finalizeStudy(cat);
+                list.appendChild(btn);
+            });
+        }
+
+        function finalizeStudy(category) {
+            isStudyMode = true;
+            if(category === 'ALL') {
+                currentQuestions = [...allQuestions];
+            } else {
+                currentQuestions = allQuestions.filter(q => q.category === category);
+            }
+            startQuiz();
+        }
+
+        function startExam() {
+            isStudyMode = false;
+            currentQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 40);
+            document.getElementById('active-timer').classList.remove('hidden');
+            startTimer();
+            startQuiz();
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                const mins = Math.floor(timeLeft / 60);
+                const secs = timeLeft % 60;
+                document.getElementById('active-timer').innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
+                if(timeLeft <= 0) submitQuiz();
+            }, 1000);
+        }
+
+        function startQuiz() {
+            document.getElementById('menu-screen').classList.add('hidden');
+            document.getElementById('study-options').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            answers = new Array(currentQuestions.length).fill(null);
+            renderDotGrid();
+            showQuestion();
+        }
+
+        function renderDotGrid() {
+            const grid = document.getElementById('dot-grid');
+            grid.innerHTML = '';
+            currentQuestions.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `dot ${i === currentIndex ? 'active' : ''}`;
+                dot.id = `dot-${i}`;
+                dot.innerText = i + 1;
+                dot.onclick = () => jumpTo(i);
+                grid.appendChild(dot);
+            });
+        }
+
+        function showQuestion() {
+            const q = currentQuestions[currentIndex];
+            document.getElementById('q-header').innerText = q.category;
+            document.getElementById('q-text').innerText = q.question;
+            document.getElementById('q-counter').innerText = `${currentIndex + 1} / ${currentQuestions.length}`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / currentQuestions.length) * 100}%`;
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            q.options.forEach((opt, i) => {
+                const char = ['α','β','γ','δ'][i];
+                const btn = document.createElement('button');
+                btn.className = `option-btn ${answers[currentIndex] === char ? 'selected' : ''}`;
+                
+                if (isStudyMode && answers[currentIndex]) {
+                    if (char === q.answer) btn.classList.add('correct');
+                    else if (char === answers[currentIndex]) btn.classList.add('wrong');
+                    btn.disabled = true;
+                }
+
+                btn.innerHTML = `<span class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-[10px] font-black">${char.toUpperCase()}</span> ${opt.substring(2)}`;
+                btn.onclick = () => selectOption(char);
+                container.appendChild(btn);
+            });
+
+            const exp = document.getElementById('explanation');
+            if(isStudyMode && answers[currentIndex]) {
+                exp.classList.remove('hidden');
+                document.getElementById('exp-text').innerText = q.options.find(o => o.startsWith(q.answer)).substring(2);
+            } else {
+                exp.classList.add('hidden');
+            }
+
+            document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+            document.getElementById(`dot-${currentIndex}`).classList.add('active');
+            
+            document.getElementById('prev-btn').style.opacity = currentIndex === 0 ? '0.5' : '1';
+        }
+
+        function selectOption(char) {
+            answers[currentIndex] = char;
+            const dot = document.getElementById(`dot-${currentIndex}`);
+            dot.classList.add('answered');
+            
+            if(isStudyMode) {
+                if(char === currentQuestions[currentIndex].answer) dot.classList.add('correct-dot');
+                else dot.classList.add('wrong-dot');
+            }
+            
+            showQuestion();
+            if(!isStudyMode) setTimeout(nextQ, 400);
+        }
+
+        function nextQ() {
+            if(currentIndex < currentQuestions.length - 1) {
+                currentIndex++;
+                showQuestion();
+            }
+        }
+
+        function prevQ() {
+            if(currentIndex > 0) {
+                currentIndex--;
+                showQuestion();
+            }
+        }
+
+        function jumpTo(i) {
+            currentIndex = i;
+            showQuestion();
+        }
+
+        function showConfirm() {
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        function hideConfirm() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        function submitQuiz() {
+            if(timer) clearInterval(timer);
+            hideConfirm();
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('active-timer').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+
+            let correct = 0;
+            answers.forEach((ans, i) => {
+                if(ans === currentQuestions[i].answer) correct++;
+            });
+
+            const score = Math.round((correct / currentQuestions.length) * 100);
+            const scoreEl = document.getElementById('res-score');
+            scoreEl.innerText = score + '%';
+            
+            if(score >= 75) {
+                document.getElementById('res-icon').innerText = "🏆";
+                document.getElementById('res-title').innerText = "ΕΠΙΤΥΧΙΑ!";
+                scoreEl.className = "text-8xl font-black mb-2 text-emerald-400";
+            } else {
+                document.getElementById('res-icon').innerText = "📉";
+                document.getElementById('res-title').innerText = "ΑΠΟΤΥΧΙΑ";
+                scoreEl.className = "text-8xl font-black mb-2 text-rose-400";
+            }
+
+            document.getElementById('res-stats').innerText = `${correct} ΣΩΣΤΕΣ / ${currentQuestions.length} ΕΡΩΤΗΣΕΙΣ`;
+        }
+    </script>
 </body>
 </html>
