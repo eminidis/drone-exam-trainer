@@ -25,7 +25,7 @@
     <main id="start-screen" class="flex-1 flex items-center justify-center p-6">
         <div class="max-w-md w-full glass-card rounded-3xl p-8 text-center border border-white/10 shadow-2xl">
             <h1 class="text-4xl font-extrabold mb-2 uppercase tracking-tight text-blue-500">Drone Exam</h1>
-            <h2 class="text-xl font-bold mb-8 text-slate-400 uppercase tracking-widest">Προετοιμασία 310 ΕΡΩΤΗΣΕΩΝ</h2>
+            <h2 class="text-xl font-bold mb-8 text-slate-400 uppercase tracking-widest">Προετοιμασία 310 Ερωτήσεων</h2>
 
             <div class="space-y-6 text-left">
                 <div>
@@ -95,15 +95,15 @@
     <main id="results-screen" class="hidden flex-1 flex items-center justify-center p-6">
         <div class="max-w-md w-full glass-card rounded-[3rem] p-10 text-center">
             <div id="res-icon" class="text-8xl mb-6">🏆</div>
-            <h2 id="res-title" class="text-4xl font-black mb-2">ΑΠΟΤΕΛΕΣΜΑ</h2>
+            <h2 id="res-title" class="text-4xl font-black mb-2 tracking-tight">ΑΠΟΤΕΛΕΣΜΑ</h2>
             <div id="res-score" class="text-8xl font-black text-blue-500 mb-4">0%</div>
             <p id="res-stats" class="text-slate-400 font-bold mb-10 uppercase tracking-widest">0 ΣΩΣΤΕΣ</p>
-            <button onclick="location.reload()" class="w-full py-5 bg-blue-600 rounded-2xl font-bold text-lg">ΝΕΟ ΤΕΣΤ</button>
+            <button onclick="location.reload()" class="w-full py-5 bg-blue-600 rounded-2xl font-bold text-lg transition-all shadow-lg shadow-blue-600/20">ΝΕΟ ΤΕΣΤ</button>
         </div>
     </main>
 
     <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-6 z-50">
-        <div class="max-w-sm w-full glass-card rounded-[2.5rem] p-8 text-center">
+        <div class="max-w-sm w-full glass-card rounded-[2.5rem] p-8 text-center border border-white/10">
             <h3 class="text-2xl font-bold mb-6">Ολοκλήρωση;</h3>
             <div class="flex gap-4">
                 <button onclick="hideConfirm()" class="flex-1 py-4 bg-slate-800 rounded-2xl font-bold">ΑΚΥΡΟ</button>
