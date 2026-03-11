@@ -1,220 +1,185 @@
-let allQuestions = []; // Οι ερωτήσεις θα έρθουν από το GitHub
-let questions = [];
-let wrongQuestions = [];
-let currentQuestion = 0;
+let allQuestions = [];
+let currentQuestions = [];
 let userAnswers = [];
 let marked = [];
-let startTime;
-let timerInterval;
-let examFinished = false;
+let currentIndex = 0;
+let isStudyMode = false;
+let timer = null;
+let timeLeft = 2700; // 45 λεπτά
 
-// ΤΟ URL ΤΟΥ ΑΡΧΕΙΟΥ ΣΟΥ
 const githubURL = "https://raw.githubusercontent.com/eminidis/drone-exam-trainer/refs/heads/main/questions.json";
 
-// ΒΗΜΑ 1: Η "ΓΕΦΥΡΑ" ΠΟΥ ΦΕΡΝΕΙ ΤΙΣ ΕΡΩΤΗΣΕΙΣ
 async function loadAllQuestions() {
     try {
         const response = await fetch(githubURL);
         const data = await response.json();
-        allQuestions = data.questions; // Γεμίζει τον πίνακα με τις 310 ερωτήσεις
+        allQuestions = data.questions;
         console.log("Επιτυχής φόρτωση ερωτήσεων!");
     } catch (error) {
         console.error("Σφάλμα κατά τη φόρτωση:", error);
-        alert("Δεν ήταν δυνατή η φόρτωση των ερωτήσεων από το GitHub.");
+        alert("Δεν ήταν δυνατή η φόρτωση των ερωτήσεων.");
     }
 }
 
-// ΚΑΛΟΥΜΕ ΤΗ ΦΟΡΤΩΣΗ ΑΜΕΣΩΣ ΜΟΛΙΣ ΑΝΟΙΞΕΙ Η ΣΕΛΙΔΑ
 loadAllQuestions();
 
-function startStudy() {
-    let category = document.getElementById("categorySelect").value;
-    let amount = document.getElementById("questionAmount").value;
-
-    // ΠΡΟΣΟΧΗ: Εδώ χρησιμοποιούμε q.ΕΝΟΤΗΤΑ γιατί έτσι είναι στο JSON σου
-    let filtered = allQuestions.filter(q => q.ΕΝΟΤΗΤΑ === category || category === "all");
-
-    shuffle(filtered);
-
-    if (amount === "all") {
-        questions = filtered;
-    } else {
-        questions = filtered.slice(0, Number(amount));
-    }
-
-    initExam();
+window.startStudy = function() {
+    const category = document.getElementById('categorySelect').value;
+    const amount = document.getElementById('amountSelect').value;
+    
+    currentQuestions = category === 'all' ? [...allQuestions] : allQuestions.filter(q => q.category === category);
+    if (amount !== 'all') currentQuestions = currentQuestions.slice(0, parseInt(amount));
+    
+    isStudyMode = true;
+    initQuiz();
 }
 
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
+window.startExam = function() {
+    currentQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 40);
+    isStudyMode = false;
+    initQuiz();
+    startTimer();
 }
 
-function practiceWrong() {
-    if (wrongQuestions.length === 0) {
-        alert("No wrong questions to practice.");
-        return;
-    }
-    questions = wrongQuestions.map(i => allQuestions[i]);
-    initExam();
+function initQuiz() {
+    currentIndex = 0;
+    userAnswers = new Array(currentQuestions.length).fill(null);
+    marked = new Array(currentQuestions.length).fill(false);
+    
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('quiz-screen').classList.remove('hidden');
+    renderQuestion();
+    renderDots();
 }
 
-function initExam() {
-    document.getElementById("home").style.display = "none";
-    currentQuestion = 0;
-    userAnswers = new Array(questions.length).fill(null);
-    marked = new Array(questions.length).fill(false);
-    startTime = Date.now();
-    timerInterval = setInterval(updateTimer, 1000);
-    examFinished = false;
-    render();
-}
+function renderQuestion() {
+    const q = currentQuestions[currentIndex];
+    document.getElementById('q-header').innerText = q.category;
+    document.getElementById('q-counter').innerText = `${currentIndex + 1} / ${currentQuestions.length}`;
+    document.getElementById('q-text').innerText = q.question;
+    
+    const container = document.getElementById('options-container');
+    container.innerHTML = '';
+    
+    const expText = document.getElementById('exp-text');
+    expText.classList.add('hidden');
 
-function updateTimer() {
-    let seconds = Math.floor((Date.now() - startTime) / 1000);
-    let min = Math.floor(seconds / 60);
-    let sec = seconds % 60;
-    document.getElementById("timer").innerHTML = "⏱ " + min + ":" + sec.toString().padStart(2, "0");
-}
-
-function render() {
-    showQuestion();
-    showGrid();
-    checkAutoFinish();
-}
-
-function showQuestion() {
-    let q = questions[currentQuestion];
-    let progress = Math.round(((currentQuestion + 1) / questions.length) * 100);
-
-    // ΑΛΛΑΓΗ: Χρησιμοποιούμε q.ερώτηση αντί για q.question
-    let html = `
-    <div style="width:60%;margin:auto;background:white;padding:20px;border-radius:10px">
-    <h3>Question ${currentQuestion + 1} / ${questions.length}</h3>
-    <div style="width:100%;background:#ddd;border-radius:10px;overflow:hidden;margin-bottom:20px">
-    <div style="width:${progress}%;background:#4caf50;height:16px"></div>
-    </div>
-    <p style="font-size:22px">${q.ερώτηση}</p>
-    `;
-
-    // ΑΛΛΑΓΗ: Χρησιμοποιούμε q.επιλογές αντί για q.answers
-    const choices = ["α", "β", "γ", "δ"];
-    choices.forEach((key) => {
-        let a = q.επιλογές[key];
-        if (!a) return; // Αν δεν υπάρχει 4η επιλογή
-
-        let color = "";
-        if (userAnswers[currentQuestion] !== null) {
-            if (key === q.σωστή_απάντηση) color = "background:#9cff9c";
-            if (key === userAnswers[currentQuestion] && key !== q.σωστή_απάντηση)
-                color = "background:#ff8f8f";
+    q.options.forEach(opt => {
+        const char = opt.charAt(0);
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        
+        if (userAnswers[currentIndex] === char) btn.classList.add('selected');
+        
+        if (isStudyMode && userAnswers[currentIndex]) {
+            if (char === q.answer) btn.classList.add('correct-choice');
+            else if (char === userAnswers[currentIndex]) btn.classList.add('wrong-choice');
+            btn.disabled = true;
+            
+            expText.innerText = "Σωστή απάντηση: " + q.options.find(o => o.startsWith(q.answer));
+            expText.classList.remove('hidden');
         }
 
-        html += `<button onclick="answer('${key}')"
-        style="display:block;margin:10px auto;padding:15px;width:320px;font-size:18px;${color}">
-        ${a} </button>`;
+        btn.innerHTML = `<div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center border border-white/10 text-xs font-bold">${char}</div>
+                         <div class="flex-1 text-sm font-medium">${opt.substring(3)}</div>`;
+        
+        btn.onclick = () => handleSelect(char);
+        container.appendChild(btn);
     });
 
-    if (userAnswers[currentQuestion] !== null && userAnswers[currentQuestion] !== q.σωστή_απάντηση) {
-        html += `
-        <div style="margin-top:20px;padding:15px;background:#f4f4f4;border-radius:8px">
-        <b>Σωστή Απάντηση:</b> ${q.σωστή_απάντηση.toUpperCase()}
-        </div>
-        `;
-    }
-
-    html += `
-    <br>
-    <button onclick="prev()" style="padding:14px 24px;font-size:20px;margin:6px">Previous</button>
-    <button onclick="next()" style="padding:14px 24px;font-size:20px;margin:6px">Next</button>
-    <button onclick="mark()" style="padding:14px 24px;font-size:20px;margin:6px">Mark</button>
-    <button onclick="finishExam()" style="padding:14px 24px;font-size:20px;margin:6px;background:#444;color:white">Finish</button>
-    </div>
-    `;
-
-    document.getElementById("quiz").innerHTML = html;
+    document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / currentQuestions.length) * 100}%`;
+    document.getElementById('prev-btn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
 }
 
-function showGrid() {
-    let grid = `<div style="position:absolute;top:20px;right:20px;background:white;padding:12px;border-radius:10px">`;
-    questions.forEach((q, i) => {
-        let color = "white";
-        if (userAnswers[i] !== null) {
-            if (userAnswers[i] === questions[i].σωστή_απάντηση) color = "#9cff9c";
-            else color = "#ff8f8f";
-        }
-        let markBadge = "";
-        if (marked[i]) {
-            markBadge = `<span style="position:absolute;top:-6px;right:-6px;background:yellow;color:black;font-weight:bold;font-size:14px;padding:2px 6px;border-radius:50%;">!</span>`;
-        }
-        grid += `
-        <div style="position:relative;display:inline-block;">
-        <button onclick="goto(${i})" style="width:38px;height:38px;margin:3px;background:${color};font-weight:bold">${i + 1}</button>
-        ${markBadge}
-        </div>`;
+function handleSelect(char) {
+    if (isStudyMode && userAnswers[currentIndex]) return;
+    userAnswers[currentIndex] = char;
+    renderQuestion();
+    renderDots();
+    if (!isStudyMode && currentIndex < currentQuestions.length - 1) {
+        setTimeout(nextQ, 300);
+    }
+}
+
+window.nextQ = function() {
+    if (currentIndex < currentQuestions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+        updateDots();
+    }
+}
+
+window.prevQ = function() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+        updateDots();
+    }
+}
+
+window.toggleMark = function() {
+    marked[currentIndex] = !marked[currentIndex];
+    renderDots();
+}
+
+function renderDots() {
+    const grid = document.getElementById('dot-grid');
+    grid.innerHTML = '';
+    currentQuestions.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = `dot ${i === currentIndex ? 'active' : ''} ${userAnswers[i] ? 'answered' : ''} ${marked[i] ? 'marked' : ''}`;
+        dot.innerText = i + 1;
+        dot.onclick = () => { currentIndex = i; renderQuestion(); updateDots(); };
+        grid.appendChild(dot);
     });
-    grid += "</div>";
-    document.getElementById("quiz").innerHTML += grid;
 }
 
-function answer(key) {
-    if (userAnswers[currentQuestion] !== null) return;
-    userAnswers[currentQuestion] = key;
-    render();
-
-    if (key === questions[currentQuestion].σωστή_απάντηση) {
-        setTimeout(() => {
-            if (currentQuestion < questions.length - 1) {
-                currentQuestion++;
-                render();
-            }
-        }, 600);
-    }
+function updateDots() {
+    document.querySelectorAll('.dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentIndex);
+    });
 }
 
-function next() { if (currentQuestion < questions.length - 1) { currentQuestion++; render(); } }
-function prev() { if (currentQuestion > 0) { currentQuestion--; render(); } }
-function goto(i) { currentQuestion = i; render(); }
-function mark() { marked[currentQuestion] = !marked[currentQuestion]; render(); }
-
-function checkAutoFinish() {
-    if (examFinished) return;
-    let allAnswered = userAnswers.every(a => a !== null);
-    if (allAnswered) {
-        examFinished = true;
-        setTimeout(() => {
-            if (confirm("All questions answered. Finish exam?")) { showResults(); } 
-            else { examFinished = false; }
-        }, 300);
-    }
+function startTimer() {
+    timeLeft = 2700;
+    const timerEl = document.getElementById('active-timer');
+    timerEl.classList.remove('hidden');
+    timer = setInterval(() => {
+        timeLeft--;
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        timerEl.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+        if (timeLeft <= 0) submitQuiz();
+    }, 1000);
 }
 
-function finishExam() {
-    if (userAnswers.includes(null)) {
-        if (!confirm("You still have unanswered questions. Finish anyway?")) return;
-    }
-    showResults();
-}
+window.showConfirm = function() { document.getElementById('confirm-modal').classList.remove('hidden'); }
+window.hideConfirm = function() { document.getElementById('confirm-modal').classList.add('hidden'); }
 
-function showResults() {
-    clearInterval(timerInterval);
+window.submitQuiz = function() {
+    if (timer) clearInterval(timer);
+    hideConfirm();
+    document.getElementById('quiz-screen').classList.add('hidden');
+    document.getElementById('active-timer').classList.add('hidden');
+    document.getElementById('results-screen').classList.remove('hidden');
+
     let correct = 0;
-    wrongQuestions = [];
-    questions.forEach((q, i) => {
-        if (userAnswers[i] === q.σωστή_απάντηση) correct++;
-        else wrongQuestions.push(i);
+    userAnswers.forEach((ans, i) => {
+        if (ans === currentQuestions[i].answer) correct++;
     });
-    let percent = Math.round((correct / questions.length) * 100);
-    document.getElementById("quiz").innerHTML = `
-    <div style="width:50%;margin:auto;background:white;padding:30px;border-radius:10px">
-    <h2>Results</h2>
-    <p>Correct answers: ${correct} / ${questions.length}</p>
-    <p>Score: ${percent}%</p>
-    <h3>${percent >= 75 ? "PASS" : "FAIL"}</h3>
-    <br>
-    <button onclick="location.reload()" style="padding:14px 25px;font-size:18px;margin:8px">Restart</button>
-    <button onclick="practiceWrong()" style="padding:14px 25px;font-size:18px;margin:8px;background:#ffc107">Practice Wrong (${wrongQuestions.length})</button>
-    </div>`;
+
+    const score = Math.round((correct / currentQuestions.length) * 100);
+    const scoreEl = document.getElementById('res-score');
+    scoreEl.innerText = score + '%';
+    
+    if (score >= 75) {
+        document.getElementById('res-icon').innerText = "🏆";
+        document.getElementById('res-title').innerText = "ΕΠΙΤΥΧΙΑ!";
+        scoreEl.className = "text-8xl font-black mb-2 text-emerald-400";
+    } else {
+        document.getElementById('res-icon').innerText = "📈";
+        document.getElementById('res-title').innerText = "ΑΠΟΤΥΧΙΑ";
+        scoreEl.className = "text-8xl font-black mb-2 text-rose-400";
+    }
+    document.getElementById('res-stats').innerText = `${correct} ΣΩΣΤΕΣ / ${currentQuestions.length} ΕΡΩΤΗΣΕΙΣ`;
 }
