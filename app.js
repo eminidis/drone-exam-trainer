@@ -1,27 +1,86 @@
 let letters = ["A", "B", "C", "D"]
-
 let current = 0
 let totalQuestions = 5
 let mode = "exam"
-
 let correctCount = 0
-
 let timerInterval
 let seconds = 0
-let examTime = 2700 // 45 λεπτά για EASA A2
-
+let examTime = 2700 // 45 λεπτά (EASA A2 Standard)
 let answered = []
 let flagged = []
-
 let questionsPool = []
 let questions = []
 
-// --- STATS & LOCAL STORAGE (Από τον αρχικό σου κώδικα) ---
+let chartInstance = null;
+
+// --- EASA OFFICIAL THEORY DATASET (Μελλοντική Χρήση) ---
+const easaTheoryData = [
+    {
+        module: "Αεροπορική Νομοθεσία",
+        sections: [
+            {
+                title: "Κατηγορίες Πτήσεων (Open Category)",
+                content: "Η Ανοικτή (Open) κατηγορία χωρίζεται σε τρεις υποκατηγορίες: A1, A2, A3 βάσει του βάρους του ΣμηΕΑ και της απόστασης από ανθρώπους.",
+                notes: [
+                    "A1: Πτήση πάνω από ανθρώπους (αλλά όχι πλήθη). Ισχύει για drones < 250g (C0) ή < 900g (C1).",
+                    "A2: Πτήση κοντά σε ανθρώπους. Απαιτείται πιστοποιητικό A2. Απόσταση 30m (ή 5m σε low-speed mode) για C2 drones.",
+                    "A3: Πτήση μακριά από ανθρώπους και αστικές περιοχές. Τουλάχιστον 150m απόσταση."
+                ]
+            },
+            {
+                title: "Ύψος και VLOS",
+                content: "Βασικοί κανόνες ασφαλείας για όλες τις υποκατηγορίες της Open.",
+                notes: [
+                    "Μέγιστο επιτρεπόμενο ύψος: 120 μέτρα (400 ft) από την επιφάνεια του εδάφους.",
+                    "VLOS (Visual Line of Sight): Πτήση πάντα εντός οπτικής επαφής του τηλεχειριστή."
+                ]
+            }
+        ]
+    },
+    {
+        module: "Μετεωρολογία",
+        sections: [
+            {
+                title: "Επίδραση Ανέμου",
+                content: "Ο άνεμος επηρεάζει άμεσα την κατανάλωση μπαταρίας και τη σταθερότητα του drone.",
+                notes: [
+                    "Η πτήση κόντρα στον άνεμο μειώνει δραστικά τον χρόνο πτήσης.",
+                    "Προσοχή σε ριπές ανέμου (gusts) γύρω από ψηλά κτίρια (φαινόμενο σήραγγας)."
+                ]
+            }
+        ]
+    },
+    {
+        module: "Ανθρώπινοι Παράγοντες",
+        sections: [
+            {
+                title: "Κρίση και Λήψη Αποφάσεων",
+                content: "Η ανθρώπινη απόδοση επηρεάζεται από διάφορους εξωτερικούς και εσωτερικούς παράγοντες.",
+                notes: [
+                    "Κόπωση, στρες και κατανάλωση αλκοόλ απαγορεύουν ρητά την εκτέλεση πτήσης.",
+                    "Η ψευδαίσθηση της προοπτικής (optical illusion) μπορεί να κάνει το drone να φαίνεται πιο κοντά ή μακριά από ότι είναι."
+                ]
+            }
+        ]
+    }
+];
+
+// --- STATS & LOCAL STORAGE ---
 let studyStats = JSON.parse(localStorage.getItem("studyStats")) || {
-    "Αεροπορική Νομοθεσία": 0,
-    "Μετεωρολογία": 0,
-    "Ανθρώπινοι Παράγοντες": 0,
-    "Πλοήγηση": 0
+    "Αεροπορική Νομοθεσία": { correct: 0, total: 0 },
+    "Μετεωρολογία": { correct: 0, total: 0 },
+    "Ανθρώπινοι Παράγοντες": { correct: 0, total: 0 },
+    "Πλοήγηση": { correct: 0, total: 0 }
+}
+
+// Retro-compatibility αν το παλιό format ήταν νούμερα
+if (typeof studyStats["Αεροπορική Νομοθεσία"] === 'number') {
+    studyStats = {
+        "Αεροπορική Νομοθεσία": { correct: 0, total: 0 },
+        "Μετεωρολογία": { correct: 0, total: 0 },
+        "Ανθρώπινοι Παράγοντες": { correct: 0, total: 0 },
+        "Πλοήγηση": { correct: 0, total: 0 }
+    }
 }
 
 let examHistory = JSON.parse(localStorage.getItem("examHistory")) || []
@@ -74,12 +133,16 @@ const missionsPool = [
         drone: "C2",
         weight: "3.5 kg",
         location: "Ημι-αστική περιοχή",
-        people: "Άνθρωποι κοντά",
+        people: "Άνθρωποι κοντά (στα 10m)",
         wind: "7 m/s",
-        q: "Σε ποια κατηγορία ανήκει η πτήση;",
-        answers: ["A1", "A2", "A3"],
+        q: "Σε ποια κατηγορία ανήκει η πτήση και ποιος είναι ο περιορισμός;",
+        answers: [
+            "A1 - Επιτρέπεται πτήση πάνω από ανθρώπους",
+            "A2 - Απαιτείται low-speed mode για πτήση στα 5m",
+            "A3 - Απαγορεύεται η πτήση, απαιτούνται 150m απόσταση"
+        ],
         correct: 1,
-        exp: "Σωστά! Με drone C2 (3.5kg) κοντά σε ανθρώπους, η πτήση υπάγεται στην υποκατηγορία A2."
+        exp: "Σωστά! Με drone C2 σε απόσταση κάτω των 30m, απαιτείται ενεργοποίηση του low-speed mode (μέγιστο 5m απόσταση) σύμφωνα με τους κανόνες της A2."
     }
 ];
 let currentMission = 0;
@@ -97,17 +160,146 @@ function openSettings() {
 function openStats() {
     hideAll()
     document.getElementById("statsScreen").style.display = "flex"
-    // Αν έχεις functions renderStudyStats() / renderExamStats(), καλούνται εδώ
 }
 
+// --- ΕΠΑΓΓΕΛΜΑΤΙΚΑ ΣΤΑΤΙΣΤΙΚΑ ---
 function openStudyStats() {
     hideAll()
     document.getElementById("studyStatsScreen").style.display = "flex"
+    
+    let container = document.getElementById("studyStatsContent");
+    let overview = document.getElementById("studyOverview");
+    let tableHTML = `<table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Ενότητα Θεωρίας EASA</th>
+                                <th>Ποσοστό Επιτυχίας</th>
+                                <th>Απαντήσεις (Σωστά / Σύνολο)</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+    
+    let totalC = 0, totalA = 0;
+
+    for (let category in studyStats) {
+        let stats = studyStats[category];
+        let correct = stats.correct || 0;
+        let total = stats.total || 0;
+        
+        totalC += correct;
+        totalA += total;
+
+        let percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+        
+        tableHTML += `
+            <tr>
+                <td><strong>${category}</strong></td>
+                <td>
+                    ${percentage}%
+                    <div class="progress-bar-container">
+                        <div class="progress-fill" style="width: ${percentage}%;"></div>
+                    </div>
+                </td>
+                <td>${correct} / ${total}</td>
+            </tr>
+        `;
+    }
+    tableHTML += `</tbody></table>`;
+    container.innerHTML = tableHTML;
+
+    let totalPercentage = totalA > 0 ? Math.round((totalC / totalA) * 100) : 0;
+    overview.innerHTML = `
+        <div class="stat-item">
+            <div class="stat-value">${totalPercentage}%</div>
+            <div class="stat-label">Συνολική Επιτυχία</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">${totalA}</div>
+            <div class="stat-label">Λυμένες Ερωτήσεις</div>
+        </div>
+    `;
 }
 
 function openExamStats() {
     hideAll()
     document.getElementById("examStatsScreen").style.display = "flex"
+    
+    let overview = document.getElementById("examOverview");
+    
+    let totalExams = examHistory.length;
+    let passedExams = examHistory.filter(score => score >= 75).length;
+    let passRate = totalExams > 0 ? Math.round((passedExams / totalExams) * 100) : 0;
+    let avgScore = totalExams > 0 ? Math.round(examHistory.reduce((a, b) => a + b, 0) / totalExams) : 0;
+
+    overview.innerHTML = `
+        <div class="stat-item">
+            <div class="stat-value">${totalExams}</div>
+            <div class="stat-label">Σύνολο Εξετάσεων</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">${avgScore}%</div>
+            <div class="stat-label">Μέσος Όρος (A2)</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">${passRate}%</div>
+            <div class="stat-label">Ποσοστό Επιτυχίας (PASS)</div>
+        </div>
+    `;
+
+    renderExamChart();
+}
+
+function renderExamChart() {
+    const ctx = document.getElementById('examChart').getContext('2d');
+    
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+    let labels = examHistory.map((_, i) => `Εξέταση ${i + 1}`);
+    let data = examHistory;
+
+    chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Βαθμολογία Προσομοίωσης A2 (%)',
+                data: data,
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: { callback: function(value) { return value + "%" } }
+                }
+            },
+            plugins: {
+                annotation: {
+                    annotations: {
+                        line1: {
+                            type: 'line',
+                            yMin: 75,
+                            yMax: 75,
+                            borderColor: 'rgb(22, 163, 74)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            label: { content: 'Βάση Επιτυχίας (75%)', enabled: true, position: 'end' }
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
 function openStudy() {
@@ -123,14 +315,14 @@ function openMission() {
 }
 
 function openExamConfirm() {
-    let confirmStart = confirm("Έναρξη προσομοίωσης A2 (30 ερωτήσεις - 45 λεπτά);")
+    let confirmStart = confirm("Έναρξη προσομοίωσης A2 (30 ερωτήσεις - 45 λεπτά);\n\nΑυτό προσομοιώνει την επίσημη εξέταση της EASA.")
     if (!confirmStart) { return }
     openExam()
 }
 
 function openExam() {
     mode = "exam"
-    prepareQuestions(30) // Set 30 questions for exam
+    prepareQuestions(30) 
     startTest()
 }
 
@@ -223,7 +415,9 @@ function loadQuestion() {
     if (q) recordSeen(q.id)
 
     document.getElementById("questionText").innerText = q.q
-    document.getElementById("explanation").innerText = ""
+    let expDiv = document.getElementById("explanation");
+    expDiv.style.display = "none";
+    expDiv.innerText = "";
 
     let buttons = document.querySelectorAll(".answers button")
     buttons.forEach((b, i) => {
@@ -252,13 +446,18 @@ function answer(i) {
             } else {
                 recordWrong(q.id)
             }
-            // Auto-next in Exam optional, leaving manual to allow review, 
-            // but normally EASA moves you. Let's move to next.
-            setTimeout(nextQuestion, 300) 
+            setTimeout(nextQuestion, 400) 
         }
     } else {
         // STUDY MODE
         if (answered[current]) return
+
+        let expDiv = document.getElementById("explanation");
+        expDiv.style.display = "block";
+        
+        let cat = q.cat;
+        if (!studyStats[cat]) studyStats[cat] = { correct: 0, total: 0 };
+        studyStats[cat].total++;
 
         if (i === q.correct) {
             correctCount++
@@ -266,18 +465,21 @@ function answer(i) {
             answered[current] = true
             recordCorrect(q.id)
 
-            let cat = q.cat
-            studyStats[cat] = Math.min(100, studyStats[cat] + 10)
+            studyStats[cat].correct++;
             localStorage.setItem("studyStats", JSON.stringify(studyStats))
 
-            document.getElementById("explanation").style.color = "#22c55e"
-            document.getElementById("explanation").innerText = "Σωστά!"
-            setTimeout(nextQuestion, 1000) // Correct -> Auto Next
+            expDiv.style.color = "#22c55e"
+            expDiv.style.background = "#dcfce7"
+            expDiv.innerText = "Εξαιρετικά! Απάντησες σωστά."
+            setTimeout(nextQuestion, 1200) 
         } else {
             cell.classList.add("wrong")
             recordWrong(q.id)
-            document.getElementById("explanation").style.color = "#dc2626"
-            document.getElementById("explanation").innerText = q.exp // Wrong -> Stay and Explain
+            localStorage.setItem("studyStats", JSON.stringify(studyStats))
+            
+            expDiv.style.color = "#dc2626"
+            expDiv.style.background = "#fee2e2"
+            expDiv.innerText = q.exp // Explanation από την θεωρία
         }
         checkStudyCompletion()
     }
@@ -288,11 +490,11 @@ function checkStudyCompletion() {
     let done = answered.filter(x => x).length
     if (done === totalQuestions) {
         setTimeout(() => {
-            let finish = confirm("Ολοκληρώθηκαν οι ερωτήσεις. Θέλεις να τελειώσεις το session;")
+            let finish = confirm("Έχεις ολοκληρώσει τη μελέτη. Θέλεις να δεις το αποτέλεσμα;")
             if (finish) {
                 finishSession()
             }
-        }, 1200)
+        }, 1500)
     }
 }
 
@@ -320,44 +522,49 @@ function renderMission() {
     let m = missionsPool[currentMission]
     document.getElementById("missionCard").innerHTML = `
         <div class="mission-visual">
-            <h3>${m.title}</h3>
-            <p><strong>Drone:</strong> ${m.drone} (${m.weight})</p>
+            <h3>📍 ${m.title}</h3>
+            <p><strong>Drone:</strong> ${m.drone} (Βάρος: ${m.weight})</p>
             <p><strong>Περιοχή:</strong> ${m.location}</p>
-            <p><strong>Συνθήκες:</strong> ${m.people}, Άνεμος ${m.wind}</p>
+            <p><strong>Συνθήκες Πεδίου:</strong> ${m.people}</p>
+            <p><strong>Άνεμος:</strong> ${m.wind}</p>
         </div>
         <div class="mission-q">
             <h4>${m.q}</h4>
             ${m.answers.map((a, i) => `<button onclick="checkMission(${i})">${a}</button>`).join('')}
         </div>
-        <p id="missionFeedback" style="font-weight:bold; margin-top:15px;"></p>
+        <div id="missionFeedback" style="display:none; padding:15px; margin-top:20px; border-radius:8px; font-weight:bold; font-size:18px;"></div>
     `
 }
 
 function checkMission(i) {
     let m = missionsPool[currentMission]
     let fb = document.getElementById("missionFeedback")
+    fb.style.display = "block"
+    
     if (i === m.correct) {
-        fb.style.color = "#22c55e"
+        fb.style.color = "#16a34a"
+        fb.style.background = "#dcfce7"
         fb.innerText = m.exp
     } else {
-        fb.style.color = "#ef4444"
-        fb.innerText = "Λάθος. " + m.exp
+        fb.style.color = "#dc2626"
+        fb.style.background = "#fee2e2"
+        fb.innerText = "Λάθος Απόφαση. " + m.exp
     }
 }
 
 function finishSession(timeout) {
     if (mode === "exam" && !timeout) {
-        let confirmFinish = confirm("Είσαι σίγουρος ότι θέλεις να υποβάλλεις το τεστ;")
+        let confirmFinish = confirm("Είσαι σίγουρος ότι θέλεις να υποβάλλεις την εξέταση;")
         if (!confirmFinish) { return }
     }
 
     clearInterval(timerInterval)
 
     let score = Math.round((correctCount / totalQuestions) * 100)
-    let resultText = "ΑΠΟΤΥΧΙΑ"
+    let resultText = "ΑΠΟΤΥΧΙΑ (FAIL)"
 
     if (score >= 75) {
-        resultText = "ΕΠΙΤΥΧΙΑ"
+        resultText = "ΕΠΙΤΥΧΙΑ (PASS)"
     }
 
     if (mode === "exam") {
@@ -368,7 +575,10 @@ function finishSession(timeout) {
     hideAll()
     document.getElementById("resultScreen").style.display = "flex"
     document.getElementById("finalScore").innerText = score + "%"
-    document.getElementById("passFail").innerText = resultText
+    
+    let passFailEl = document.getElementById("passFail");
+    passFailEl.innerText = resultText;
+    passFailEl.style.color = score >= 75 ? "#16a34a" : "#dc2626";
 }
 
 function goMenu() {
@@ -393,42 +603,42 @@ questionsPool = [
     {
         id: "Q0",
         cat: "Αεροπορική Νομοθεσία",
-        q: "Τι σημαίνει UAV;",
-        answers: ["Μη επανδρωμένο αεροσκάφος", "Αυτόνομο όχημα", "Αεροσκάφος επιβατών", "Δορυφόρος"],
+        q: "Τι σημαίνει το ακρωνύμιο UAV;",
+        answers: ["Μη επανδρωμένο αεροσκάφος (Unmanned Aerial Vehicle)", "Αυτόνομο όχημα πτήσης", "Αεροσκάφος μεταφοράς επιβατών", "Δορυφορικό σύστημα"],
         correct: 0,
-        exp: "Η σωστή απάντηση είναι: Μη επανδρωμένο αεροσκάφος (Unmanned Aerial Vehicle)."
+        exp: "Σύμφωνα με τους κανονισμούς της EASA, UAV σημαίνει Unmanned Aerial Vehicle, δηλαδή ένα αεροσκάφος που επιχειρεί χωρίς πιλότο εντός αυτού."
     },
     {
         id: "Q1",
         cat: "Μετεωρολογία",
-        q: "Ποια μπαταρία χρησιμοποιούν τα περισσότερα drones;",
-        answers: ["AA", "LiPo", "NiMH", "Lead"],
+        q: "Ποιος τύπος μπαταρίας χρησιμοποιείται κυρίως στα σύγχρονα drones;",
+        answers: ["Αλκαλικές AA", "Lithium Polymer (LiPo)", "Νικελίου-Υδριδίου (NiMH)", "Μολύβδου"],
         correct: 1,
-        exp: "Η σωστή απάντηση είναι: LiPo. Προσφέρουν υψηλή πυκνότητα ενέργειας."
+        exp: "Οι μπαταρίες Lithium Polymer (LiPo) χρησιμοποιούνται λόγω της ικανότητάς τους να αποθηκεύουν μεγάλη ποσότητα ενέργειας (υψηλή ενεργειακή πυκνότητα) και να παρέχουν γρήγορα υψηλά ρεύματα εκφόρτισης."
     },
     {
         id: "Q2",
         cat: "Ανθρώπινοι Παράγοντες",
-        q: "Τι κάνει το Return to Home;",
-        answers: ["Σβήνει το drone", "Επιστρέφει στο σημείο απογείωσης", "Κλείνει την κάμερα", "Κάνει προσγείωση όπου είναι"],
+        q: "Ποια είναι η λειτουργία του συστήματος RTH (Return to Home);",
+        answers: ["Απενεργοποιεί άμεσα τους κινητήρες του drone", "Επιστρέφει αυτόματα το drone στο αρχικό σημείο απογείωσης (Home Point)", "Κλείνει το σύστημα καταγραφής βίντεο", "Πραγματοποιεί άμεση προσγείωση στο σημείο που βρίσκεται"],
         correct: 1,
-        exp: "Το RTH επιστρέφει το drone αυτόματα στο σημείο που ορίστηκε ως Home Point."
+        exp: "Η λειτουργία Return to Home (RTH) αποτελεί σύστημα ασφαλείας που, όταν ενεργοποιηθεί (χειροκίνητα ή λόγω απώλειας σήματος), φέρνει το drone πίσω στο προκαθορισμένο Home Point."
     },
     {
         id: "Q3",
         cat: "Πλοήγηση",
-        q: "Ποιος αισθητήρας σταθεροποιεί το drone;",
-        answers: ["Γυροσκόπιο", "GPS", "Κάμερα", "Μπαταρία"],
+        q: "Ποιος εσωτερικός αισθητήρας είναι υπεύθυνος για τη βασική σταθεροποίηση του drone κατά την πτήση;",
+        answers: ["Γυροσκόπιο", "Δέκτης GPS", "Οπτική Κάμερα", "Αισθητήρας Μπαταρίας"],
         correct: 0,
-        exp: "Το γυροσκόπιο μετράει τη γωνιακή ταχύτητα και είναι απαραίτητο για τη σταθεροποίηση."
+        exp: "Το γυροσκόπιο (Gyroscope) μετράει τη γωνιακή ταχύτητα και τις κλίσεις του drone, παρέχοντας τα δεδομένα στον Flight Controller για να διατηρήσει το drone οριζοντιωμένο και σταθερό."
     },
     {
         id: "Q4",
         cat: "Πλοήγηση",
-        q: "Τι χρησιμοποιείται για πλοήγηση;",
-        answers: ["Radar", "GPS", "Sonar", "Infrared"],
+        q: "Ποιο σύστημα παρέχει στο drone την ικανότητα να γνωρίζει τη γεωγραφική του θέση;",
+        answers: ["Σύστημα Ραντάρ (Radar)", "Παγκόσμιο Σύστημα Εντοπισμού Θέσης (GPS)", "Αισθητήρας Υπερήχων (Sonar)", "Αισθητήρας Υπέρυθρων (Infrared)"],
         correct: 1,
-        exp: "Το GPS χρησιμοποιείται για τον προσδιορισμό θέσης και την πλοήγηση."
+        exp: "Το GPS (μαζί με άλλα GNSS συστήματα όπως Galileo ή GLONASS) λαμβάνει σήματα από δορυφόρους για να υπολογίσει με ακρίβεια τις συντεταγμένες θέσης (Γεωγραφικό Μήκος, Πλάτος, Υψόμετρο) του drone."
     }
 ]
 
