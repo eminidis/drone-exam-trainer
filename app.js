@@ -1,482 +1,435 @@
-let letters=["A","B","C","D"]
+let letters = ["A", "B", "C", "D"]
 
-let current=0
-let totalQuestions=5
-let mode="exam"
+let current = 0
+let totalQuestions = 5
+let mode = "exam"
 
-let correctCount=0
+let correctCount = 0
 
 let timerInterval
-let seconds=0
-let examTime=3600
+let seconds = 0
+let examTime = 2700 // 45 λεπτά για EASA A2
 
-let answered=[]
-let flagged=[]
+let answered = []
+let flagged = []
 
-let questionsPool=[]
-let questions=[]
+let questionsPool = []
+let questions = []
 
-let studyStats=JSON.parse(localStorage.getItem("studyStats")) || {
-"Αεροπορική Νομοθεσία":0,
-"Μετεωρολογία":0,
-"Ανθρώπινοι Παράγοντες":0,
-"Πλοήγηση":0
+// --- STATS & LOCAL STORAGE (Από τον αρχικό σου κώδικα) ---
+let studyStats = JSON.parse(localStorage.getItem("studyStats")) || {
+    "Αεροπορική Νομοθεσία": 0,
+    "Μετεωρολογία": 0,
+    "Ανθρώπινοι Παράγοντες": 0,
+    "Πλοήγηση": 0
 }
 
-let examHistory=JSON.parse(localStorage.getItem("examHistory")) || []
+let examHistory = JSON.parse(localStorage.getItem("examHistory")) || []
+let questionStats = JSON.parse(localStorage.getItem("questionStats")) || {}
+let wrongQuestions = JSON.parse(localStorage.getItem("wrongQuestions")) || []
 
-let questionStats=JSON.parse(localStorage.getItem("questionStats")) || {}
-let wrongQuestions=JSON.parse(localStorage.getItem("wrongQuestions")) || []
-
-function initQuestionStats(){
-
-questionsPool.forEach((q,i)=>{
-
-if(!q.id){
-q.id="Q"+i
+function initQuestionStats() {
+    questionsPool.forEach((q, i) => {
+        if (!q.id) { q.id = "Q" + i }
+        if (!questionStats[q.id]) {
+            questionStats[q.id] = { seen: 0, correct: 0, wrong: 0 }
+        }
+    })
+    localStorage.setItem("questionStats", JSON.stringify(questionStats))
 }
 
-if(!questionStats[q.id]){
-
-questionStats[q.id]={
-seen:0,
-correct:0,
-wrong:0
+function recordSeen(id) {
+    if (questionStats[id]) {
+        questionStats[id].seen++
+        saveQuestionStats()
+    }
 }
 
+function recordCorrect(id) {
+    if (questionStats[id]) {
+        questionStats[id].correct++
+        saveQuestionStats()
+    }
 }
 
-})
-
-localStorage.setItem("questionStats",JSON.stringify(questionStats))
-
+function recordWrong(id) {
+    if (questionStats[id]) {
+        questionStats[id].wrong++
+        if (!wrongQuestions.includes(id)) {
+            wrongQuestions.push(id)
+        }
+        saveQuestionStats()
+    }
 }
 
-function recordSeen(id){
-
-questionStats[id].seen++
-saveQuestionStats()
-
+function saveQuestionStats() {
+    localStorage.setItem("questionStats", JSON.stringify(questionStats))
+    localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions))
 }
 
-function recordCorrect(id){
+// --- MISSION MODE DATA ---
+const missionsPool = [
+    {
+        title: "Επιθεώρηση Εργοταξίου",
+        drone: "C2",
+        weight: "3.5 kg",
+        location: "Ημι-αστική περιοχή",
+        people: "Άνθρωποι κοντά",
+        wind: "7 m/s",
+        q: "Σε ποια κατηγορία ανήκει η πτήση;",
+        answers: ["A1", "A2", "A3"],
+        correct: 1,
+        exp: "Σωστά! Με drone C2 (3.5kg) κοντά σε ανθρώπους, η πτήση υπάγεται στην υποκατηγορία A2."
+    }
+];
+let currentMission = 0;
 
-questionStats[id].correct++
-saveQuestionStats()
-
+// --- UI & NAVIGATION ---
+function toggleTheme() {
+    document.body.classList.toggle("dark")
 }
 
-function recordWrong(id){
-
-questionStats[id].wrong++
-
-if(!wrongQuestions.includes(id)){
-wrongQuestions.push(id)
+function openSettings() {
+    hideAll()
+    document.getElementById("settingsScreen").style.display = "flex"
 }
 
-saveQuestionStats()
-
+function openStats() {
+    hideAll()
+    document.getElementById("statsScreen").style.display = "flex"
+    // Αν έχεις functions renderStudyStats() / renderExamStats(), καλούνται εδώ
 }
 
-function saveQuestionStats(){
-
-localStorage.setItem("questionStats",JSON.stringify(questionStats))
-localStorage.setItem("wrongQuestions",JSON.stringify(wrongQuestions))
-
+function openStudyStats() {
+    hideAll()
+    document.getElementById("studyStatsScreen").style.display = "flex"
 }
 
-function toggleTheme(){
-document.body.classList.toggle("dark")
+function openExamStats() {
+    hideAll()
+    document.getElementById("examStatsScreen").style.display = "flex"
 }
 
-function openSettings(){
-hideAll()
-document.getElementById("settingsScreen").style.display="flex"
+function openStudy() {
+    hideAll()
+    document.getElementById("studySetup").style.display = "flex"
 }
 
-function openStats(){
-hideAll()
-document.getElementById("statsScreen").style.display="flex"
-renderStudyStats()
-renderExamStats()
+function openMission() {
+    hideAll()
+    currentMission = 0
+    renderMission()
+    document.getElementById("missionScreen").style.display = "flex"
 }
 
-function openStudyStats(){
-hideAll()
-document.getElementById("studyStatsScreen").style.display="flex"
+function openExamConfirm() {
+    let confirmStart = confirm("Έναρξη προσομοίωσης A2 (30 ερωτήσεις - 45 λεπτά);")
+    if (!confirmStart) { return }
+    openExam()
 }
 
-function openExamStats(){
-hideAll()
-document.getElementById("examStatsScreen").style.display="flex"
+function openExam() {
+    mode = "exam"
+    prepareQuestions(30) // Set 30 questions for exam
+    startTest()
 }
 
-function openStudy(){
-hideAll()
-document.getElementById("studySetup").style.display="flex"
+function startStudy() {
+    mode = "study"
+    prepareQuestions()
+    startTest()
 }
 
-function openExamConfirm(){
+// --- SETUP & LOGIC ---
+function prepareQuestions(overrideCount = null) {
+    let category = document.getElementById("studyCategory") ? document.getElementById("studyCategory").value : "Random"
+    let count = overrideCount ? overrideCount : (document.getElementById("studyCount") ? parseInt(document.getElementById("studyCount").value) : 5)
 
-let confirmStart=confirm("Είσαι σίγουρος ότι θέλεις να ξεκινήσεις κανονικό τεστ;")
+    let filtered = [...questionsPool]
+    if (category !== "Random") {
+        filtered = questionsPool.filter(q => q.cat === category)
+    }
 
-if(!confirmStart){
-return
+    filtered = shuffleArray(filtered)
+    questions = filtered.slice(0, count)
+    totalQuestions = questions.length
 }
 
-openExam()
-
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1))
+        let temp = array[i]
+        array[i] = array[j]
+        array[j] = temp
+    }
+    return array
 }
 
-function openExam(){
-mode="exam"
-prepareQuestions()
-startTest()
+function startTimer() {
+    clearInterval(timerInterval)
+
+    if (mode === "study") {
+        seconds = 0
+        timerInterval = setInterval(() => {
+            seconds++
+            let m = Math.floor(seconds / 60)
+            let s = seconds % 60
+            document.getElementById("timer").innerText = String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0")
+        }, 1000)
+    } else {
+        let time = examTime
+        timerInterval = setInterval(() => {
+            time--
+            let m = Math.floor(time / 60)
+            let s = time % 60
+            document.getElementById("timer").innerText = String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0")
+
+            if (time <= 0) {
+                finishSession(true)
+            }
+        }, 1000)
+    }
 }
 
-function startStudy(){
-mode="study"
-prepareQuestions()
-startTest()
+function startTest() {
+    hideAll()
+    document.getElementById("testScreen").style.display = "block"
+    current = 0
+    correctCount = 0
+    answered = []
+    flagged = []
+    createGrid()
+    loadQuestion()
+    startTimer()
 }
 
-function prepareQuestions(){
+function createGrid() {
+    let grid = document.querySelector(".question-grid")
+    grid.innerHTML = ""
 
-let category=document.getElementById("studyCategory") ? document.getElementById("studyCategory").value : "Random"
-let count=document.getElementById("studyCount") ? parseInt(document.getElementById("studyCount").value) : 5
-
-let filtered=[...questionsPool]
-
-if(category!=="Random"){
-filtered=questionsPool.filter(q=>q.cat===category)
+    for (let i = 0; i < totalQuestions; i++) {
+        let cell = document.createElement("div")
+        cell.innerText = i + 1
+        cell.onclick = function () {
+            current = i
+            loadQuestion()
+        }
+        grid.appendChild(cell)
+    }
 }
 
-filtered=shuffleArray(filtered)
+function loadQuestion() {
+    let q = questions[current]
+    if (q) recordSeen(q.id)
 
-questions=filtered.slice(0,count)
+    document.getElementById("questionText").innerText = q.q
+    document.getElementById("explanation").innerText = ""
 
-totalQuestions=questions.length
-
+    let buttons = document.querySelectorAll(".answers button")
+    buttons.forEach((b, i) => {
+        if (q.answers[i]) {
+            b.innerText = letters[i] + ". " + q.answers[i]
+            b.style.display = "block"
+        } else {
+            b.style.display = "none"
+        }
+        b.classList.remove("correct", "wrong")
+    })
 }
 
-function shuffleArray(array){
+function answer(i) {
+    let q = questions[current]
+    let cell = document.querySelectorAll(".question-grid div")[current]
 
-for(let i=array.length-1;i>0;i--){
-let j=Math.floor(Math.random()*(i+1))
-let temp=array[i]
-array[i]=array[j]
-array[j]=temp
+    if (mode === "exam") {
+        if (!answered[current]) {
+            answered[current] = true
+            cell.classList.add("exam")
+
+            if (i === q.correct) {
+                correctCount++
+                recordCorrect(q.id)
+            } else {
+                recordWrong(q.id)
+            }
+            // Auto-next in Exam optional, leaving manual to allow review, 
+            // but normally EASA moves you. Let's move to next.
+            setTimeout(nextQuestion, 300) 
+        }
+    } else {
+        // STUDY MODE
+        if (answered[current]) return
+
+        if (i === q.correct) {
+            correctCount++
+            cell.classList.add("correct")
+            answered[current] = true
+            recordCorrect(q.id)
+
+            let cat = q.cat
+            studyStats[cat] = Math.min(100, studyStats[cat] + 10)
+            localStorage.setItem("studyStats", JSON.stringify(studyStats))
+
+            document.getElementById("explanation").style.color = "#22c55e"
+            document.getElementById("explanation").innerText = "Σωστά!"
+            setTimeout(nextQuestion, 1000) // Correct -> Auto Next
+        } else {
+            cell.classList.add("wrong")
+            recordWrong(q.id)
+            document.getElementById("explanation").style.color = "#dc2626"
+            document.getElementById("explanation").innerText = q.exp // Wrong -> Stay and Explain
+        }
+        checkStudyCompletion()
+    }
 }
 
-return array
-
+function checkStudyCompletion() {
+    if (mode !== "study") return
+    let done = answered.filter(x => x).length
+    if (done === totalQuestions) {
+        setTimeout(() => {
+            let finish = confirm("Ολοκληρώθηκαν οι ερωτήσεις. Θέλεις να τελειώσεις το session;")
+            if (finish) {
+                finishSession()
+            }
+        }, 1200)
+    }
 }
 
-function startTimer(){
-
-clearInterval(timerInterval)
-
-if(mode==="study"){
-
-seconds=0
-
-timerInterval=setInterval(()=>{
-
-seconds++
-
-let m=Math.floor(seconds/60)
-let s=seconds%60
-
-document.getElementById("timer").innerText=
-String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")
-
-},1000)
-
-}else{
-
-let time=examTime
-
-timerInterval=setInterval(()=>{
-
-time--
-
-let m=Math.floor(time/60)
-let s=time%60
-
-document.getElementById("timer").innerText=
-String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")
-
-if(time<=0){
-finishSession(true)
+function nextQuestion() {
+    if (current < totalQuestions - 1) {
+        current++
+        loadQuestion()
+    }
 }
 
-},1000)
-
+function prevQuestion() {
+    if (current > 0) {
+        current--
+        loadQuestion()
+    }
 }
 
+function flagQuestion() {
+    let cell = document.querySelectorAll(".question-grid div")[current]
+    cell.classList.toggle("flag")
 }
 
-function startTest(){
-
-hideAll()
-
-document.getElementById("testScreen").style.display="block"
-
-current=0
-correctCount=0
-answered=[]
-flagged=[]
-
-createGrid()
-loadQuestion()
-startTimer()
-
+// --- MISSION RENDER ---
+function renderMission() {
+    let m = missionsPool[currentMission]
+    document.getElementById("missionCard").innerHTML = `
+        <div class="mission-visual">
+            <h3>${m.title}</h3>
+            <p><strong>Drone:</strong> ${m.drone} (${m.weight})</p>
+            <p><strong>Περιοχή:</strong> ${m.location}</p>
+            <p><strong>Συνθήκες:</strong> ${m.people}, Άνεμος ${m.wind}</p>
+        </div>
+        <div class="mission-q">
+            <h4>${m.q}</h4>
+            ${m.answers.map((a, i) => `<button onclick="checkMission(${i})">${a}</button>`).join('')}
+        </div>
+        <p id="missionFeedback" style="font-weight:bold; margin-top:15px;"></p>
+    `
 }
 
-function createGrid(){
-
-let grid=document.querySelector(".question-grid")
-grid.innerHTML=""
-
-for(let i=0;i<totalQuestions;i++){
-
-let cell=document.createElement("div")
-cell.innerText=i+1
-
-cell.onclick=function(){
-current=i
-loadQuestion()
+function checkMission(i) {
+    let m = missionsPool[currentMission]
+    let fb = document.getElementById("missionFeedback")
+    if (i === m.correct) {
+        fb.style.color = "#22c55e"
+        fb.innerText = m.exp
+    } else {
+        fb.style.color = "#ef4444"
+        fb.innerText = "Λάθος. " + m.exp
+    }
 }
 
-grid.appendChild(cell)
+function finishSession(timeout) {
+    if (mode === "exam" && !timeout) {
+        let confirmFinish = confirm("Είσαι σίγουρος ότι θέλεις να υποβάλλεις το τεστ;")
+        if (!confirmFinish) { return }
+    }
 
+    clearInterval(timerInterval)
+
+    let score = Math.round((correctCount / totalQuestions) * 100)
+    let resultText = "ΑΠΟΤΥΧΙΑ"
+
+    if (score >= 75) {
+        resultText = "ΕΠΙΤΥΧΙΑ"
+    }
+
+    if (mode === "exam") {
+        examHistory.push(score)
+        localStorage.setItem("examHistory", JSON.stringify(examHistory))
+    }
+
+    hideAll()
+    document.getElementById("resultScreen").style.display = "flex"
+    document.getElementById("finalScore").innerText = score + "%"
+    document.getElementById("passFail").innerText = resultText
 }
 
+function goMenu() {
+    hideAll()
+    document.getElementById("menu").style.display = "flex"
 }
 
-function loadQuestion(){
+function hideAll() {
+    let ids = [
+        "menu", "studySetup", "testScreen", "statsScreen",
+        "studyStatsScreen", "examStatsScreen", "settingsScreen", "resultScreen", "missionScreen"
+    ]
 
-let q=questions[current]
-
-recordSeen(q.id)
-
-document.getElementById("questionText").innerText=q.q
-document.getElementById("explanation").innerText=""
-
-let buttons=document.querySelectorAll(".answers button")
-
-buttons.forEach((b,i)=>{
-b.innerText=letters[i]+". "+q.answers[i]
-})
-
+    ids.forEach(id => {
+        let el = document.getElementById(id)
+        if (el) el.style.display = "none"
+    })
 }
 
-function answer(i){
-
-let q=questions[current]
-let cell=document.querySelectorAll(".question-grid div")[current]
-
-if(mode==="exam"){
-
-if(!answered[current]){
-answered[current]=true
-cell.classList.add("exam")
-
-if(i===q.correct){
-correctCount++
-recordCorrect(q.id)
-}else{
-recordWrong(q.id)
-}
-}
-
-}else{
-
-if(answered[current]) return
-
-if(i===q.correct){
-
-correctCount++
-cell.classList.add("correct")
-answered[current]=true
-
-recordCorrect(q.id)
-
-let cat=q.cat
-studyStats[cat]=Math.min(100,studyStats[cat]+10)
-
-localStorage.setItem("studyStats",JSON.stringify(studyStats))
-
-if(current<totalQuestions-1){
-current++
-loadQuestion()
-}
-
-}else{
-
-cell.classList.add("wrong")
-
-recordWrong(q.id)
-
-document.getElementById("explanation").innerText=q.exp
-
-}
-
-checkStudyCompletion()
-
-}
-
-}
-
-function checkStudyCompletion(){
-
-if(mode!=="study") return
-
-let done=answered.filter(x=>x).length
-
-if(done===totalQuestions){
-
-let finish=confirm("Ολοκληρώθηκαν οι ερωτήσεις. Θέλεις να τελειώσεις το session;")
-
-if(finish){
-finishSession()
-}
-
-}
-
-}
-
-function nextQuestion(){
-
-if(current<totalQuestions-1){
-current++
-loadQuestion()
-}
-
-}
-
-function prevQuestion(){
-
-if(current>0){
-current--
-loadQuestion()
-}
-
-}
-
-function flagQuestion(){
-
-let cell=document.querySelectorAll(".question-grid div")[current]
-cell.classList.toggle("flag")
-
-}
-
-function finishSession(timeout){
-
-if(mode==="exam" && !timeout){
-
-let confirmFinish=confirm("Είσαι σίγουρος ότι θέλεις να τελειώσεις το τεστ;")
-
-if(!confirmFinish){
-return
-}
-
-}
-
-clearInterval(timerInterval)
-
-let score=Math.round((correctCount/totalQuestions)*100)
-
-let resultText="ΑΠΟΤΥΧΙΑ"
-
-if(score>=75){
-resultText="ΕΠΙΤΥΧΙΑ"
-}
-
-if(mode==="exam"){
-examHistory.push(score)
-localStorage.setItem("examHistory",JSON.stringify(examHistory))
-}
-
-hideAll()
-
-document.getElementById("resultScreen").style.display="flex"
-
-document.getElementById("finalScore").innerText=score+"%"
-
-document.getElementById("passFail").innerText=resultText
-
-}
-
-function goMenu(){
-
-hideAll()
-document.getElementById("menu").style.display="flex"
-
-}
-
-function hideAll(){
-
-let ids=[
-"menu",
-"studySetup",
-"testScreen",
-"statsScreen",
-"studyStatsScreen",
-"examStatsScreen",
-"settingsScreen",
-"resultScreen"
-]
-
-ids.forEach(id=>{
-let el=document.getElementById(id)
-if(el) el.style.display="none"
-})
-
-}
-
-questionsPool=[
-
-{
-cat:"Αεροπορική Νομοθεσία",
-q:"Τι σημαίνει UAV;",
-answers:["Μη επανδρωμένο αεροσκάφος","Αυτόνομο όχημα","Αεροσκάφος επιβατών","Δορυφόρος"],
-correct:0,
-exp:"Η σωστή απάντηση είναι: Μη επανδρωμένο αεροσκάφος."
-},
-
-{
-cat:"Μετεωρολογία",
-q:"Ποια μπαταρία χρησιμοποιούν τα περισσότερα drones;",
-answers:["AA","LiPo","NiMH","Lead"],
-correct:1,
-exp:"Η σωστή απάντηση είναι: LiPo."
-},
-
-{
-cat:"Ανθρώπινοι Παράγοντες",
-q:"Τι κάνει το Return to Home;",
-answers:["Σβήνει το drone","Επιστρέφει στο σημείο απογείωσης","Κλείνει την κάμερα","Κάνει προσγείωση όπου είναι"],
-correct:1,
-exp:"Η σωστή απάντηση είναι: Επιστρέφει στο σημείο απογείωσης."
-},
-
-{
-cat:"Πλοήγηση",
-q:"Ποιος αισθητήρας σταθεροποιεί το drone;",
-answers:["Γυροσκόπιο","GPS","Κάμερα","Μπαταρία"],
-correct:0,
-exp:"Η σωστή απάντηση είναι: Γυροσκόπιο."
-},
-
-{
-cat:"Πλοήγηση",
-q:"Τι χρησιμοποιείται για πλοήγηση;",
-answers:["Radar","GPS","Sonar","Infrared"],
-correct:1,
-exp:"Η σωστή απάντηση είναι: GPS."
-}
-
+// --- ΒΑΣΗ ΕΡΩΤΗΣΕΩΝ ---
+questionsPool = [
+    {
+        id: "Q0",
+        cat: "Αεροπορική Νομοθεσία",
+        q: "Τι σημαίνει UAV;",
+        answers: ["Μη επανδρωμένο αεροσκάφος", "Αυτόνομο όχημα", "Αεροσκάφος επιβατών", "Δορυφόρος"],
+        correct: 0,
+        exp: "Η σωστή απάντηση είναι: Μη επανδρωμένο αεροσκάφος (Unmanned Aerial Vehicle)."
+    },
+    {
+        id: "Q1",
+        cat: "Μετεωρολογία",
+        q: "Ποια μπαταρία χρησιμοποιούν τα περισσότερα drones;",
+        answers: ["AA", "LiPo", "NiMH", "Lead"],
+        correct: 1,
+        exp: "Η σωστή απάντηση είναι: LiPo. Προσφέρουν υψηλή πυκνότητα ενέργειας."
+    },
+    {
+        id: "Q2",
+        cat: "Ανθρώπινοι Παράγοντες",
+        q: "Τι κάνει το Return to Home;",
+        answers: ["Σβήνει το drone", "Επιστρέφει στο σημείο απογείωσης", "Κλείνει την κάμερα", "Κάνει προσγείωση όπου είναι"],
+        correct: 1,
+        exp: "Το RTH επιστρέφει το drone αυτόματα στο σημείο που ορίστηκε ως Home Point."
+    },
+    {
+        id: "Q3",
+        cat: "Πλοήγηση",
+        q: "Ποιος αισθητήρας σταθεροποιεί το drone;",
+        answers: ["Γυροσκόπιο", "GPS", "Κάμερα", "Μπαταρία"],
+        correct: 0,
+        exp: "Το γυροσκόπιο μετράει τη γωνιακή ταχύτητα και είναι απαραίτητο για τη σταθεροποίηση."
+    },
+    {
+        id: "Q4",
+        cat: "Πλοήγηση",
+        q: "Τι χρησιμοποιείται για πλοήγηση;",
+        answers: ["Radar", "GPS", "Sonar", "Infrared"],
+        correct: 1,
+        exp: "Το GPS χρησιμοποιείται για τον προσδιορισμό θέσης και την πλοήγηση."
+    }
 ]
 
 initQuestionStats()
