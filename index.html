@@ -2,248 +2,165 @@
 <html lang="el">
 
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>UAV Academy</title>
-
-<link rel="stylesheet" href="style.css">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAV Academy</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
-<button id="menuBtn" onclick="goMenu()">Αρχικό Μενού</button>
-<button id="themeBtn" onclick="toggleTheme()">🌙</button>
-<button id="settingsBtn" onclick="openSettings()">⚙</button>
-
-
-<div id="menu">
-
-<div class="overlay">
-
-<div class="menu-center">
-
-<h1 class="title">UAV Academy</h1>
-<p class="subtitle">Drone Training Platform</p>
-
-<div class="menu-cards">
-
-<div class="menu-card study-card" onclick="openStudy()">
-<h2>Study Mode</h2>
-<p>Μελέτη</p>
-</div>
-
-<div class="menu-card exam-card" onclick="openExamConfirm()">
-<h2>Exam Mode</h2>
-<p>Εξέταση</p>
-</div>
-
-<div class="menu-card stats-card" onclick="openStats()">
-<h2>Statistics</h2>
-<p>Progress</p>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div id="statsScreen">
-
-<div class="overlay">
-
-<div class="menu-center">
-
-<h1 class="title">Statistics</h1>
-<p class="subtitle">Training Progress</p>
-
-<div class="menu-cards">
-
-<div class="menu-card study-card" onclick="openStudyStats()">
-<h2>Study Mode</h2>
-<p>Study Statistics</p>
-</div>
-
-<div class="menu-card exam-card" onclick="openExamStats()">
-<h2>Exam Mode</h2>
-<p>Exam Statistics</p>
-</div>
-
-</div>
-
-<button onclick="goMenu()">Πίσω</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div id="studyStatsScreen">
-
-<div class="stats-box">
-
-<h2>Study Progress</h2>
-
-<div id="studyStatsContent"></div>
-
-<button onclick="openStats()">Πίσω</button>
-
-</div>
-
-</div>
-
-
-
-<div id="examStatsScreen">
-
-<div class="stats-box">
-
-<h2>Exam History</h2>
-
-<canvas id="examChart"></canvas>
-
-<button onclick="openStats()">Πίσω</button>
-
-</div>
-
-</div>
-
-
-
-<div id="studySetup">
-
-<div class="study-container">
-
-<h2>Study Mode</h2>
-
-<div class="menu-cards">
-
-<div class="menu-card">
-
-<h3>Ενότητες</h3>
-
-<select id="studyCategory">
-
-<option>Random</option>
-<option>Αεροπορική Νομοθεσία</option>
-<option>Μετεωρολογία</option>
-<option>Ανθρώπινοι Παράγοντες</option>
-<option>Πλοήγηση</option>
-
-</select>
-
-</div>
-
-
-<div class="menu-card">
-
-<h3>Αριθμός Ερωτήσεων</h3>
-
-<input id="studyCount" type="number" value="5">
-
-</div>
-
-</div>
-
-<br>
-
-<button onclick="startStudy()">Έναρξη Μελέτης</button>
-
-<br><br>
-
-<button onclick="goMenu()">Πίσω</button>
-
-</div>
-
-</div>
-
-
-
-<div id="settingsScreen">
-
-<div class="settings-page">
-
-<h1>Settings</h1>
-
-<button onclick="goMenu()">Πίσω</button>
-
-</div>
-
-</div>
-
-
-
-<div id="resultScreen">
-
-<div class="result-box">
-
-<h2>Αποτέλεσμα</h2>
-
-<h1 id="finalScore">0%</h1>
-
-<h3 id="passFail"></h3>
-
-<button onclick="goMenu()">Αρχικό Μενού</button>
-
-</div>
-
-</div>
-
-
-
-<div id="testScreen">
-
-<div class="exam-topbar">
-<div id="timer">00:00</div>
-</div>
-
-<div class="exam-layout">
-
-<div class="question-area">
-
-<h2 id="questionText"></h2>
-
-<div class="answers">
-
-<button onclick="answer(0)"></button>
-<button onclick="answer(1)"></button>
-<button onclick="answer(2)"></button>
-<button onclick="answer(3)"></button>
-
-</div>
-
-<div id="explanation"></div>
-
-<div class="controls">
-
-<button onclick="prevQuestion()">Πίσω</button>
-<button onclick="flagQuestion()">Σημείωση</button>
-<button onclick="nextQuestion()">Επόμενη</button>
-<button onclick="finishSession()">Τέλος</button>
-
-</div>
-
-</div>
-
-<div class="question-grid"></div>
-
-</div>
-
-</div>
-
-<script src="app.js"></script>
-
+    <button id="menuBtn" onclick="goMenu()">Αρχικό Μενού</button>
+    <button id="themeBtn" onclick="toggleTheme()">🌙</button>
+    <button id="settingsBtn" onclick="openSettings()">⚙</button>
+
+    <div id="menu">
+        <div class="overlay">
+            <div class="menu-center">
+                <h1 class="title">UAV Academy</h1>
+                <p class="subtitle">Drone Training Platform</p>
+
+                <div class="menu-cards">
+                    <div class="menu-card study-card" onclick="openStudy()">
+                        <h2>Study Mode</h2>
+                        <p>Μελέτη</p>
+                    </div>
+
+                    <div class="menu-card exam-card" onclick="openExamConfirm()">
+                        <h2>Exam Mode</h2>
+                        <p>Εξέταση</p>
+                    </div>
+
+                    <div class="menu-card mission-card" onclick="openMission()">
+                        <h2>Mission Mode</h2>
+                        <p>Σενάρια</p>
+                    </div>
+
+                    <div class="menu-card stats-card" onclick="openStats()">
+                        <h2>Statistics</h2>
+                        <p>Progress</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="missionScreen">
+        <div class="overlay">
+            <div class="mission-container">
+                <h2>Mission Mode</h2>
+                <div id="missionCard">
+                    </div>
+                <button class="back-btn" onclick="goMenu()">Πίσω στο Μενού</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="statsScreen">
+        <div class="overlay">
+            <div class="menu-center">
+                <h1 class="title">Statistics</h1>
+                <p class="subtitle">Training Progress</p>
+                <div class="menu-cards">
+                    <div class="menu-card study-card" onclick="openStudyStats()">
+                        <h2>Study Mode</h2>
+                        <p>Study Statistics</p>
+                    </div>
+                    <div class="menu-card exam-card" onclick="openExamStats()">
+                        <h2>Exam Mode</h2>
+                        <p>Exam Statistics</p>
+                    </div>
+                </div>
+                <button onclick="goMenu()">Πίσω</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="studyStatsScreen">
+        <div class="stats-box">
+            <h2>Study Progress</h2>
+            <div id="studyStatsContent"></div>
+            <button onclick="openStats()">Πίσω</button>
+        </div>
+    </div>
+
+    <div id="examStatsScreen">
+        <div class="stats-box">
+            <h2>Exam History</h2>
+            <canvas id="examChart"></canvas>
+            <button onclick="openStats()">Πίσω</button>
+        </div>
+    </div>
+
+    <div id="studySetup">
+        <div class="study-container">
+            <h2>Study Mode</h2>
+            <div class="menu-cards">
+                <div class="menu-card">
+                    <h3>Ενότητες</h3>
+                    <select id="studyCategory">
+                        <option>Random</option>
+                        <option>Αεροπορική Νομοθεσία</option>
+                        <option>Μετεωρολογία</option>
+                        <option>Ανθρώπινοι Παράγοντες</option>
+                        <option>Πλοήγηση</option>
+                    </select>
+                </div>
+                <div class="menu-card">
+                    <h3>Αριθμός Ερωτήσεων</h3>
+                    <input id="studyCount" type="number" value="5">
+                </div>
+            </div>
+            <br>
+            <button onclick="startStudy()">Έναρξη Μελέτης</button>
+            <br><br>
+            <button onclick="goMenu()">Πίσω</button>
+        </div>
+    </div>
+
+    <div id="settingsScreen">
+        <div class="settings-page">
+            <h1>Settings</h1>
+            <button onclick="goMenu()">Πίσω</button>
+        </div>
+    </div>
+
+    <div id="resultScreen">
+        <div class="result-box">
+            <h2>Αποτέλεσμα</h2>
+            <h1 id="finalScore">0%</h1>
+            <h3 id="passFail"></h3>
+            <button onclick="goMenu()">Αρχικό Μενού</button>
+        </div>
+    </div>
+
+    <div id="testScreen">
+        <div class="exam-topbar">
+            <div id="timer">00:00</div>
+        </div>
+        <div class="exam-layout">
+            <div class="question-area">
+                <h2 id="questionText"></h2>
+                <div class="answers">
+                    <button onclick="answer(0)"></button>
+                    <button onclick="answer(1)"></button>
+                    <button onclick="answer(2)"></button>
+                    <button onclick="answer(3)"></button>
+                </div>
+                <div id="explanation"></div>
+                <div class="controls">
+                    <button onclick="prevQuestion()">Πίσω</button>
+                    <button onclick="flagQuestion()">Σημείωση</button>
+                    <button onclick="nextQuestion()">Επόμενη</button>
+                    <button onclick="finishSession()">Τέλος</button>
+                </div>
+            </div>
+            <div class="question-grid"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
+
 </html>
