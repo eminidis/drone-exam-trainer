@@ -24,22 +24,22 @@
                 <div class="menu-cards">
                     <div class="menu-card study-card" onclick="openStudy()">
                         <h2>Study Mode</h2>
-                        <p>Μελέτη</p>
+                        <p>Μελέτη Θεωρίας</p>
                     </div>
 
                     <div class="menu-card exam-card" onclick="openExamConfirm()">
                         <h2>Exam Mode</h2>
-                        <p>Εξέταση</p>
+                        <p>Προσομοίωση A2</p>
                     </div>
 
                     <div class="menu-card mission-card" onclick="openMission()">
                         <h2>Mission Mode</h2>
-                        <p>Σενάρια</p>
+                        <p>Επιχειρησιακά Σενάρια</p>
                     </div>
 
                     <div class="menu-card stats-card" onclick="openStats()">
                         <h2>Statistics</h2>
-                        <p>Progress</p>
+                        <p>Πρόοδος & Αναλύσεις</p>
                     </div>
                 </div>
             </div>
@@ -60,36 +60,43 @@
     <div id="statsScreen">
         <div class="overlay">
             <div class="menu-center">
-                <h1 class="title">Statistics</h1>
-                <p class="subtitle">Training Progress</p>
+                <h1 class="title">Στατιστικά</h1>
+                <p class="subtitle">Ανάλυση Εκπαίδευσης</p>
                 <div class="menu-cards">
                     <div class="menu-card study-card" onclick="openStudyStats()">
-                        <h2>Study Mode</h2>
-                        <p>Study Statistics</p>
+                        <h2>Study Stats</h2>
+                        <p>Πρόοδος ανά Ενότητα</p>
                     </div>
                     <div class="menu-card exam-card" onclick="openExamStats()">
-                        <h2>Exam Mode</h2>
-                        <p>Exam Statistics</p>
+                        <h2>Exam Stats</h2>
+                        <p>Ιστορικό Εξετάσεων</p>
                     </div>
                 </div>
-                <button onclick="goMenu()">Πίσω</button>
+                <button class="back-btn" onclick="goMenu()" style="margin-top: 30px;">Πίσω στο Μενού</button>
             </div>
         </div>
     </div>
 
     <div id="studyStatsScreen">
         <div class="stats-box">
-            <h2>Study Progress</h2>
-            <div id="studyStatsContent"></div>
-            <button onclick="openStats()">Πίσω</button>
+            <h2>Πρόοδος Μελέτης ανά Ενότητα</h2>
+            <div class="stats-overview" id="studyOverview">
+                </div>
+            <div id="studyStatsContent">
+                </div>
+            <button class="back-btn" onclick="openStats()">Επιστροφή στα Στατιστικά</button>
         </div>
     </div>
 
     <div id="examStatsScreen">
         <div class="stats-box">
-            <h2>Exam History</h2>
-            <canvas id="examChart"></canvas>
-            <button onclick="openStats()">Πίσω</button>
+            <h2>Ιστορικό και Απόδοση Εξετάσεων</h2>
+            <div class="stats-overview" id="examOverview">
+                </div>
+            <div class="chart-container">
+                <canvas id="examChart"></canvas>
+            </div>
+            <button class="back-btn" onclick="openStats()">Επιστροφή στα Στατιστικά</button>
         </div>
     </div>
 
@@ -109,20 +116,21 @@
                 </div>
                 <div class="menu-card">
                     <h3>Αριθμός Ερωτήσεων</h3>
-                    <input id="studyCount" type="number" value="5">
+                    <input id="studyCount" type="number" value="5" min="1" max="50">
                 </div>
             </div>
             <br>
-            <button onclick="startStudy()">Έναρξη Μελέτης</button>
+            <button class="back-btn" onclick="startStudy()" style="background: #2563eb; color: white;">Έναρξη Μελέτης</button>
             <br><br>
-            <button onclick="goMenu()">Πίσω</button>
+            <button class="back-btn" onclick="goMenu()">Πίσω</button>
         </div>
     </div>
 
     <div id="settingsScreen">
         <div class="settings-page">
-            <h1>Settings</h1>
-            <button onclick="goMenu()">Πίσω</button>
+            <h1>Ρυθμίσεις</h1>
+            <p>Η εφαρμογή εκτελείται αποκλειστικά στα Ελληνικά.</p>
+            <button class="back-btn" onclick="goMenu()">Πίσω</button>
         </div>
     </div>
 
@@ -131,7 +139,8 @@
             <h2>Αποτέλεσμα</h2>
             <h1 id="finalScore">0%</h1>
             <h3 id="passFail"></h3>
-            <button onclick="goMenu()">Αρχικό Μενού</button>
+            <button class="back-btn" onclick="goMenu()">Αρχικό Μενού</button>
+            <button class="back-btn" onclick="openExamStats()" style="background:#16a34a; color:white; margin-left:10px;">Δείτε τα Στατιστικά</button>
         </div>
     </div>
 
