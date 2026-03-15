@@ -32,12 +32,17 @@
 
     <div id="topNavbar" class="top-navbar" style="display: none;">
         <div class="nav-left">
-            <button id="menuBtn" onclick="goMenu()">Αρχικό Μενού</button>
+            <button id="menuBtn" onclick="goMenu()">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: middle;"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                Αρχικό Μενού
+            </button>
         </div>
         <div class="nav-right">
-            <button id="settingsBtn" onclick="openSettings()" title="Ρυθμίσεις">⚙</button>
+            <button id="settingsBtn" onclick="openSettings()" title="Ρυθμίσεις">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
             <button id="themeBtn" onclick="toggleTheme()" title="Εναλλαγή Θέματος">
-                <svg id="themeIcon" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <svg id="themeIcon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                 </svg>
             </button>
@@ -194,7 +199,7 @@
                                 <li><span class="detail-icon">💨</span> <strong>Άνεμος:</strong> 8 m/s (B)</li>
                                 <li><span class="detail-icon">🌡️</span> <strong>Θερμ.:</strong> 15°C</li>
                             </ul>
-                            <button class="btn-primary" style="width:100%; margin-top: 15px;" onclick="alert('Φόρτωση Προσομοιωτή...')">Έναρξη Αποστολής</button>
+                            <button class="btn-primary" style="width:100%; margin-top: 15px;" onclick="startMission(1)">Έναρξη Αποστολής</button>
                         </div>
                     </div>
 
@@ -230,6 +235,24 @@
                             </ul>
                             <button class="btn-secondary" style="width:100%; margin-top: 15px;" disabled>Απαιτείται Επίπεδο 10</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="missionSimulatorScreen">
+        <div class="sim-overlay">
+            <div class="sim-header">
+                <h2>Επιχειρησιακό Σενάριο</h2>
+                <button class="btn-danger" onclick="openMission()">Ματαίωση Αποστολής</button>
+            </div>
+            <div class="sim-container">
+                <div class="sim-view" id="simView" style="background-image: url('drone-bg.jpg');">
+                    <div class="sim-dialog-box" id="simDialogBox">
+                        <h3 id="simStepTitle">Βήμα 1: Προετοιμασία Πτήσης</h3>
+                        <p id="simStepDesc">Βρίσκεστε στο σημείο απογείωσης (Αστικό Περιβάλλον). Ο άνεμος είναι στα 8m/s. Ποια είναι η πρώτη σας ενέργεια;</p>
+                        <div class="sim-options" id="simOptions"></div>
                     </div>
                 </div>
             </div>
@@ -297,12 +320,13 @@
                     <div class="menu-card glass-card">
                         <h3 style="color: white; margin-top: 0; font-size: 18px;">Ενότητα</h3>
                         <select id="studyCategory" class="glass-input">
-                            <option value="Random">Τυχαίες (Όλες)</option>
+                            <option value="Random">Όλες οι Ενότητες (Mix)</option>
+                            <option value="A1/A3 Βασικό">A1/A3 Βασικό Επίπεδο</option>
+                            <option value="A2 Προχωρημένο">A2 Προχωρημένο Επίπεδο</option>
                             <option value="Αεροπορική Νομοθεσία">Αεροπορική Νομοθεσία</option>
                             <option value="Μετεωρολογία">Μετεωρολογία</option>
                             <option value="Ανθρώπινοι Παράγοντες">Ανθρώπινοι Παράγοντες</option>
                             <option value="Πλοήγηση">Πλοήγηση</option>
-                            <option value="Ιδιωτικότητα">Ιδιωτικότητα</option>
                         </select>
                     </div>
                     <div class="menu-card glass-card">
@@ -332,7 +356,9 @@
                 <div class="test-meta-bar">
                     <div class="meta-left">
                         <span id="qCounter" class="q-counter">Ερ. 1 / 30</span>
-                        <button id="flagBtn" class="pin-btn" onclick="flagQuestion()" title="Σημείωση (Επισήμανση με Σημαία)">🚩</button>
+                        <button id="flagBtn" class="pin-btn" onclick="flagQuestion()" title="Σημείωση (Επισήμανση με Πινέζα)">
+                            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.68V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3v4.68a2 2 0 0 1-1.11 1.87l-1.78.9A2 2 0 0 0 5 15.24Z"></path></svg>
+                        </button>
                     </div>
                     <div class="meta-center">
                         <span id="qCategoryBadge" class="cat-badge">Κατηγορία</span>
@@ -341,11 +367,6 @@
                         <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                         <span class="timer-display" id="timer">00:00:00</span>
                     </div>
-                </div>
-
-                <div class="test-tabs">
-                    <div class="tab active" id="tabQuestion"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> ΕΡΩΤΗΣΗ</div>
-                    <div class="tab" id="tabExplanation" style="display:none;"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> ΕΠΕΞΗΓΗΣΗ</div>
                 </div>
 
                 <div class="question-body">
