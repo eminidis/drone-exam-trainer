@@ -137,6 +137,7 @@ const easaTheoryData = [
     }
 ];
 
+// Extended Question Pool containing mixed A1, A2, A3 questions + ALL JSON DATA
 const questionsPool = [
     { cat: "A1/A3 Βασικό", q: "Τι ισχύει για την υποκατηγορία A1 (drones κλάσης C1);", answers: ["Επιτρέπεται η πτήση πάνω από συναθροίσεις", "Πρέπει να αποφεύγεται η πτήση πάνω από μεμονωμένα άτομα", "Απαγορεύεται η χρήση κάμερας", "Δεν απαιτείται εγγραφή στο μητρώο"], correct: 1, exp: "Στην A1, επιτρέπεται μεν (για C0/C1) η πτήση πάνω από μεμονωμένα άτομα, αλλά πρέπει πάντα να αποφεύγεται." },
     { cat: "A1/A3 Βασικό", q: "Ποια είναι η ελάχιστη απόσταση από κατοικημένες περιοχές στην υποκατηγορία A3;", answers: ["50 μέτρα", "120 μέτρα", "150 μέτρα", "Δεν υπάρχει όριο"], correct: 2, exp: "Στην A3, απαιτείται απόσταση 150m από οικιστικές, εμπορικές, βιομηχανικές ή ψυχαγωγικές περιοχές." },
@@ -469,7 +470,31 @@ function logoutMock() {
 }
 
 function openSettings() {
+    // Κρύβουμε όλα τα screens
+    document.querySelectorAll('body > div').forEach(el => {
+        if(el.id !== 'topNavbar' && el.id !== 'landingNavbar') el.style.display = 'none';
+    });
+    // Εμφανίζουμε το panel ρυθμίσεων
     document.getElementById('settingsScreen').style.display = 'flex';
+    
+    // Ανοίγουμε την 1η καρτέλα από προεπιλογή
+    switchSettingsTab('profile');
+}
+
+function switchSettingsTab(tabId) {
+    // Κρύψε όλα τα tab contents
+    document.querySelectorAll('.settings-tab-content').forEach(el => {
+        el.style.display = 'none';
+    });
+    
+    // Βγάλε το active class από όλα τα tab buttons
+    document.querySelectorAll('.settings-tab').forEach(el => {
+        el.classList.remove('active');
+    });
+    
+    // Εμφάνισε μόνο το επιλεγμένο και δώσε του styling
+    document.getElementById('tab-' + tabId).style.display = 'block';
+    document.getElementById('tabBtn-' + tabId).classList.add('active');
 }
 
 function saveSettings() {
