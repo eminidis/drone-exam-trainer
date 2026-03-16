@@ -415,18 +415,18 @@ const questionsPool = [
     { cat: "ΤΕΧΝΙΚΑ ΚΑΙ ΛΕΙΤΟΥΡΓΙΚΑ ΜΕΤΡΑ ΜΕΤΡΙΑΣΜΟΥ ΚΙΝΔΥΝΩΝ", q: "18) Πτήση στην πλευρά ενός κτιρίου, στην οποία πνέει άνεμος:", answers: ["α) είναι ασφαλής επειδή το ΣμηΕΑ είναι προστατευμένο από τον άνεμο", "β) είναι επικίνδυνο λόγω αναταράξεων", "γ) υπερβαίνει τους κανόνες πτήσης στην ανοιχτή κατηγορία", "δ) θα μπορούσε να γίνει μόνο σε χειροκίνητη λειτουργία πτήσης (δεν επιτρέπονται αυτόματες λειτουργίες)"], correct: 1, exp: "Επίσημη Ερώτηση - Βάση Δεδομένων" }
 ];
 
-let mode = "menu"; // menu, theory, study, exam, mission, stats
+let mode = "menu";
 let selectedQuestions = [];
 let currentQ = 0;
 let userAnswers = {};
 let timerInterval;
 let seconds = 0;
-let examTime = 60 * 60; // 60 Λεπτά
+let examTime = 60 * 60;
 let flaggedQuestions = new Set();
 let examModeActive = false;
 let userNotes = JSON.parse(localStorage.getItem('droneNotes')) || {};
+let finishModalShown = false;
 
-// Initialize application
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("landingScreen").style.display = "flex";
     document.getElementById("landingNavbar").style.display = "flex";
@@ -434,7 +434,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loadUserProfile();
 });
 
-// UI NAVIGATION
 function goMenu() {
     clearInterval(timerInterval);
     document.querySelectorAll('body > div').forEach(el => {
@@ -501,7 +500,6 @@ if(localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark');
 }
 
-// THEORY MODULE
 function openTheory() {
     document.getElementById('menu').style.display = 'none';
     document.getElementById('theoryScreen').style.display = 'flex';
@@ -527,7 +525,6 @@ function loadTheoryContent(index, btnEl) {
     contentBox.scrollTop = 0;
 }
 
-// MISSIONS
 function openMission() {
     document.getElementById('menu').style.display = 'none';
     document.getElementById('missionSimulatorScreen').style.display = 'none';
@@ -542,14 +539,31 @@ function startMission(id) {
     const desc = document.getElementById('simStepDesc');
     const options = document.getElementById('simOptions');
     
-    title.innerText = "Βήμα 1: Αξιολόγηση Περιβάλλοντος";
-    desc.innerText = "Βρίσκεστε σε αστικό περιβάλλον (Α2). Υπάρχει ένα άτομο στα 10 μέτρα. Το drone σας είναι C2 και έχει λειτουργία χαμηλής ταχύτητας. Τι κάνετε;";
-    
-    options.innerHTML = `
-        <button class="sim-btn" onclick="missionResult(false)">Απογειώνομαι κανονικά, επιτρέπεται μέχρι 5 μέτρα.</button>
-        <button class="sim-btn" onclick="missionResult(true)">Ενεργοποιώ το low-speed mode (max 3m/s) και μετά απογειώνομαι με προσοχή.</button>
-        <button class="sim-btn" onclick="missionResult(false)">Πλησιάζω το άτομο και του ζητάω να κρατήσει το drone.</button>
-    `;
+    if(id === 1) {
+        title.innerText = "Βήμα 1: Αξιολόγηση Περιβάλλοντος (Επιθεώρηση Κτιρίου)";
+        desc.innerText = "Βρίσκεστε σε αστικό περιβάλλον (Α2). Υπάρχει ένα άτομο στα 10 μέτρα. Το drone σας είναι C2 και έχει λειτουργία χαμηλής ταχύτητας. Τι κάνετε;";
+        options.innerHTML = `
+            <button class="sim-btn" onclick="missionResult(false)">Απογειώνομαι κανονικά, επιτρέπεται μέχρι 5 μέτρα.</button>
+            <button class="sim-btn" onclick="missionResult(true)">Ενεργοποιώ το low-speed mode (max 3m/s) και μετά απογειώνομαι.</button>
+            <button class="sim-btn" onclick="missionResult(false)">Πλησιάζω το άτομο και του ζητάω να κρατήσει το drone.</button>
+        `;
+    } else if (id === 2) {
+        title.innerText = "Βήμα 1: Νυχτερινή Πτήση (Έρευνα SAR)";
+        desc.innerText = "Επιχειρείτε SAR στο βουνό, νύχτα (C3). Ο άνεμος είναι 12m/s. Τι πρέπει να έχετε ενεργοποιημένο οπωσδήποτε στο drone;";
+        options.innerHTML = `
+            <button class="sim-btn" onclick="missionResult(false)">Τα μπροστινά LED λευκού χρώματος.</button>
+            <button class="sim-btn" onclick="missionResult(true)">Ένα πράσινο αναλάμπον (flashing) φως στην κάτω πλευρά.</button>
+            <button class="sim-btn" onclick="missionResult(false)">Ηχητικό σήμα (buzzer) συνεχούς λειτουργίας.</button>
+        `;
+    } else {
+        title.innerText = "Βήμα 1: Πτήση πάνω από καλλιέργειες (Ψεκασμός)";
+        desc.innerText = "Ψεκάζετε ένα χωράφι. Βλέπετε 2 περαστικούς να μπαίνουν στα όρια του χωραφιού. Τι κάνετε;";
+        options.innerHTML = `
+            <button class="sim-btn" onclick="missionResult(true)">Διακόπτω άμεσα τον ψεκασμό και απομακρύνω το drone.</button>
+            <button class="sim-btn" onclick="missionResult(false)">Χαμηλώνω ύψος και συνεχίζω κανονικά.</button>
+            <button class="sim-btn" onclick="missionResult(false)">Τους φωνάζω από μακριά να προσέχουν.</button>
+        `;
+    }
 }
 
 function missionResult(success) {
@@ -569,7 +583,6 @@ function missionResult(success) {
     }
 }
 
-// EXAM AND STUDY SETUP
 function openStudy() {
     document.getElementById('menu').style.display = 'none';
     document.getElementById('studySetup').style.display = 'flex';
@@ -586,7 +599,6 @@ function startStudy() {
     const countVal = document.getElementById("studyCount").value;
     
     let filtered = cat === "Random" ? [...questionsPool] : questionsPool.filter(q => q.cat === cat);
-    
     filtered.sort(() => Math.random() - 0.5);
     
     let limit = countVal === "all" ? filtered.length : parseInt(countVal);
@@ -597,9 +609,9 @@ function startStudy() {
     }
 
     selectedQuestions = filtered.slice(0, limit);
-    
     mode = "study";
     examModeActive = false;
+    finishModalShown = false;
     document.getElementById("studySetup").style.display = "none";
     initSession("Study Mode: Εξάσκηση", false);
 }
@@ -611,6 +623,7 @@ function startExam() {
     
     mode = "exam";
     examModeActive = true;
+    finishModalShown = false;
     document.getElementById("menu").style.display = "none";
     initSession("EASA A2 - Επίσημη Προσομοίωση", true);
 }
@@ -649,7 +662,6 @@ function initSession(title, isExam) {
     loadQuestion(0);
 }
 
-// CORE TEST LOGIC
 function loadQuestion(idx) {
     currentQ = idx;
     const qData = selectedQuestions[idx];
@@ -669,7 +681,6 @@ function loadQuestion(idx) {
         pinBtn.classList.remove("active");
     }
 
-    // Load Note
     document.getElementById("noteContainer").style.display = "none";
     const noteArea = document.getElementById("questionNote");
     if(userNotes[qData.q]) {
@@ -837,6 +848,20 @@ function updateProgress() {
     let answeredCount = Object.keys(userAnswers).length;
     let pct = (answeredCount / selectedQuestions.length) * 100;
     document.getElementById("examProgressBar").style.width = pct + "%";
+
+    if (answeredCount === selectedQuestions.length && !finishModalShown) {
+        finishModalShown = true;
+        setTimeout(() => {
+            document.getElementById('autoFinishModal').style.display = 'flex';
+        }, 600);
+    }
+}
+
+function confirmFinish(submit) {
+    document.getElementById('autoFinishModal').style.display = 'none';
+    if (submit) {
+        finishSession();
+    }
 }
 
 function nextQuestion() {
@@ -869,7 +894,6 @@ function startTimer() {
     }, 1000);
 }
 
-// RESULTS & STATS
 function finishSession() {
     clearInterval(timerInterval);
     
@@ -895,18 +919,17 @@ function finishSession() {
     document.getElementById("finalScore").innerText = Math.round(score) + "%";
     
     const passFail = document.getElementById("passFail");
+    if(score >= 75) {
+        passFail.innerText = "ΕΠΙΤΥΧΙΑ (PASS)";
+        passFail.style.color = "#16a34a";
+    } else {
+        passFail.innerText = "ΑΠΟΤΥΧΙΑ (FAIL)";
+        passFail.style.color = "#dc2626";
+    }
+
     if(mode === "exam") {
-        if(score >= 75) {
-            passFail.innerText = "ΕΠΙΤΥΧΙΑ (PASS)";
-            passFail.style.color = "#16a34a";
-        } else {
-            passFail.innerText = "ΑΠΟΤΥΧΙΑ (FAIL)";
-            passFail.style.color = "#dc2626";
-        }
         saveExamStats(score);
     } else {
-        passFail.innerText = "Ολοκλήρωση Μελέτης";
-        passFail.style.color = "#2563eb";
         saveStudyStats();
     }
     
@@ -1008,25 +1031,39 @@ function openStudyStats() {
         return;
     }
     
-    let html = '<div style="display:flex; flex-direction:column; gap:20px;">';
+    let html = `
+    <table class="stats-table">
+        <thead>
+            <tr>
+                <th>Ενότητα</th>
+                <th>Ερωτήσεις</th>
+                <th>Σωστές</th>
+                <th>Λάθος</th>
+                <th>Ποσοστό</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
     
     for(const cat in stats) {
-        let pct = Math.round((stats[cat].correct / stats[cat].total) * 100);
+        let total = stats[cat].total;
+        let correct = stats[cat].correct;
+        let wrong = total - correct;
+        let pct = Math.round((correct / total) * 100);
         let color = pct >= 75 ? "#22c55e" : (pct >= 50 ? "#f59e0b" : "#ef4444");
         
         html += `
-            <div>
-                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <span style="font-weight:bold;">${cat}</span>
-                    <span style="color:${color}; font-weight:bold;">${pct}% (${stats[cat].correct}/${stats[cat].total})</span>
-                </div>
-                <div style="width:100%; background:#e2e8f0; border-radius:5px; height:10px;">
-                    <div style="width:${pct}%; background:${color}; height:100%; border-radius:5px;"></div>
-                </div>
-            </div>
+            <tr>
+                <td>${cat}</td>
+                <td>${total}</td>
+                <td style="color: #22c55e; font-weight: bold;">${correct}</td>
+                <td style="color: #ef4444; font-weight: bold;">${wrong}</td>
+                <td style="color: ${color}; font-weight: bold;">${pct}%</td>
+            </tr>
         `;
     }
-    html += '</div>';
+    
+    html += '</tbody></table>';
     content.innerHTML = html;
 }
 
@@ -1086,7 +1123,6 @@ function openExamStats() {
 }
 
 function updateGlobalStats() {
-    // Optional utility to compute summary stats
 }
 
 function loadUserProfile() {
