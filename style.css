@@ -37,6 +37,12 @@ body {
 }
 .theme-btn-landing:hover { color: #facc15; }
 
+/* Sun & Moon Icons Logic */
+body:not(.dark) .moon-icon { display: block; }
+body:not(.dark) .sun-icon { display: none; }
+body.dark .moon-icon { display: none; }
+body.dark .sun-icon { display: block; }
+
 /* LANDING SCREEN HERO SECTION */
 .landing-screen {
     display: flex; min-height: calc(100vh - 60px);
@@ -88,7 +94,7 @@ body {
 .bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; }
 .bar-fill { height: 100%; background: #3b82f6; border-radius: 3px; box-shadow: 0 0 10px rgba(59,130,246,0.5); }
 
-/* SLEEK TOP NAVBAR (Main App) - Redesigned to be Professional Dark Glass */
+/* SLEEK TOP NAVBAR */
 .top-navbar {
     position: fixed; top: 0; left: 0; right: 0; height: 60px;
     background: rgba(15, 23, 42, 0.85); 
@@ -182,6 +188,17 @@ body {
 .stats-content-box { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 .dark .stats-content-box { background: #1e293b; border: 1px solid #334155; color: white; }
 
+/* STATS TABLE (NEW) */
+.stats-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.dark .stats-table { background: #0f172a; border: 1px solid #334155; }
+.stats-table th, .stats-table td { padding: 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+.dark .stats-table th, .dark .stats-table td { border-bottom-color: #334155; color: #cbd5e1; }
+.stats-table th { background: #f8fafc; font-weight: 600; color: #475569; text-transform: uppercase; font-size: 13px; }
+.dark .stats-table th { background: #1e293b; color: #94a3b8; }
+.stats-table tr:last-child td { border-bottom: none; }
+.stats-table tr:hover { background: #f1f5f9; }
+.dark .stats-table tr:hover { background: rgba(255,255,255,0.02); }
+
 /* THEORY STYLES */
 .theory-container { background: white; width: 95%; max-width: 1300px; height: 85vh; border-radius: 20px; padding: 0; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); overflow: hidden; }
 .dark .theory-container { background: #1e293b; color: #f1f5f9; }
@@ -263,7 +280,7 @@ body {
 .q-counter { font-size: 20px; font-weight: 700; color: #1e293b; margin-right: 15px; background: #e2e8f0; padding: 5px 15px; border-radius: 8px; }
 .dark .q-counter { color: #f8fafc; background: #334155; }
 
-/* Pin Button Styles (SVG based for consistent coloring) */
+/* Pin Button Styles */
 .pin-btn { 
     background: transparent; border: none; cursor: pointer; color: #cbd5e1; 
     transition: 0.2s; padding: 5px; display: flex; align-items: center; justify-content: center;
@@ -276,6 +293,9 @@ body {
 }
 .pin-btn.active svg { fill: #facc15; }
 
+.pin-btn.has-note { color: #3b82f6; }
+.pin-btn.has-note svg { fill: rgba(59, 130, 246, 0.2); }
+
 .cat-badge { font-size: 14px; font-weight: 600; letter-spacing: 1px; color: #3b82f6; text-transform: uppercase; border: 1px solid #3b82f6; padding: 4px 12px; border-radius: 20px; }
 
 .timer-display { font-size: 24px; font-weight: 600; letter-spacing: 2px; font-family: 'Courier New', monospace; color: #1e293b; }
@@ -287,7 +307,6 @@ body {
 
 .av-answers { display: flex; flex-direction: column; gap: 15px; }
 
-/* Redesigned Answer Cards */
 .av-answers button {
     display: flex; align-items: center; background: white; border: 2px solid #e2e8f0;
     border-radius: 12px; padding: 15px 20px; cursor: pointer; text-align: left; transition: all 0.2s ease;
@@ -321,7 +340,7 @@ body {
 .av-answers button.wrong .letter { background: #ef4444 !important; color: white !important; box-shadow: 0 2px 8px rgba(239,68,68,0.4) !important; }
 .dark .av-answers button.wrong { background: rgba(239, 68, 68, 0.1) !important; }
 
-/* Explanation Box appearing below answers */
+/* Explanation Box */
 .av-explanation {
     margin-top: 25px; padding: 25px; background: white; border-radius: 12px;
     border: 1px solid #e2e8f0; font-size: 15px; line-height: 1.6; color: #334155; display: none;
@@ -338,7 +357,7 @@ body {
 .dark .nav-bottom-btn { background: #334155; color: #cbd5e1; }
 .dark .nav-bottom-btn:hover { background: #475569; color: white; }
 
-/* Distinctive Dashboard-style Sidebar Grid */
+/* Sidebar Grid */
 .test-sidebar { width: 320px; }
 .sidebar-card {
     background: white; border-radius: 16px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
@@ -362,25 +381,19 @@ body {
 .btn-finish-test:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.4); }
 
 .av-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
-
-/* Rounded grid items */
 .av-grid div {
     aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center;
     background: #f8fafc; border: 2px solid #cbd5e1; font-size: 13px; font-weight: 600; color: #64748b;
     cursor: pointer; transition: 0.2s; position: relative;
 }
 .dark .av-grid div { background: #0f172a; border-color: #475569; color: #94a3b8; }
-
 .av-grid div:hover { border-color: #94a3b8; color: #334155; }
 .dark .av-grid div:hover { border-color: #64748b; color: #e2e8f0; }
 
-/* EXAM MODE: All answered become solid BLUE */
 .av-grid div.answered { background: #3b82f6 !important; border-color: #2563eb !important; color: white !important; }
-
 .av-grid div.active { border-color: #3b82f6; color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.2); transform: scale(1.1); z-index: 5; }
 .dark .av-grid div.active { box-shadow: 0 0 0 4px rgba(59,130,246,0.3); }
 
-/* The Pin styling - Custom Yellow SVG for the Grid */
 .av-grid div.flagged::after {
     content: ''; position: absolute; top: -6px; right: -6px; width: 16px; height: 16px;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23facc15" stroke="%23ca8a04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.68V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3v4.68a2 2 0 0 1-1.11 1.87l-1.78.9A2 2 0 0 0 5 15.24Z"></path></svg>');
@@ -388,14 +401,13 @@ body {
     filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.4)); z-index: 10;
 }
 
-/* STUDY MODE overrides blue with Green/Red */
 .av-grid div.correct { background: #22c55e !important; color: white !important; border-color: #16a34a !important; }
 .av-grid div.wrong { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
 
-/* MODAL OVERLAY (Login) */
+/* MODAL OVERLAYS */
 .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(15, 23, 42, 0.85); z-index: 3000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
 .glass-modal { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px rgba(0,0,0,0.5); padding: 40px; border-radius: 16px; width: 90%; max-width: 400px; }
-.glass-modal h2 { margin-top: 0; color: white; text-align: center; margin-bottom: 25px; font-weight: 600; }
+.glass-modal h2 { margin-top: 0; color: white; margin-bottom: 25px; font-weight: 600; }
 .glass-modal .form-input { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: white; }
 .glass-modal .form-input:focus { border-color: #60a5fa; background: rgba(0,0,0,0.5); }
 
