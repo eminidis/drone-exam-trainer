@@ -5,209 +5,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UAV Academy - EASA Certified Platform</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* Κεντρική διαχείριση χρωμάτων για σωστή αντίθεση σε Light / Dark Mode */
+        :root {
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f1f5f9;
+            --border-color: #cbd5e1;
+        }
+        body.dark-mode, body.dark-theme {
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --border-color: #334155;
+        }
+
         .trial-grid-item {
             padding: 10px;
             text-align: center;
-            border: 1px solid #cbd5e1;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.2s;
-            background: white;
-            color: #334155;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .trial-grid-item:hover { background: #e2e8f0; }
+        .trial-grid-item:hover { background: var(--bg-secondary); }
         
-        /* Νέο Στυλ Τιμοκαταλόγου βάσει σχεδίου */
+        /* Στυλ Τιμοκαταλόγου βάσει σχεδίου (Πιο compact) */
         .pricing-modal-content {
             background-color: #171f2c;
             border: 1px solid #2a3649;
             border-radius: 16px;
             color: white;
-            max-width: 1000px;
+            max-width: 850px; /* Μικρότερο πλάτος */
             width: 95%;
-            padding: 40px 50px;
+            padding: 30px 40px; /* Μικρότερα κενά */
             position: relative;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .pricing-header-text {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+        .pricing-header-text { text-align: center; margin-bottom: 25px; }
+        .pricing-header-text h2 { margin: 0 0 10px 0; font-size: 28px; font-weight: 700; color: white; }
+        .pricing-header-text p { color: #94a3b8; margin: 0; font-size: 15px; }
 
-        .pricing-header-text h2 {
-            margin: 0 0 10px 0;
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .pricing-header-text p {
-            color: #94a3b8;
-            margin: 0;
-            font-size: 16px;
-        }
-
-        .pricing-cards-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            align-items: stretch;
-        }
-
-        .price-card {
-            background: #1a2232;
-            border: 1px solid #2a3649;
-            border-radius: 16px;
-            padding: 40px 30px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-
-        .price-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .price-card.pro-card {
-            background: #151e2e;
-            border: 2px solid #3b82f6;
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
-        }
-
-        .price-badge {
-            position: absolute;
-            top: -14px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #4a8df8;
-            color: white;
-            padding: 5px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .price-title {
-            text-align: center;
-            font-size: 22px;
-            font-weight: 700;
-            margin: 0 0 20px 0;
-            color: white;
-        }
-
-        .pro-card .price-title {
-            color: #60a5fa;
-        }
-
-        .price-amount {
-            text-align: center;
-            font-size: 48px;
-            font-weight: 800;
-            margin: 0 0 30px 0;
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-        }
-
-        .price-amount span {
-            font-size: 18px;
-            color: #94a3b8;
-            font-weight: normal;
-            margin-left: 5px;
-        }
-
-        .price-features {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 40px 0;
-            flex-grow: 1;
-        }
-
-        .price-features li {
-            position: relative;
-            padding-left: 30px;
-            margin-bottom: 15px;
-            color: #cbd5e1;
-            font-size: 15px;
-            line-height: 1.4;
-        }
-
-        .price-features li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            top: 0;
-            color: #10b981;
+        /* FOMO Timer */
+        .fomo-banner {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 20px;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
-        .price-btn {
-            width: 100%;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            border: none;
-            transition: background 0.2s;
-        }
+        .pricing-cards-container { display: flex; justify-content: center; gap: 15px; align-items: stretch; }
+        .price-card { background: #1a2232; border: 1px solid #2a3649; border-radius: 16px; padding: 30px 20px; flex: 1; display: flex; flex-direction: column; position: relative; transition: transform 0.3s ease; }
+        .price-card:hover { transform: translateY(-5px); }
+        .price-card.pro-card { background: #151e2e; border: 2px solid #3b82f6; box-shadow: 0 0 30px rgba(59, 130, 246, 0.15); }
+        .price-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #4a8df8; color: white; padding: 5px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+        .price-title { text-align: center; font-size: 20px; font-weight: 700; margin: 0 0 15px 0; color: white; }
+        .pro-card .price-title { color: #60a5fa; }
+        .price-amount { text-align: center; font-size: 38px; font-weight: 800; margin: 0 0 25px 0; display: flex; align-items: baseline; justify-content: center; }
+        .price-amount span { font-size: 16px; color: #94a3b8; font-weight: normal; margin-left: 5px; }
+        .price-features { list-style: none; padding: 0; margin: 0 0 30px 0; flex-grow: 1; }
+        .price-features li { position: relative; padding-left: 25px; margin-bottom: 12px; color: #cbd5e1; font-size: 14px; line-height: 1.4; }
+        .price-features li::before { content: "✓"; position: absolute; left: 0; top: 0; color: #10b981; font-weight: bold; font-size: 14px; }
+        .price-btn { width: 100%; padding: 12px; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; transition: background 0.2s; }
+        .btn-basic-adv { background: #334155; color: white; }
+        .btn-basic-adv:hover { background: #475569; }
+        .btn-pro { background: #4a8df8; color: white; }
+        .btn-pro:hover { background: #3b82f6; }
+        .close-pricing-btn { display: block; margin: 30px auto 0; background: transparent; border: 1px solid #475569; color: white; padding: 8px 30px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .close-pricing-btn:hover { background: rgba(255, 255, 255, 0.05); border-color: #64748b; }
 
-        .btn-basic-adv {
-            background: #334155;
-            color: white;
-        }
-
-        .btn-basic-adv:hover {
-            background: #475569;
-        }
-
-        .btn-pro {
-            background: #4a8df8;
-            color: white;
-        }
-
-        .btn-pro:hover {
-            background: #3b82f6;
-        }
-
-        .close-pricing-btn {
-            display: block;
-            margin: 40px auto 0;
-            background: transparent;
-            border: 1px solid #475569;
-            color: white;
-            padding: 10px 40px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .close-pricing-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: #64748b;
-        }
-
-        .landing-overlay {
-            overflow-y: auto;
-            padding-bottom: 50px;
-        }
+        .landing-overlay { overflow-y: auto; padding-bottom: 0px; }
         
+        /* Μπλε Κουμπί 'ΞΕΚΙΝΗΣΤΕ ΤΩΡΑ' */
         .nav-start-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: white;
             padding: 10px 20px;
             font-size: 14px;
@@ -220,8 +115,37 @@
         }
         .nav-start-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 6px 12px rgba(37, 99, 235, 0.25);
         }
+
+        /* Dashboard (Μενού) */
+        .cockpit-panel { background: var(--bg-secondary); border-radius: 12px; padding: 25px; margin-bottom: 30px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .cockpit-stats { display: flex; gap: 30px; }
+        .cockpit-stat-item { text-align: center; }
+        .cockpit-stat-value { font-size: 28px; font-weight: 800; color: #4ade80; }
+        .cockpit-stat-label { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+        .badges-container { display: flex; gap: 15px; }
+        .badge-icon { font-size: 32px; filter: grayscale(100%); opacity: 0.4; transition: all 0.3s; position: relative; cursor: help; }
+        .badge-icon.unlocked { filter: grayscale(0%); opacity: 1; transform: scale(1.1); }
+        .badge-icon:hover::after { content: attr(data-tooltip); position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 5px 10px; font-size: 12px; border-radius: 4px; white-space: nowrap; z-index: 10; }
+
+        /* PWA Install Button */
+        .pwa-install-btn { background: #f59e0b; color: #fff; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; display: none; align-items: center; gap: 8px; font-size: 13px; }
+
+        /* Mission Map Grid */
+        .mission-interactive-map { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: rgba(15, 23, 42, 0.8); padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .map-cell { height: 60px; background: rgba(255,255,255,0.1); border: 1px dashed #475569; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 20px; }
+        .map-cell:hover { background: rgba(255,255,255,0.2); }
+        .map-cell.no-fly:hover { background: rgba(239, 68, 68, 0.3); border-color: #ef4444; }
+        .map-cell.safe-fly:hover { background: rgba(16, 185, 129, 0.3); border-color: #10b981; }
+
+        /* Certificate Modal */
+        #certificateModal .modal-content { background: #fff; color: #0f172a; text-align: center; padding: 40px; border: 8px solid #cbd5e1; border-radius: 0; max-width: 800px; background-image: radial-gradient(#f1f5f9 1px, transparent 1px); background-size: 20px 20px; }
+        .cert-title { font-size: 42px; font-family: serif; color: #1e293b; margin-bottom: 10px; }
+        .cert-subtitle { font-size: 18px; color: #64748b; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 2px; }
+        .cert-name { font-size: 36px; font-weight: bold; border-bottom: 2px solid #cbd5e1; display: inline-block; padding: 0 40px 10px; margin-bottom: 30px; color: #2563eb; }
+        .cert-details { font-size: 16px; color: #475569; line-height: 1.6; margin-bottom: 40px; }
+        .cert-seal { width: 100px; height: 100px; background: #fbbf24; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; border: 4px dashed #b45309; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     </style>
 </head>
 
@@ -241,6 +165,7 @@
 
             <button class="login-btn" onclick="openLoginModal()">Είσοδος</button>
             <button class="register-btn" onclick="openLoginModal()">Εγγραφή</button>
+            <button class="pwa-install-btn" id="installPwaBtn">📱 Εγκατάσταση App</button>
             <button class="theme-btn-landing" onclick="toggleTheme()" title="Εναλλαγή Θέματος">
                 <svg class="sun-icon" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
@@ -338,12 +263,12 @@
         <div class="pricing-modal-content">
             
             <div class="pricing-header-text">
+                <div class="fomo-banner">⚡ Περιορισμένη Προσφορά: Λήγει σε <span id="fomoTimer">02:45:30</span></div>
                 <h2>Τιμοκατάλογος Πιστοποιήσεων</h2>
                 <p>Επιλέξτε το εκπαιδευτικό πακέτο που ταιριάζει στις ανάγκες σας</p>
             </div>
 
             <div class="pricing-cards-container">
-                
                 <div class="price-card">
                     <h3 class="price-title">Basic (A1/A3)</h3>
                     <div class="price-amount">49€<span>/ εφάπαξ</span></div>
@@ -380,11 +305,8 @@
                     </ul>
                     <button class="price-btn btn-basic-adv" onclick="openLoginModal()">Επιλογή Advanced</button>
                 </div>
-
             </div>
-
             <button class="close-pricing-btn" onclick="closePricingModal()">Κλείσιμο</button>
-
         </div>
     </div>
 
@@ -406,32 +328,47 @@
     </div>
 
     <div id="menu" style="display: none;">
-        <div class="overlay">
-            <div class="menu-center">
-                <h1 class="title">UAV Academy</h1>
-                <p class="subtitle">Επαγγελματική Πλατφόρμα Εκπαίδευσης & Πιστοποίησης EASA</p>
+        <div class="overlay" style="overflow-y: auto;">
+            <div class="menu-center" style="max-width: 1000px;">
+                <h1 class="title" style="margin-top: 40px; color: var(--text-primary);">UAV Academy Μενού</h1>
+                <p class="subtitle" style="color: var(--text-secondary);">Επιλέξτε την ενότητα που θέλετε να μελετήσετε.</p>
+
+                <div class="cockpit-panel">
+                    <div class="cockpit-stats">
+                        <div class="cockpit-stat-item">
+                            <div class="cockpit-stat-value">5 🔥</div>
+                            <div class="cockpit-stat-label">Ημερες Σερι</div>
+                        </div>
+                        <div class="cockpit-stat-item">
+                            <div class="cockpit-stat-value" style="color: #3b82f6;">82% 🎯</div>
+                            <div class="cockpit-stat-label">Ετοιμοτητα EASA</div>
+                        </div>
+                    </div>
+                    <div class="badges-container">
+                        <div class="badge-icon unlocked" data-tooltip="Meteorology Master">🌤️</div>
+                        <div class="badge-icon unlocked" data-tooltip="Night Flight Specialist">🌙</div>
+                        <div class="badge-icon" data-tooltip="A2 Certified (Locked)">🏆</div>
+                        <div class="badge-icon" data-tooltip="Perfect Score (Locked)">⭐</div>
+                    </div>
+                </div>
 
                 <div class="menu-cards">
                     <div class="menu-card theory-card" onclick="openTheory()">
                         <h2>Θεωρία EASA</h2>
                         <p>Πλήρης Βιβλιοθήκη Ύλης</p>
                     </div>
-
                     <div class="menu-card study-card" onclick="openStudy()">
                         <h2>Study Mode</h2>
                         <p>Μελέτη & Εξάσκηση</p>
                     </div>
-
                     <div class="menu-card exam-card" onclick="openExamConfirm()">
                         <h2>Exam Mode</h2>
                         <p>Προσομοίωση A2</p>
                     </div>
-
                     <div class="menu-card mission-card" onclick="openMission()">
                         <h2>Mission Mode</h2>
                         <p>Επιχειρησιακά Σενάρια</p>
                     </div>
-
                     <div class="menu-card stats-card" onclick="openStats()">
                         <h2>Statistics</h2>
                         <p>Πρόοδος & Αναλύσεις</p>
@@ -525,15 +462,32 @@
     <div id="missionSimulatorScreen">
         <div class="sim-overlay">
             <div class="sim-header">
-                <h2>Επιχειρησιακό Σενάριο</h2>
+                <h2>Επιχειρησιακό Σενάριο (UAS Simulator)</h2>
                 <button class="btn-danger" onclick="openMission()">Ματαίωση Αποστολής</button>
             </div>
             <div class="sim-container">
-                <div class="sim-view" id="simView" style="background-image: url('drone-bg.jpg');">
-                    <div class="sim-dialog-box" id="simDialogBox">
-                        <h3 id="simStepTitle">Βήμα 1: Προετοιμασία Πτήσης</h3>
-                        <p id="simStepDesc">Βρίσκεστε στο σημείο απογείωσης (Αστικό Περιβάλλον). Ο άνεμος είναι στα 8m/s. Ποια είναι η πρώτη σας ενέργεια;</p>
-                        <div class="sim-options" id="simOptions"></div>
+                <div class="sim-view" id="simView" style="background: #1e293b;">
+                    <div class="sim-dialog-box" id="simDialogBox" style="position: relative; margin-top: 20px;">
+                        <h3 id="simStepTitle">Βήμα 1: Χωροταξικός Έλεγχος & Απογείωση</h3>
+                        <p id="simStepDesc">Αναλύστε τον χάρτη της περιοχής. Επιλέξτε μια ασφαλή ζώνη (πράσινη) για να ορίσετε το σημείο απογείωσης (Home Point). Αποφύγετε τις απαγορευμένες ζώνες αεροδρομίου.</p>
+                        
+                        <div class="mission-interactive-map">
+                            <div class="map-cell no-fly" onclick="alert('Σφάλμα: Ζώνη Περιορισμού Πτήσεων (No-Fly Zone) - Αεροδρόμιο')">✈️</div>
+                            <div class="map-cell no-fly" onclick="alert('Σφάλμα: Ζώνη Περιορισμού Πτήσεων (No-Fly Zone) - Αεροδρόμιο')">✈️</div>
+                            <div class="map-cell safe-fly" onclick="alert('Επιτυχής ορισμός Home Point! Συνεχίστε με την πτήση.')">🌳</div>
+                            <div class="map-cell safe-fly" onclick="alert('Επιτυχής ορισμός Home Point! Συνεχίστε με την πτήση.')">🌾</div>
+                            <div class="map-cell safe-fly" onclick="alert('Επιτυχής ορισμός Home Point! Συνεχίστε με την πτήση.')">🏞️</div>
+                            
+                            <div class="map-cell no-fly" onclick="alert('Σφάλμα: Συνωστισμός Πλήθους (Απαγορεύεται η πτήση)')">🏟️</div>
+                            <div class="map-cell safe-fly" onclick="alert('Επιτυχής ορισμός Home Point! Συνεχίστε με την πτήση.')">🏢</div>
+                            <div class="map-cell safe-fly" onclick="alert('Επιτυχής ορισμός Home Point! Συνεχίστε με την πτήση.')">🏠</div>
+                            <div class="map-cell safe-fly" onclick="alert('Επιτυχής ορισμός Home Point! Συνεχίστε με την πτήση.')">🌲</div>
+                            <div class="map-cell no-fly" onclick="alert('Σφάλμα: Στρατιωτική Εγκατάσταση')">🛡️</div>
+                        </div>
+
+                        <div class="sim-options" id="simOptions" style="margin-top: 20px;">
+                            <button class="btn-primary" onclick="alert('Η αποστολή ολοκληρώθηκε επιτυχώς!')" style="width: 100%;">Ολοκλήρωση Συναρίου</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -722,17 +676,37 @@
                 
                 <div class="exam-stats-summary" id="examStatsSummary"></div>
                 
-                <div id="reviewSection" style="display:none; text-align: left; margin-top: 20px; max-height: 400px; overflow-y: auto; padding: 20px; background: #f8fafc; border-radius: 10px; border: 1px solid #cbd5e1;">
+                <div id="reviewSection" style="display:none; text-align: left; margin-top: 20px; max-height: 400px; overflow-y: auto; padding: 20px; background: var(--bg-secondary); border-radius: 10px; border: 1px solid var(--border-color);">
                     <h3 style="color: #dc2626; margin-top: 0; border-bottom: 2px solid #fca5a5; padding-bottom: 10px;">Αναλυτική Ανασκόπηση Λαθών</h3>
-                    <div id="mistakesList"></div>
+                    <div id="mistakesList" style="color: var(--text-primary);"></div>
                 </div>
 
                 <div class="result-actions">
+                    <button class="btn-primary" id="downloadCertBtn" onclick="openCertificate()" style="display:none; background:#10b981; border:none; width:100%; margin-bottom: 10px;">📄 Λήψη Βεβαίωσης PDF</button>
+                    
                     <button class="back-btn" onclick="openExamStats()" style="background:#16a34a; color:white; border:none;">Στατιστικά</button>
                     <button class="back-btn" id="reviewBtn" onclick="toggleReview()" style="background:#f59e0b; color:white; border:none;">Εμφάνιση Λαθών</button>
                     <button class="back-btn" onclick="goMenu()" style="background:#2563eb; color:white; border:none;">Αρχικό Μενού</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="certificateModal" class="modal-overlay" style="display:none; z-index: 6000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="position: relative;">
+            <button onclick="closeCertificate()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer;">✕</button>
+            <div class="cert-title">Βεβαίωση Ετοιμότητας</div>
+            <div class="cert-subtitle">UAV Academy EASA Preparation</div>
+            <p style="font-size: 18px; color: #475569;">Απονέμεται στον/στην:</p>
+            <div class="cert-name">Χρήστης (Pilot_GR)</div>
+            <p class="cert-details">
+                Βεβαιώνεται ότι ο παραπάνω υποψήφιος ολοκλήρωσε επιτυχώς την προσομοίωση εξετάσεων<br>
+                για την Ανοιχτή Κατηγορία (A1/A2/A3) με βαθμολογία άνω του 75%.
+            </p>
+            <div class="cert-seal">
+                CERTIFIED<br>EASA
+            </div>
+            <button class="btn-primary" onclick="window.print()" style="margin-top: 40px; background: #2563eb;">Εκτύπωση / Αποθήκευση PDF</button>
         </div>
     </div>
 
@@ -864,13 +838,54 @@
     </div>
 
     <script>
-        // Modal Pricing Logic
+        // Modal Pricing & FOMO Logic
         function openPricingModal() {
             document.getElementById('pricingModal').style.display = 'flex';
+            startFomoTimer();
         }
         function closePricingModal() {
             document.getElementById('pricingModal').style.display = 'none';
         }
+        
+        let fomoInterval;
+        function startFomoTimer() {
+            clearInterval(fomoInterval);
+            let time = 2 * 3600 + 45 * 60 + 30; // 2h 45m 30s
+            fomoInterval = setInterval(() => {
+                time--;
+                const h = Math.floor(time / 3600).toString().padStart(2, '0');
+                const m = Math.floor((time % 3600) / 60).toString().padStart(2, '0');
+                const s = (time % 60).toString().padStart(2, '0');
+                document.getElementById('fomoTimer').innerText = `${h}:${m}:${s}`;
+                if (time <= 0) clearInterval(fomoInterval);
+            }, 1000);
+        }
+
+        // Mock Certificate Functions
+        function openCertificate() {
+            document.getElementById('certificateModal').style.display = 'flex';
+        }
+        function closeCertificate() {
+            document.getElementById('certificateModal').style.display = 'none';
+        }
+        
+        // PWA Install Prompt Simulation
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installBtn = document.getElementById('installPwaBtn');
+            installBtn.style.display = 'flex';
+            installBtn.addEventListener('click', () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        installBtn.style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                });
+            });
+        });
 
         // Free Trial Logic (10 Ερωτήσεις)
         const trialQuestionsData = [
