@@ -1,6 +1,12 @@
-<title>UAV Academy - EASA Certified Platform</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAV Academy - EASA Certified Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         html { scroll-behavior: smooth; }
         
@@ -238,44 +244,102 @@
 </head>
 
 <body>
-@@ -17,9 +251,10 @@
-</div>
-<div class="landing-nav-links">
-<a href="#">Αρχική</a>
-            <a href="#">Πρόγραμμα</a>
-            <a href="#">Πιστοποιήσεις</a>
+
+    <div id="landingNavbar" class="landing-navbar">
+        <div class="logo">
+            <span style="font-weight: 800; font-size: 24px; letter-spacing: 1px;">UAV<span style="color: #4ade80;">Academy</span></span>
+        </div>
+        <div class="landing-nav-links">
+            <a href="#">Αρχική</a>
             <a href="#certifications">Πιστοποιήσεις</a>
             <a href="#freetrial">Δωρεάν Δοκιμή</a>
-<a href="#">Επικοινωνία</a>
+            <a href="#">Επικοινωνία</a>
             <button class="nav-start-btn" onclick="openPricingModal()">ΞΕΚΙΝΗΣΤΕ ΤΩΡΑ</button>
-<button class="login-btn" onclick="openLoginModal()">Είσοδος</button>
-<button class="register-btn" onclick="openLoginModal()">Εγγραφή</button>
-<button class="theme-btn-landing" onclick="toggleTheme()" title="Εναλλαγή Θέματος">
-@@ -55,7 +290,7 @@
-</div>
-</div>
+            <button class="login-btn" onclick="openLoginModal()">Είσοδος</button>
+            <button class="register-btn" onclick="openLoginModal()">Εγγραφή</button>
+            <button class="theme-btn-landing" onclick="toggleTheme()" title="Εναλλαγή Θέματος">
+                <svg class="sun-icon" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
 
-    <div id="landingScreen" class="landing-screen">
+    <div id="topNavbar" class="top-navbar" style="display: none;">
+        <div class="nav-left">
+            <button id="menuBtn" onclick="goMenu()">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: middle;"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                Αρχικό Μενού
+            </button>
+        </div>
+        <div class="nav-right">
+            <button id="settingsBtn" onclick="openSettings()" title="Ρυθμίσεις">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+            <button id="themeBtn" onclick="toggleTheme()" title="Εναλλαγή Θέματος">
+                <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <div id="landingScreen" class="landing-screen" style="overflow-y: auto;">
-<div class="landing-overlay">
-<div class="hero-container">
-<div class="hero-content">
-@@ -77,11 +312,6 @@ <h1>Η Κορυφαία Πλατφόρμα Εκπαίδευσης Χειριστ
-<span>Προσαρμοσμένα στατιστικά προόδου</span>
-</div>
-</div>
+        <div class="landing-overlay">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <div class="hero-badge">ΝΕΑ ΥΛΗ EASA 2026</div>
+                    <h1>Η Κορυφαία Πλατφόρμα Εκπαίδευσης Χειριστών ΣμηΕΑ</h1>
+                    <p>Προετοιμαστείτε με επαγγελματισμό και σιγουριά για τις εξετάσεις των κατηγοριών A1, A2 & A3. Ανακαλύψτε το μέλλον της αεροπορικής εκπαίδευσης.</p>
 
-                    <div class="hero-buttons">
-                        <button class="btn-primary-large" onclick="openLoginModal()">ΞΕΚΙΝΗΣΤΕ ΤΩΡΑ</button>
-                        <button class="btn-secondary-large">ΜΑΘΕΤΕ ΠΕΡΙΣΣΟΤΕΡΑ</button>
+                    <div class="hero-features">
+                        <div class="feature-item">
+                            <span class="icon">✓</span>
+                            <span>Πραγματικές συνθήκες εξετάσεων ΥΠΑ/EASA</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="icon">✓</span>
+                            <span>Αναλυτική βιβλιοθήκη θεωρίας & μετεωρολογίας</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="icon">✓</span>
+                            <span>Προσαρμοσμένα στατιστικά προόδου</span>
+                        </div>
                     </div>
-</div>
-
-<div class="hero-visual">
-@@ -110,10 +340,134 @@ <h1>Η Κορυφαία Πλατφόρμα Εκπαίδευσης Χειριστ
-</div>
-</div>
-</div>
+                </div>
+                
+                <div class="hero-visual">
+                    <div class="floating-card">
+                        <div class="card-header">
+                            <div class="dots"><span></span><span></span><span></span></div>
+                            <div class="card-title">Στατιστικά σε Πραγματικό Χρόνο</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="stat-row">
+                                <span>Αεροπορική Νομοθεσία</span>
+                                <div class="bar-bg"><div class="bar-fill" style="width: 85%;"></div></div>
+                                <span>85%</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Μετεωρολογία</span>
+                                <div class="bar-bg"><div class="bar-fill" style="width: 62%;"></div></div>
+                                <span>62%</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Ανθρώπινοι Παράγοντες</span>
+                                <div class="bar-bg"><div class="bar-fill" style="width: 95%; background: #4ade80;"></div></div>
+                                <span style="color: #4ade80;">95%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="certifications-main-section" id="certifications">
                 <h2 class="section-title-cert">Επίσημες Πιστοποιήσεις EASA</h2>
@@ -358,10 +422,9 @@
             </div>
             
             <button class="back-btn" style="display: block; width: fit-content; margin: 30px auto 0 auto; background: transparent; border: 1px solid #475569; color: #e2e8f0; padding: 10px 30px;" onclick="closePricingModal()">Κλείσιμο</button>
-</div>
-</div>
+        </div>
+    </div>
 
-    <div id="loginModal" class="modal-overlay" style="display:none; z-index: 4000;">
     <div id="freeTrialScreen">
         <div class="test-top-bar" style="background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid #334155; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10;">
             <button class="back-nav-btn" onclick="closeFreeTrial()" style="background: transparent; border: none; color: #e2e8f0; font-size: 16px; cursor: pointer; display: flex; align-items: center;">
@@ -405,374 +468,213 @@
     </div>
 
     <div id="loginModal" class="modal-overlay" style="display:none; z-index: 7000;">
-<div class="modal-content glass-modal">
-<h2>Σύνδεση Μέλους</h2>
-<p style="text-align: center; color: #94a3b8; margin-top: -15px; margin-bottom: 25px;">Εισάγετε τα στοιχεία σας για πρόσβαση</p>
-@@ -166,7 +520,7 @@ <h2>Statistics</h2>
-</div>
-</div>
+        <div class="modal-content glass-modal">
+            <h2>Σύνδεση Μέλους</h2>
+            <p style="text-align: center; color: #94a3b8; margin-top: -15px; margin-bottom: 25px;">Εισάγετε τα στοιχεία σας για πρόσβαση</p>
+            <div class="form-group">
+                <label style="color: #e2e8f0;">Email ή Username</label>
+                <input type="email" class="form-input glass-input" placeholder="user@example.com" id="loginEmail">
+            </div>
+            <div class="form-group">
+                <label style="color: #e2e8f0;">Κωδικός Πρόσβασης</label>
+                <input type="password" class="form-input glass-input" placeholder="********" id="loginPass">
+            </div>
+            <button class="btn-primary" style="width:100%; margin-top:10px; padding: 14px; font-size: 16px; background: #2563eb;" onclick="doLogin()">Είσοδος στην Πλατφόρμα</button>
+            <button class="back-btn" style="width:100%; margin-top:15px; background: transparent; border: 1px solid #475569; color: #e2e8f0;" onclick="closeLoginModal()">Ακύρωση</button>
+        </div>
+    </div>
 
-    <div id="theoryScreen">
+    <div id="menu" style="display: none;">
+        <div class="overlay">
+            <div class="menu-center">
+                <h1 class="title">UAV Academy</h1>
+                <p class="subtitle">Επαγγελματική Πλατφόρμα Εκπαίδευσης & Πιστοποίησης EASA</p>
+
+                <div class="menu-cards">
+                    <div class="menu-card theory-card" onclick="openTheory()">
+                        <h2>Θεωρία EASA</h2>
+                        <p>Πλήρης Βιβλιοθήκη Ύλης</p>
+                    </div>
+
+                    <div class="menu-card study-card" onclick="openStudy()">
+                        <h2>Study Mode</h2>
+                        <p>Μελέτη & Εξάσκηση</p>
+                    </div>
+
+                    <div class="menu-card exam-card" onclick="openExamConfirm()">
+                        <h2>Exam Mode</h2>
+                        <p>Προσομοίωση A2</p>
+                    </div>
+
+                    <div class="menu-card mission-card" onclick="openMission()">
+                        <h2>Mission Mode</h2>
+                        <p>Επιχειρησιακά Σενάρια</p>
+                    </div>
+
+                    <div class="menu-card stats-card" onclick="openStats()">
+                        <h2>Statistics</h2>
+                        <p>Πρόοδος & Αναλύσεις</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="theoryScreen" style="display: none;">
-<div class="overlay-dark">
-<div class="theory-container">
-<div class="theory-header">
-@@ -177,15 +531,15 @@ <h2>Πλήρης Ύλη EASA (Κατηγορία OPEN)</h2>
-<div class="theory-content" id="theoryContent">
-<div class="welcome-theory">
-<h3 style="color: #2563eb; font-size: 24px;">Καλώς ήρθατε στη Βιβλιοθήκη Θεωρίας</h3>
-                            <p>Επιλέξτε μια θεματική ενότητα από το μενού αριστερά για να ξεκινήσετε την ανάγνωση. Η ύλη καλύπτει πλήρως τις απαιτήσεις των κανονισμών (ΕΕ) 2019/947 και 2019/945.</p>
-                            <p>Επιλέξτε μια θεματική ενότητα από το μενού αριστερά για να ξεκινήσετε την ανάγνωση.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-    <div id="missionScreen">
-    <div id="missionScreen" style="display: none;">
-<div class="overlay-dark">
-<div class="dashboard-container">
-<div class="dashboard-header">
-@@ -194,60 +548,18 @@ <h2>Επιχειρησιακά Σενάρια (Mission Mode)</h2>
-</div>
-<div class="mission-grid">
-<div class="mission-pro-card active-mission">
-                        <div class="mission-img" style="background-image: url('drone-bg.jpg');">
-                            <div class="mission-badge">ΕΝΕΡΓΟ</div>
-                        </div>
-                        <div class="mission-img" style="background: #1e293b; display: flex; align-items: center; justify-content: center;"><span style="font-size: 40px;">🏢</span></div>
-<div class="mission-content">
-<h3>Σενάριο 1: Επιθεώρηση Κτιρίου</h3>
-                            <p class="mission-desc">Αξιολόγηση ρωγμών σε βιομηχανικό κτίριο εντός αστικού ιστού. Απαιτείται ακρίβεια και τήρηση αποστάσεων ασφαλείας.</p>
-                            <ul class="mission-details">
-                                <li><span class="detail-icon">📍</span> <strong>Ζώνη:</strong> Πυκνοκατοικημένη (UAS: C2)</li>
-                                <li><span class="detail-icon">💨</span> <strong>Άνεμος:</strong> 8 m/s (B)</li>
-                                <li><span class="detail-icon">🌡️</span> <strong>Θερμ.:</strong> 15°C</li>
-                            </ul>
-                            <button class="btn-primary" style="width:100%; margin-top: 15px;" onclick="startMission(1)">Έναρξη Αποστολής</button>
-                        </div>
-                    </div>
-
-                    <div class="mission-pro-card active-mission">
-                        <div class="mission-img" style="background: #334155; display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 40px;">🚁</span>
-                            <div class="mission-badge">ΕΝΕΡΓΟ</div>
-                        </div>
-                        <div class="mission-content">
-                            <h3>Σενάριο 2: Έρευνα & Διάσωση (SAR)</h3>
-                            <p class="mission-desc">Εντοπισμός αγνοουμένου σε δασική περιοχή κατά τη διάρκεια της νύχτας. Χρήση θερμικής κάμερας.</p>
-                            <ul class="mission-details">
-                                <li><span class="detail-icon">📍</span> <strong>Ζώνη:</strong> Ορεινή (UAS: C3)</li>
-                                <li><span class="detail-icon">💨</span> <strong>Άνεμος:</strong> 12 m/s (BA)</li>
-                                <li><span class="detail-icon">🌙</span> <strong>Συνθήκες:</strong> Νύχτα / 0°C</li>
-                            </ul>
-                            <button class="btn-primary" style="width:100%; margin-top: 15px;" onclick="startMission(2)">Έναρξη Αποστολής</button>
-                        </div>
-                    </div>
-
-                    <div class="mission-pro-card active-mission">
-                        <div class="mission-img" style="background: #334155; display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 40px;">🌾</span>
-                            <div class="mission-badge">ΕΝΕΡΓΟ</div>
-                        </div>
-                        <div class="mission-content">
-                            <h3>Σενάριο 3: Ψεκασμός Καλλιεργειών</h3>
-                            <p class="mission-desc">Αγροτική αποστολή. Προγραμματισμός πτήσης (Waypoints) για ομοιόμορφη κάλυψη της έκτασης.</p>
-                            <ul class="mission-details">
-                                <li><span class="detail-icon">📍</span> <strong>Ζώνη:</strong> Αγροτική (Specific)</li>
-                                <li><span class="detail-icon">💧</span> <strong>Φορτίο:</strong> 15kg (Υγρά)</li>
-                                <li><span class="detail-icon">🔋</span> <strong>Μπαταρία:</strong> Κρίσιμη</li>
-                            </ul>
-                            <button class="btn-primary" style="width:100%; margin-top: 15px;" onclick="startMission(3)">Έναρξη Αποστολής</button>
-                            <button class="btn-primary" style="width:100%; margin-top: auto;" onclick="startMission(1)">Έναρξη Αποστολής</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-    <div id="missionSimulatorScreen">
-    <div id="missionSimulatorScreen" style="display: none;">
-<div class="sim-overlay">
-<div class="sim-header">
-<h2>Επιχειρησιακό Σενάριο</h2>
-@@ -256,16 +568,15 @@ <h2>Επιχειρησιακό Σενάριο</h2>
-<div class="sim-container">
-<div class="sim-view" id="simView" style="background-image: url('drone-bg.jpg');">
-<div class="sim-dialog-box" id="simDialogBox">
-                        <h3 id="simStepTitle">Βήμα 1: Προετοιμασία Πτήσης</h3>
-                        <p id="simStepDesc">Βρίσκεστε στο σημείο απογείωσης (Αστικό Περιβάλλον). Ο άνεμος είναι στα 8m/s. Ποια είναι η πρώτη σας ενέργεια;</p>
-                        <h3 id="simStepTitle">Βήμα 1</h3>
-<div class="sim-options" id="simOptions"></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-    <div id="statsScreen">
-    <div id="statsScreen" style="display: none;">
-<div class="overlay-dark">
-<div class="dashboard-container" style="max-width: 1000px;">
-<div class="dashboard-header">
-@@ -274,23 +585,19 @@ <h2>Κέντρο Αναλύσεων & Στατιστικών</h2>
-</div>
-<div class="stats-cards-grid">
-<div class="stat-pro-card" onclick="openStudyStats()">
-                        <div class="stat-icon-wrapper study-icon">📊</div>
-<h3>Ανάλυση Μελέτης</h3>
-                        <p>Δείτε αναλυτικά το ποσοστό επιτυχίας σας και τα δυνατά/αδύναμα σημεία σας ανά θεματική ενότητα EASA.</p>
-<button class="btn-primary" style="margin-top: auto; width: 100%;">Προβολή Μελέτης</button>
-</div>
-<div class="stat-pro-card" onclick="openExamStats()">
-                        <div class="stat-icon-wrapper exam-icon">📈</div>
-<h3>Ιστορικό Εξετάσεων</h3>
-                        <p>Παρακολουθήστε την πορεία των βαθμολογιών σας στις προσομοιώσεις εξετάσεων μέσω επαγγελματικού διαδραστικού γραφήματος.</p>
-<button class="btn-primary" style="margin-top: auto; width: 100%;">Προβολή Εξετάσεων</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-    <div id="studyStatsScreen">
-    <div id="studyStatsScreen" style="display: none;">
-<div class="overlay-dark">
-<div class="dashboard-container" style="max-width: 900px;">
-<div class="dashboard-header">
-@@ -302,7 +609,7 @@ <h2>Αναλυτική Πρόοδος Μελέτης</h2>
-</div>
-</div>
-
-    <div id="examStatsScreen">
-    <div id="examStatsScreen" style="display: none;">
-<div class="overlay-dark">
-<div class="dashboard-container" style="max-width: 900px;">
-<div class="dashboard-header">
-@@ -317,39 +624,16 @@ <h2>Απόδοση Εξετάσεων (Exam Mode)</h2>
-</div>
-</div>
-
-    <div id="studySetup">
-    <div id="studySetup" style="display: none;">
-<div class="study-overlay">
-<div class="glass-panel">
-                <h2 style="color: white; font-size: 32px; margin-top: 0; margin-bottom: 30px; text-shadow: 0 2px 5px rgba(0,0,0,0.5);">Study Mode</h2>
-                <h2 style="color: white; font-size: 32px; margin-top: 0; margin-bottom: 30px;">Study Mode</h2>
-<div class="menu-cards" style="justify-content: center; gap: 30px;">
-<div class="menu-card glass-card">
-                        <h3 style="color: white; margin-top: 0; font-size: 18px;">Ενότητα</h3>
-                        <select id="studyCategory" class="glass-input">
-                            <option value="Random">Όλες οι Ενότητες (Mix)</option>
-                            <option value="ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ ΣμηΕΑ">ΑΣΦΑΛΕΙΑ ΠΤΗΣΕΩΝ ΣμηΕΑ</option>
-                            <option value="ΕΝΑΕΡΙΑ ΚΥΚΛΟΦΟΡΙΑ">ΕΝΑΕΡΙΑ ΚΥΚΛΟΦΟΡΙΑ</option>
-                            <option value="ΚΑΝΟΝΙΣΜΟΙ ΑΕΡΟΠΟΡΙΑΣ">ΚΑΝΟΝΙΣΜΟΙ ΑΕΡΟΠΟΡΙΑΣ</option>
-                            <option value="ΑΝΘΡΩΠΙΝΟΣ ΠΑΡΑΓΟΝΤΑΣ">ΑΝΘΡΩΠΙΝΟΣ ΠΑΡΑΓΟΝΤΑΣ</option>
-                            <option value="ΕΠΙΧΕΙΡΗΣΙΑΚΕΣ ΔΙΑΔΙΚΑΣΙΕΣ">ΕΠΙΧΕΙΡΗΣΙΑΚΕΣ ΔΙΑΔΙΚΑΣΙΕΣ</option>
-                            <option value="ΓΕΝΙΚΕΣ ΓΝΩΣΕΙΣ ΠΕΡΙ ΣμηΕΑ">ΓΕΝΙΚΕΣ ΓΝΩΣΕΙΣ ΠΕΡΙ ΣμηΕΑ</option>
-                            <option value="ΙΔΙΩΤΙΚΟΤΗΤΑ ΚΑΙ ΠΡΟΣΤΑΣΙΑ ΔΕΔΟΜΕΝΩΝ">ΙΔΙΩΤΙΚΟΤΗΤΑ ΚΑΙ ΠΡΟΣΤΑΣΙΑ ΔΕΔΟΜΕΝΩΝ</option>
-                            <option value="ΑΣΦΑΛΙΣΗ">ΑΣΦΑΛΙΣΗ</option>
-                            <option value="ΠΡΟΣΤΑΣΙΑ ΑΠΟ ΕΚΝΟΜΕΣ ΕΝΕΡΓΕΙΕΣ">ΠΡΟΣΤΑΣΙΑ ΑΠΟ ΕΚΝΟΜΕΣ ΕΝΕΡΓΕΙΕΣ</option>
-                            <option value="ΜΕΤΕΩΡΟΛΟΓΙΑ">ΜΕΤΕΩΡΟΛΟΓΙΑ</option>
-                            <option value="ΑΠΟΔΟΣΗ ΠΤΗΣΗΣ ΣμηΕΑ">ΑΠΟΔΟΣΗ ΠΤΗΣΗΣ ΣμηΕΑ</option>
-                            <option value="ΤΕΧΝΙΚΑ ΚΑΙ ΛΕΙΤΟΥΡΓΙΚΑ ΜΕΤΡΑ ΜΕΤΡΙΑΣΜΟΥ ΚΙΝΔΥΝΩΝ">ΤΕΧΝΙΚΑ ΚΑΙ ΛΕΙΤΟΥΡΓΙΚΑ ΜΕΤΡΑ ΜΕΤΡΙΑΣΜΟΥ ΚΙΝΔΥΝΩΝ</option>
-                        </select>
-                        <select id="studyCategory" class="glass-input"><option value="Random">Όλες οι Ενότητες (Mix)</option></select>
-</div>
-<div class="menu-card glass-card">
-                        <h3 style="color: white; margin-top: 0; font-size: 18px;">Ερωτήσεις</h3>
-                        <select id="studyCount" class="glass-input">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                            <option value="40">40</option>
-                            <option value="50">50</option>
-                            <option value="all">Όλες</option>
-                        </select>
-                        <select id="studyCount" class="glass-input"><option value="10">10</option></select>
-</div>
-</div>
-<br><br>
-@@ -358,169 +642,187 @@ <h3 style="color: white; margin-top: 0; font-size: 18px;">Ερωτήσεις</h3
-</div>
-</div>
-
-    <div id="testScreen" class="test-view">
-    <div id="testScreen" class="test-view" style="display: none;">
-<div class="test-top-bar">
-<button class="back-nav-btn" onclick="finishSession()">
-                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polyline points="15 18 9 12 15 6"></polyline></svg>
-<span id="examTypeMock">Δοκιμαστική Εξέταση</span>
-</button>
-<div class="test-user-info" id="candidateNameMock">Χρήστης: User_01</div>
-</div>
-        
-<div id="examProgressBar" class="test-progress-fill"></div>
-
-<div class="test-main-container">
-<div class="test-content">
-                <div class="test-meta-bar">
-                    <div class="meta-left">
-                        <span id="qCounter" class="q-counter">Ερ. 1 / 40</span>
-                        <button id="flagBtn" class="pin-btn" onclick="flagQuestion()" title="Σημείωση (Επισήμανση με Πινέζα)">
-                            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.68V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3v4.68a2 2 0 0 1-1.11 1.87l-1.78.9A2 2 0 0 0 5 15.24Z"></path></svg>
-                        </button>
-                        <button id="noteBtn" class="pin-btn" style="margin-left: 10px;" onclick="toggleNote()" title="Προσωπικές Σημειώσεις">
-                            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                        </button>
-                    </div>
-                    <div class="meta-center">
-                        <span id="qCategoryBadge" class="cat-badge">Κατηγορία</span>
-                    </div>
-                    <div class="meta-right">
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        <span class="timer-display" id="timer">00:00:00</span>
-                    </div>
-                </div>
-
-<div class="question-body">
-<h3 id="questionText"></h3>
-                    
-                    <div class="av-answers" id="answersContainer">
-                        <button onclick="answer(0)" id="btnAns0"><span class="letter">A</span><span class="ans-text" id="ansText0"></span></button>
-                        <button onclick="answer(1)" id="btnAns1"><span class="letter">B</span><span class="ans-text" id="ansText1"></span></button>
-                        <button onclick="answer(2)" id="btnAns2"><span class="letter">C</span><span class="ans-text" id="ansText2"></span></button>
-                        <button onclick="answer(3)" id="btnAns3"><span class="letter">D</span><span class="ans-text" id="ansText3"></span></button>
-                    </div>
-
-                    <div id="noteContainer" style="display:none; margin-top: 15px;">
-                        <textarea id="questionNote" placeholder="Γράψτε τις σημειώσεις σας για αυτή την ερώτηση..." oninput="saveNote()" style="width: 100%; height: 80px; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; resize: vertical; background: #f8fafc; font-family: inherit; font-size: 14px; box-sizing: border-box;"></textarea>
-                    </div>
-
-                    <div id="explanation" class="av-explanation"></div>
-                </div>
-
-                <div class="test-nav-bottom">
-                    <button class="nav-bottom-btn" onclick="prevQuestion()">◄ ΠΡΟΗΓΟΥΜΕΝΗ</button>
-                    <button class="nav-bottom-btn" onclick="nextQuestion()">ΕΠΟΜΕΝΗ ►</button>
-                </div>
-            </div>
-
-            <div class="test-sidebar">
-                <div class="sidebar-card">
-                    <div class="sidebar-header" onclick="goMenu()">
-                        <span>Ακύρωση Εξέτασης</span>
-                    </div>
-                    <button class="btn-finish-test" onclick="finishSession()">ΥΠΟΒΟΛΗ ΕΞΕΤΑΣΗΣ</button>
-                    <div class="av-grid" id="questionGrid"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="autoFinishModal" class="modal-overlay" style="display:none; z-index: 4000;">
-        <div class="modal-content glass-modal" style="text-align: center;">
-            <h2 style="color: white; margin-bottom: 10px;">Ολοκλήρωση!</h2>
-            <p style="color: #cbd5e1; margin-bottom: 25px; line-height: 1.5;">Έχετε απαντήσει σε όλες τις ερωτήσεις. Θέλετε να τερματίσετε το τεστ και να δείτε τα αποτελέσματά σας;</p>
-            <div style="display: flex; gap: 15px; justify-content: center;">
-                <button class="btn-primary" style="flex: 1; background: #16a34a; border: none; padding: 12px;" onclick="confirmFinish(true)">Ναι, Υποβολή</button>
-                <button class="back-btn" style="flex: 1; background: transparent; color: white; border-color: #475569; padding: 12px;" onclick="confirmFinish(false)">Όχι, Έλεγχος</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="resultScreen">
         <div class="overlay-dark">
-            <div class="result-box pro-result-box">
-                <h2>Αναφορά Αποτελεσμάτων</h2>
-                <div class="score-circle">
-                    <h1 id="finalScore">0%</h1>
+            <div class="theory-container">
+                <div class="theory-header">
+                    <h2>Πλήρης Ύλη EASA (Κατηγορία OPEN)</h2>
                 </div>
-                <h3 id="passFail" class="status-text"></h3>
-                
-                <div class="exam-stats-summary" id="examStatsSummary"></div>
-                
-                <div id="reviewSection" style="display:none; text-align: left; margin-top: 20px; max-height: 400px; overflow-y: auto; padding: 20px; background: #f8fafc; border-radius: 10px; border: 1px solid #cbd5e1;">
-                    <h3 style="color: #dc2626; margin-top: 0; border-bottom: 2px solid #fca5a5; padding-bottom: 10px;">Αναλυτική Ανασκόπηση Λαθών</h3>
-                    <div id="mistakesList"></div>
+                <div class="theory-layout">
+                    <div class="theory-sidebar" id="theorySidebar"></div>
+                    <div class="theory-content" id="theoryContent">
+                        <div class="welcome-theory">
+                            <h3 style="color: #2563eb; font-size: 24px;">Καλώς ήρθατε στη Βιβλιοθήκη Θεωρίας</h3>
+                            <p>Επιλέξτε μια θεματική ενότητα από το μενού αριστερά για να ξεκινήσετε την ανάγνωση.</p>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="result-actions">
-                    <button class="back-btn" onclick="openExamStats()" style="background:#16a34a; color:white; border:none;">Στατιστικά</button>
-                    <button class="back-btn" id="reviewBtn" onclick="toggleReview()" style="background:#f59e0b; color:white; border:none;">Εμφάνιση Λαθών</button>
-                    <button class="back-btn" onclick="goMenu()" style="background:#2563eb; color:white; border:none;">Αρχικό Μενού</button>
+    <div id="missionScreen" style="display: none;">
+        <div class="overlay-dark">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <h2>Επιχειρησιακά Σενάρια (Mission Mode)</h2>
+                    <button class="back-btn" onclick="goMenu()">Επιστροφή στο Μενού</button>
+                </div>
+                <div class="mission-grid">
+                    <div class="mission-pro-card active-mission">
+                        <div class="mission-img" style="background: #1e293b; display: flex; align-items: center; justify-content: center;"><span style="font-size: 40px;">🏢</span></div>
+                        <div class="mission-content">
+                            <h3>Σενάριο 1: Επιθεώρηση Κτιρίου</h3>
+                            <button class="btn-primary" style="width:100%; margin-top: auto;" onclick="startMission(1)">Έναρξη Αποστολής</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="missionSimulatorScreen" style="display: none;">
+        <div class="sim-overlay">
+            <div class="sim-header">
+                <h2>Επιχειρησιακό Σενάριο</h2>
+                <button class="btn-danger" onclick="openMission()">Ματαίωση Αποστολής</button>
+            </div>
+            <div class="sim-container">
+                <div class="sim-view" id="simView" style="background-image: url('drone-bg.jpg');">
+                    <div class="sim-dialog-box" id="simDialogBox">
+                        <h3 id="simStepTitle">Βήμα 1</h3>
+                        <div class="sim-options" id="simOptions"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="statsScreen" style="display: none;">
+        <div class="overlay-dark">
+            <div class="dashboard-container" style="max-width: 1000px;">
+                <div class="dashboard-header">
+                    <h2>Κέντρο Αναλύσεων & Στατιστικών</h2>
+                    <button class="back-btn" onclick="goMenu()">Επιστροφή</button>
+                </div>
+                <div class="stats-cards-grid">
+                    <div class="stat-pro-card" onclick="openStudyStats()">
+                        <h3>Ανάλυση Μελέτης</h3>
+                        <button class="btn-primary" style="margin-top: auto; width: 100%;">Προβολή Μελέτης</button>
+                    </div>
+                    <div class="stat-pro-card" onclick="openExamStats()">
+                        <h3>Ιστορικό Εξετάσεων</h3>
+                        <button class="btn-primary" style="margin-top: auto; width: 100%;">Προβολή Εξετάσεων</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="studyStatsScreen" style="display: none;">
+        <div class="overlay-dark">
+            <div class="dashboard-container" style="max-width: 900px;">
+                <div class="dashboard-header">
+                    <h2>Αναλυτική Πρόοδος Μελέτης</h2>
+                    <button class="back-btn" onclick="openStats()">Πίσω στα Στατιστικά</button>
+                </div>
+                <div class="stats-content-box" style="overflow-y: auto;" id="studyStatsContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="examStatsScreen" style="display: none;">
+        <div class="overlay-dark">
+            <div class="dashboard-container" style="max-width: 900px;">
+                <div class="dashboard-header">
+                    <h2>Απόδοση Εξετάσεων (Exam Mode)</h2>
+                    <button class="back-btn" onclick="openStats()">Πίσω στα Στατιστικά</button>
+                </div>
+                <div class="stats-overview" id="examOverview"></div>
+                <div class="stats-content-box chart-container" style="height: 400px; padding: 20px;">
+                    <canvas id="examChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="studySetup" style="display: none;">
+        <div class="study-overlay">
+            <div class="glass-panel">
+                <h2 style="color: white; font-size: 32px; margin-top: 0; margin-bottom: 30px;">Study Mode</h2>
+                <div class="menu-cards" style="justify-content: center; gap: 30px;">
+                    <div class="menu-card glass-card">
+                        <select id="studyCategory" class="glass-input"><option value="Random">Όλες οι Ενότητες (Mix)</option></select>
+                    </div>
+                    <div class="menu-card glass-card">
+                        <select id="studyCount" class="glass-input"><option value="10">10</option></select>
+                    </div>
+                </div>
+                <br><br>
+                <button class="glass-btn-primary" onclick="startStudy()">Έναρξη Εξάσκησης</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="testScreen" class="test-view" style="display: none;">
+        <div class="test-top-bar">
+            <button class="back-nav-btn" onclick="finishSession()">
+                <span id="examTypeMock">Δοκιμαστική Εξέταση</span>
+            </button>
+            <div class="test-user-info" id="candidateNameMock">Χρήστης: User_01</div>
+        </div>
+        <div id="examProgressBar" class="test-progress-fill"></div>
+        <div class="test-main-container">
+            <div class="test-content">
+                <div class="question-body">
+                    <h3 id="questionText"></h3>
                     <div class="av-answers" id="answersContainer"></div>
-</div>
-</div>
-</div>
-</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div id="settingsScreen">
     <div id="settingsScreen" style="display: none;">
-<div class="overlay-dark">
-            <div class="settings-page" style="max-width: 1000px; display: flex; flex-direction: row; padding: 0;">
-                <div style="width: 250px; background: #1e293b; color: white; padding: 30px 20px; display: flex; flex-direction: column;">
-                    <h2 style="margin-top: 0; font-size: 20px; border-bottom: 1px solid #334155; padding-bottom: 15px;">Ο Λογαριασμός μου</h2>
-                    <p style="color: #94a3b8; font-size: 14px; margin-top: 20px; cursor: pointer;">👤 Προφίλ Χρήστη</p>
-                    <p style="color: #94a3b8; font-size: 14px; margin-top: 15px; cursor: pointer;">🔒 Ασφάλεια & Κωδικοί</p>
-                    <p style="color: #94a3b8; font-size: 14px; margin-top: 15px; cursor: pointer;">💳 Συνδρομή (Pro)</p>
-                    <p style="color: #dc2626; font-size: 14px; margin-top: auto; cursor: pointer; font-weight: bold;" onclick="logoutMock()">🚪 Αποσύνδεση</p>
+        <div class="overlay-dark">
             <div class="settings-page" style="max-width: 1000px; display: flex; flex-direction: row; padding: 0; min-height: 550px;">
                 <div style="width: 260px; background: #1e293b; color: white; padding: 30px 20px; display: flex; flex-direction: column;">
                     <h2 style="margin-top: 0; font-size: 20px; border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 20px;">Ρυθμίσεις</h2>
                     <div class="settings-tab" style="color: #fca5a5; margin-top: auto;" onclick="logoutMock()">🚪 Αποσύνδεση</div>
-</div>
-                <div class="settings-layout" style="flex: 1; padding: 40px; background: #f8fafc; overflow-y: auto;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                        <h1 style="margin: 0; color: #0f172a;">Ρυθμίσεις Προφίλ</h1>
-                        <button class="back-btn" onclick="goMenu()">Χ Κλείσιμο</button>
-                    </div>
-
-                    <div class="settings-section" style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 25px;">
-                        <h3 style="margin-top: 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; color: #1e293b;">Προσωπικά Στοιχεία</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div class="form-group">
-                                <label>Όνομα Χρήστη / Username</label>
-                                <input type="text" class="form-input" value="Pilot_GR" id="setUsername" style="background: white;">
-                            </div>
-                            <div class="form-group">
-                                <label>Email Λογαριασμού</label>
-                                <input type="email" class="form-input" value="pilot@example.com" id="setEmail" style="background: white;">
-                            </div>
-                            <div class="form-group" style="grid-column: span 2;">
-                                <label>Αριθμός Μητρώου Εκμεταλλευόμενου (UAS Operator ID)</label>
-                                <input type="text" class="form-input" value="GRCxxxxxxxxxxxx" id="setOperatorId" style="background: white;">
-                            </div>
-                        </div>
-                        <button class="btn-primary" onclick="saveSettings()" style="padding: 10px 25px;">Αποθήκευση</button>
-                    </div>
-
-                    <div class="settings-section" style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 25px;">
-                        <h3 style="margin-top: 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; color: #1e293b;">Αλλαγή Κωδικού (Password)</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div class="form-group">
-                                <label>Τρέχων Κωδικός</label>
-                                <input type="password" class="form-input" placeholder="********" style="background: white;">
-                            </div>
-                            <div class="form-group">
-                                <label>Νέος Κωδικός</label>
-                                <input type="password" class="form-input" placeholder="Εισάγετε νέο κωδικό" style="background: white;">
-                            </div>
-                        </div>
-                        <button class="btn-secondary" style="padding: 10px 25px; cursor:pointer;">Ενημέρωση Κωδικού</button>
-                    </div>
-
-                    <div class="settings-section danger-zone" style="background: #fef2f2; border: 1px solid #fca5a5; border-radius: 12px; padding: 25px;">
-                        <h3 style="color: #dc2626; margin-top: 0;">Διαχείριση Δεδομένων Εφαρμογής</h3>
-                        <p style="font-size: 14px; color: #475569; margin-bottom: 15px;">Προσοχή: Η διαγραφή δεδομένων θα μηδενίσει το ιστορικό εξετάσεων, τις σημειώσεις και τα στατιστικά μελέτης. Η ενέργεια είναι μη αναστρέψιμη.</p>
-                        <button onclick="resetAllData()" class="btn-danger" style="padding: 10px 25px;">Επαναφορά Δεδομένων App (Reset)</button>
-                    </div>
+                </div>
                 <div class="settings-layout" style="flex: 1; padding: 40px; background: #f8fafc; overflow-y: auto; position: relative;">
                     <button class="back-btn" onclick="goMenu()" style="position: absolute; top: 20px; right: 20px; z-index: 10;">Χ Κλείσιμο</button>
-</div>
-</div>
-</div>
-</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<script src="app.js"></script>
+    <script src="app.js"></script>
 
     <script>
         // Pricing Modal Logic
