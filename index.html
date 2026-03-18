@@ -23,20 +23,204 @@
             justify-content: center;
         }
         .trial-grid-item:hover { background: #e2e8f0; }
-        .trial-pricing-card {
-            background: rgba(30, 41, 59, 0.8);
-            padding: 30px;
-            border-radius: 12px;
-            width: 300px;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s;
+        
+        /* Νέο Στυλ Τιμοκαταλόγου βάσει σχεδίου */
+        .pricing-modal-content {
+            background-color: #171f2c;
+            border: 1px solid #2a3649;
+            border-radius: 16px;
+            color: white;
+            max-width: 1000px;
+            width: 95%;
+            padding: 40px 50px;
             position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
-        .trial-pricing-card:hover { transform: translateY(-5px); }
+
+        .pricing-header-text {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .pricing-header-text h2 {
+            margin: 0 0 10px 0;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .pricing-header-text p {
+            color: #94a3b8;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .pricing-cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .price-card {
+            background: #1a2232;
+            border: 1px solid #2a3649;
+            border-radius: 16px;
+            padding: 40px 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .price-card.pro-card {
+            background: #151e2e;
+            border: 2px solid #3b82f6;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
+        }
+
+        .price-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4a8df8;
+            color: white;
+            padding: 5px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .price-title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 20px 0;
+            color: white;
+        }
+
+        .pro-card .price-title {
+            color: #60a5fa;
+        }
+
+        .price-amount {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 800;
+            margin: 0 0 30px 0;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+        }
+
+        .price-amount span {
+            font-size: 18px;
+            color: #94a3b8;
+            font-weight: normal;
+            margin-left: 5px;
+        }
+
+        .price-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 40px 0;
+            flex-grow: 1;
+        }
+
+        .price-features li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+            color: #cbd5e1;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .price-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .price-btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+        }
+
+        .btn-basic-adv {
+            background: #334155;
+            color: white;
+        }
+
+        .btn-basic-adv:hover {
+            background: #475569;
+        }
+
+        .btn-pro {
+            background: #4a8df8;
+            color: white;
+        }
+
+        .btn-pro:hover {
+            background: #3b82f6;
+        }
+
+        .close-pricing-btn {
+            display: block;
+            margin: 40px auto 0;
+            background: transparent;
+            border: 1px solid #475569;
+            color: white;
+            padding: 10px 40px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .close-pricing-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #64748b;
+        }
+
         .landing-overlay {
             overflow-y: auto;
             padding-bottom: 50px;
+        }
+        
+        .nav-start-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .nav-start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.2);
         }
     </style>
 </head>
@@ -47,11 +231,14 @@
         <div class="logo">
             <span style="font-weight: 800; font-size: 24px; letter-spacing: 1px;">UAV<span style="color: #4ade80;">Academy</span></span>
         </div>
-        <div class="landing-nav-links">
+        <div class="landing-nav-links" style="align-items: center;">
             <a href="#">Αρχική</a>
             <a href="#">Πρόγραμμα</a>
             <a href="#">Πιστοποιήσεις</a>
             <a href="#">Επικοινωνία</a>
+            
+            <button class="nav-start-btn" onclick="openPricingModal()">ΞΕΚΙΝΗΣΤΕ ΤΩΡΑ</button>
+
             <button class="login-btn" onclick="openLoginModal()">Είσοδος</button>
             <button class="register-btn" onclick="openLoginModal()">Εγγραφή</button>
             <button class="theme-btn-landing" onclick="toggleTheme()" title="Εναλλαγή Θέματος">
@@ -109,11 +296,6 @@
                             <span>Προσαρμοσμένα στατιστικά προόδου</span>
                         </div>
                     </div>
-
-                    <div class="hero-buttons">
-                        <button class="btn-primary-large" onclick="openLoginModal()">ΞΕΚΙΝΗΣΤΕ ΤΩΡΑ</button>
-                        <button class="btn-secondary-large" onclick="openFreeTrial()" style="border: 2px solid #4ade80; color: #4ade80;">FREE TRIAL (15 ΕΡΩΤΗΣΕΙΣ)</button>
-                    </div>
                 </div>
                 
                 <div class="hero-visual">
@@ -143,34 +325,65 @@
                 </div>
             </div>
 
-            <div class="pricing-section" style="padding: 50px 20px; text-align: center; max-width: 1200px; margin: 50px auto 0;">
-                <h2 style="color: white; font-size: 32px; margin-bottom: 40px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Επιλέξτε το Πλάνο που σας ταιριάζει</h2>
-                <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
-                    
-                    <div class="trial-pricing-card">
-                        <h3 style="color: white; font-size: 24px; margin-top: 0;">Basic Mode</h3>
-                        <p style="color: #cbd5e1; min-height: 40px;">Βασική πρόσβαση & Θεωρητική ύλη</p>
-                        <p style="color: #4ade80; font-size: 36px; font-weight: bold; margin: 20px 0;">Δωρεάν</p>
-                        <button class="btn-primary" style="width:100%; background: transparent; border: 2px solid #4ade80; color: #4ade80;" onclick="openFreeTrial()">Δοκιμάστε το Free Trial</button>
-                    </div>
-
-                    <div class="trial-pricing-card" style="border: 2px solid #3b82f6; transform: scale(1.05); background: rgba(15, 23, 42, 0.9);">
-                        <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #3b82f6; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold;">ΠΡΟΤΕΙΝΟΜΕΝΟ</div>
-                        <h3 style="color: white; font-size: 24px; margin-top: 0;">Standard Mode</h3>
-                        <p style="color: #cbd5e1; min-height: 40px;">Πλήρης πρόσβαση σε Study & Exam Mode</p>
-                        <p style="color: #3b82f6; font-size: 36px; font-weight: bold; margin: 20px 0;">€19.99<span style="font-size: 16px; color: #94a3b8;"> / μήνα</span></p>
-                        <button class="btn-primary" style="width:100%; background: #3b82f6;" onclick="openLoginModal()">Εγγραφή Standard</button>
-                    </div>
-
-                    <div class="trial-pricing-card">
-                        <h3 style="color: white; font-size: 24px; margin-top: 0;">Premium Mode</h3>
-                        <p style="color: #cbd5e1; min-height: 40px;">Όλα τα παραπάνω + Mission Mode & VIP Στατιστικά</p>
-                        <p style="color: #f59e0b; font-size: 36px; font-weight: bold; margin: 20px 0;">€29.99<span style="font-size: 16px; color: #94a3b8;"> / μήνα</span></p>
-                        <button class="btn-primary" style="width:100%; background: #f59e0b; border: none;" onclick="openLoginModal()">Εγγραφή Premium</button>
-                    </div>
-
-                </div>
+            <div style="padding: 60px 20px; text-align: center; max-width: 900px; margin: 0 auto;">
+                <h2 style="color: white; font-size: 32px; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Δοκιμάστε δωρεάν την πλατφόρμα μας</h2>
+                <p style="color: #cbd5e1; font-size: 18px; margin-bottom: 30px; line-height: 1.6;">Αξιολογήστε τις γνώσεις σας τώρα! Κάντε ένα ρεαλιστικό τεστ 10 ερωτήσεων της EASA, εντελώς δωρεάν, και δείτε άμεσα το αποτέλεσμά σας όπως ακριβώς στην πλήρη έκδοση της εφαρμογής.</p>
+                <button onclick="openFreeTrial()" style="background: transparent; border: 2px solid #4ade80; color: #4ade80; padding: 15px 40px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.3s;">ΕΝΑΡΞΗ FREE TRIAL (10 ΕΡΩΤΗΣΕΙΣ)</button>
             </div>
+
+        </div>
+    </div>
+
+    <div id="pricingModal" class="modal-overlay" style="display:none; z-index: 5000; align-items: center; justify-content: center;">
+        <div class="pricing-modal-content">
+            
+            <div class="pricing-header-text">
+                <h2>Τιμοκατάλογος Πιστοποιήσεων</h2>
+                <p>Επιλέξτε το εκπαιδευτικό πακέτο που ταιριάζει στις ανάγκες σας</p>
+            </div>
+
+            <div class="pricing-cards-container">
+                
+                <div class="price-card">
+                    <h3 class="price-title">Basic (A1/A3)</h3>
+                    <div class="price-amount">49€<span>/ εφάπαξ</span></div>
+                    <ul class="price-features">
+                        <li>Πλήρης θεωρία EASA A1/A3</li>
+                        <li>Απεριόριστα τεστ προσομοίωσης</li>
+                        <li>Στατιστικά Προόδου</li>
+                        <li>Πρόσβαση για 6 μήνες</li>
+                    </ul>
+                    <button class="price-btn btn-basic-adv" onclick="openLoginModal()">Επιλογή Basic</button>
+                </div>
+
+                <div class="price-card pro-card">
+                    <div class="price-badge">BEST VALUE</div>
+                    <h3 class="price-title">Pro Bundle (A1-A2-A3)</h3>
+                    <div class="price-amount">129€<span>/ εφάπαξ</span></div>
+                    <ul class="price-features">
+                        <li>Όλη η θεωρία (A1/A3 & A2)</li>
+                        <li>Όλα τα τεστ σε όλα τα επίπεδα</li>
+                        <li>Mission Mode (Σενάρια)</li>
+                        <li>Πρόσβαση για 12 μήνες</li>
+                    </ul>
+                    <button class="price-btn btn-pro" onclick="openLoginModal()">Επιλογή Pro</button>
+                </div>
+
+                <div class="price-card">
+                    <h3 class="price-title">Advanced (A2)</h3>
+                    <div class="price-amount">89€<span>/ εφάπαξ</span></div>
+                    <ul class="price-features">
+                        <li>Πλήρης θεωρία EASA A2</li>
+                        <li>Απεριόριστα τεστ A2</li>
+                        <li>Προχωρημένη Μετεωρολογία</li>
+                        <li>Πρόσβαση για 6 μήνες</li>
+                    </ul>
+                    <button class="price-btn btn-basic-adv" onclick="openLoginModal()">Επιλογή Advanced</button>
+                </div>
+
+            </div>
+
+            <button class="close-pricing-btn" onclick="closePricingModal()">Κλείσιμο</button>
 
         </div>
     </div>
@@ -589,7 +802,7 @@
                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 <span>Ακύρωση Free Trial</span>
             </button>
-            <div class="test-user-info" style="color: #4ade80;">Δωρεάν Δοκιμή: 15 Ερωτήσεις</div>
+            <div class="test-user-info" style="color: #4ade80;">Δωρεάν Δοκιμή: 10 Ερωτήσεις</div>
         </div>
         
         <div id="trialProgressBar" class="test-progress-fill" style="width: 0%; background: #3b82f6;"></div>
@@ -598,7 +811,7 @@
             <div class="test-content">
                 <div class="test-meta-bar" style="background: #1e293b; color: white; border: none;">
                     <div class="meta-left">
-                        <span id="trialQCounter" class="q-counter" style="color: white;">Ερ. 1 / 15</span>
+                        <span id="trialQCounter" class="q-counter" style="color: white;">Ερ. 1 / 10</span>
                     </div>
                     <div class="meta-center">
                         <span class="cat-badge" style="background: #3b82f6; color: white;">Free Trial EASA</span>
@@ -628,14 +841,38 @@
 
             <div class="test-sidebar" style="background: #1e293b; border-left: 1px solid #334155;">
                 <div class="sidebar-card" style="background: transparent; border: none; box-shadow: none;">
-                    <button class="btn-finish-test" style="width: 100%; background: #10b981; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; margin-bottom: 20px; cursor: pointer;" onclick="finishFreeTrial()">ΟΛΟΚΛΗΡΩΣΗ TRIAL</button>
+                    <button class="btn-finish-test" style="width: 100%; background: #10b981; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; margin-bottom: 20px; cursor: pointer;" onclick="finishFreeTrial()">ΥΠΟΒΟΛΗ ΕΞΕΤΑΣΗΣ</button>
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;" id="trialQuestionGrid"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <div id="trialResultScreen" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); z-index: 6000; justify-content: center; align-items: center;">
+        <div class="result-box pro-result-box" style="background: #1e293b; border: 1px solid #334155; padding: 40px; border-radius: 12px; text-align: center; max-width: 600px; width: 90%;">
+            <h2 style="color: white; margin-top: 0; font-size: 28px;">Αποτελέσματα Δοκιμαστικού</h2>
+            <div class="score-circle" id="trialScoreCircle" style="margin: 30px auto; width: 160px; height: 160px; border-radius: 50%; border: 8px solid #3b82f6; display: flex; align-items: center; justify-content: center;">
+                <h1 id="trialFinalScore" style="color: white; font-size: 52px; margin: 0;">0%</h1>
+            </div>
+            <h3 id="trialPassFail" class="status-text" style="font-size: 26px; margin-bottom: 20px;"></h3>
+            <p style="color: #cbd5e1; margin-bottom: 30px; font-size: 16px; line-height: 1.5;">Αυτό ήταν μόνο ένα μικρό δείγμα! Αποκτήστε πλήρη πρόσβαση σε εκατοντάδες ερωτήσεις, θεωρία, αναλυτικά στατιστικά και το καινοτόμο Mission Mode.</p>
+            <div class="result-actions" style="display: flex; gap: 15px; justify-content: center;">
+                <button class="btn-primary" onclick="closeTrialResultAndOpenPricing()" style="background:#f59e0b; border:none; padding: 12px 25px; font-weight: bold; font-size: 16px;">Δείτε τα Πακέτα μας</button>
+                <button class="back-btn" onclick="closeTrialResult()" style="background:transparent; border: 1px solid #475569; color: white; padding: 12px 25px; font-size: 16px;">Αρχική Σελίδα</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Modal Pricing Logic
+        function openPricingModal() {
+            document.getElementById('pricingModal').style.display = 'flex';
+        }
+        function closePricingModal() {
+            document.getElementById('pricingModal').style.display = 'none';
+        }
+
+        // Free Trial Logic (10 Ερωτήσεις)
         const trialQuestionsData = [
             { q: "Ποιο είναι το μέγιστο επιτρεπόμενο ύψος πτήσης στην Ανοιχτή Κατηγορία σύμφωνα με τον EASA;", opts: ["120 μέτρα (400 πόδια) από το έδαφος", "50 μέτρα", "Δεν υπάρχει όριο αρκεί να υπάρχει οπτική επαφή", "150 μέτρα"], correct: 0 },
             { q: "Τι σημαίνει η συντομογραφία VLOS;", opts: ["Video Line of Sight", "Visual Line of Sight (Οπτική Επαφή)", "Vertical Limit of Speed", "VHF Localizer Operating System"], correct: 1 },
@@ -646,16 +883,11 @@
             { q: "Τι αντιπροσωπεύει ο όρος MTOM (Maximum Take-Off Mass);", opts: ["Τη μέγιστη ταχύτητα του κινητήρα", "Τη Μέγιστη Μάζα Απογείωσης που ορίζει ο κατασκευαστής", "Το καθαρό βάρος της μπαταρίας", "Το μέγιστο βάρος του ωφέλιμου φορτίου"], correct: 1 },
             { q: "Ποια είναι η ελάχιστη ηλικία για εγγραφή εκμεταλλευόμενου (Operator) ΣμηΕΑ στην Ελλάδα;", opts: ["14 ετών", "16 ετών", "18 ετών", "Δεν υπάρχει όριο ηλικίας"], correct: 2 },
             { q: "Απαιτείται ασφάλιση έναντι τρίτων για πτήσεις ΣμηΕΑ άνω των 250g στην Ελλάδα;", opts: ["Όχι", "Μόνο για εμπορική χρήση", "Ναι, είναι υποχρεωτική από το νόμο", "Μόνο σε αστικό περιβάλλον"], correct: 2 },
-            { q: "Ποια είναι η πιο σημαντική ενέργεια ΠΡΙΝ από κάθε πτήση;", opts: ["Να φορτίσετε το κινητό σας", "Να ελέγξετε τον καιρό, τον εναέριο χώρο και τη λειτουργική κατάσταση του drone", "Να καθαρίσετε την κάμερα", "Να βάλετε την έλικα"], correct: 1 },
-            { q: "Τι σημαίνει πρακτικά μια γεωγραφική ζώνη UAS (π.χ. κοντά σε αεροδρόμιο);", opts: ["Ότι η πτήση προτείνεται να είναι χαμηλή", "Ότι ενδέχεται να υπάρχουν περιορισμοί ή πλήρης απαγόρευση πτήσεων", "Ότι επιτρέπονται μόνο αγώνες FPV", "Τίποτα το ιδιαίτερο"], correct: 1 },
-            { q: "Ο Αριθμός Μητρώου Εκμεταλλευόμενου (Operator ID) πρέπει να...", opts: ["Αναγράφεται στο βιογραφικό του χειριστή", "Είναι εμφανής και ευανάγνωστος πάνω στο ΣμηΕΑ", "Κρατείται μυστικός στο σπίτι", "Αναρτάται στα κοινωνικά δίκτυα"], correct: 1 },
-            { q: "Μπορείτε να μεταφέρετε επικίνδυνα υλικά με το drone στην Ανοιχτή Κατηγορία;", opts: ["Ναι, αν είναι ελαφριά", "Όχι, απαγορεύεται αυστηρά", "Μόνο με drones κλάσης C3", "Ναι, εφόσον δεν υπάρχουν άνθρωποι"], correct: 1 },
-            { q: "Σε περίπτωση απώλειας σήματος ελέγχου (Link Loss), ποια είναι η πιο ασφαλής προγραμματισμένη λειτουργία;", opts: ["Η λειτουργία RTH (Return to Home)", "Η αυτόματη απενεργοποίηση των κινητήρων στον αέρα", "Το συνεχές πέταγμα στην ίδια κατεύθυνση", "Η λήψη βίντεο"], correct: 0 },
-            { q: "Ποιες καιρικές συνθήκες θεωρούνται οι πλέον επικίνδυνες για ελαφριά πολυκόπτερα;", opts: ["Υψηλή υγρασία χωρίς βροχή", "Ισχυροί και ριπαίοι άνεμοι, ειδικά σε αστικά περιβάλλοντα", "Θερμοκρασίες γύρω στους 20°C", "Ελαφριά νέφωση"], correct: 1 }
+            { q: "Ποια είναι η πιο σημαντική ενέργεια ΠΡΙΝ από κάθε πτήση;", opts: ["Να φορτίσετε το κινητό σας", "Να ελέγξετε τον καιρό, τον εναέριο χώρο και τη λειτουργική κατάσταση του drone", "Να καθαρίσετε την κάμερα", "Να βάλετε την έλικα"], correct: 1 }
         ];
 
         let currentTrialQ = 0;
-        let trialUserAnswers = new Array(15).fill(null);
+        let trialUserAnswers = new Array(10).fill(null);
 
         function openFreeTrial() {
             document.getElementById('landingScreen').style.display = 'none';
@@ -674,7 +906,7 @@
         function buildTrialGrid() {
             const grid = document.getElementById('trialQuestionGrid');
             grid.innerHTML = '';
-            for(let i=0; i<15; i++) {
+            for(let i=0; i<10; i++) {
                 const btn = document.createElement('div');
                 btn.className = 'trial-grid-item';
                 btn.innerText = i+1;
@@ -686,8 +918,8 @@
 
         function loadTrialQ(index) {
             currentTrialQ = index;
-            document.getElementById('trialQCounter').innerText = `Ερ. ${index+1} / 15`;
-            document.getElementById('trialProgressBar').style.width = `${((index+1)/15)*100}%`;
+            document.getElementById('trialQCounter').innerText = `Ερ. ${index+1} / 10`;
+            document.getElementById('trialProgressBar').style.width = `${((index+1)/10)*100}%`;
             
             const q = trialQuestionsData[index];
             document.getElementById('trialQuestionText').innerText = q.q;
@@ -705,7 +937,7 @@
                 }
             }
 
-            for(let i=0; i<15; i++) {
+            for(let i=0; i<10; i++) {
                 const gb = document.getElementById('trialGridBtn' + i);
                 gb.style.border = '1px solid #cbd5e1';
                 if(trialUserAnswers[i] !== null) {
@@ -728,19 +960,47 @@
         }
 
         function prevTrialQuestion() { if(currentTrialQ > 0) loadTrialQ(currentTrialQ - 1); }
-        function nextTrialQuestion() { if(currentTrialQ < 14) loadTrialQ(currentTrialQ + 1); }
+        function nextTrialQuestion() { if(currentTrialQ < 9) loadTrialQ(currentTrialQ + 1); }
 
         function finishFreeTrial() {
             let score = 0;
-            let answered = 0;
-            for(let i=0; i<15; i++) {
-                if(trialUserAnswers[i] !== null) {
-                    answered++;
-                    if(trialUserAnswers[i] === trialQuestionsData[i].correct) score++;
+            for(let i=0; i<10; i++) {
+                if(trialUserAnswers[i] !== null && trialUserAnswers[i] === trialQuestionsData[i].correct) {
+                    score++;
                 }
             }
-            alert(`Το Free Trial Ολοκληρώθηκε!\n\nΑπαντήσατε σε ${answered} από τις 15 ερωτήσεις.\nΣωστές Απαντήσεις: ${score}/15 (${Math.round((score/15)*100)}%)\n\nΕγγραφείτε σε ένα από τα πακέτα μας για να αποκτήσετε πλήρη πρόσβαση σε εκατοντάδες ερωτήσεις, Mission Mode και αναλυτικά στατιστικά προόδου!`);
-            closeFreeTrial();
+            
+            const percentage = Math.round((score/10)*100);
+            
+            document.getElementById('freeTrialScreen').style.display = 'none';
+            document.getElementById('trialResultScreen').style.display = 'flex';
+            
+            document.getElementById('trialFinalScore').innerText = percentage + '%';
+            
+            const passFailText = document.getElementById('trialPassFail');
+            const scoreCircle = document.getElementById('trialScoreCircle');
+            
+            if(percentage >= 75) {
+                passFailText.innerText = "ΕΠΙΤΥΧΙΑ (PASS)";
+                passFailText.style.color = "#4ade80";
+                scoreCircle.style.borderColor = "#4ade80";
+            } else {
+                passFailText.innerText = "ΑΠΟΤΥΧΙΑ (FAIL)";
+                passFailText.style.color = "#f87171";
+                scoreCircle.style.borderColor = "#f87171";
+            }
+        }
+
+        function closeTrialResult() {
+            document.getElementById('trialResultScreen').style.display = 'none';
+            document.getElementById('landingScreen').style.display = 'block';
+            currentTrialQ = 0;
+            trialUserAnswers.fill(null);
+        }
+
+        function closeTrialResultAndOpenPricing() {
+            closeTrialResult();
+            openPricingModal();
         }
     </script>
     <script src="app.js"></script>
